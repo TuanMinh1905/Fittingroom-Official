@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": "src/", // Before : import { Button } from '../../../components/button || After : import { Button } from '@/components/button'
+    "paths": {
+      "@/*": ["./*"],
+      "@/styles/*": ["styles/*"],
+      "@/components/*": ["components/*"], // @/styles/x → src/styles/x || Viết @/components/Button - Thực tế trỏ đến src/components/Button 
+      "@/siufolder/*": ["siufolder/*"],  // @/components/x → src/components/x
+
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}

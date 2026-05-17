@@ -1,0 +1,4 @@
+- Tập trung làm cho xong task trước -> Tự vẽ pipeline work flow của Task
+
+Task A : Fitting Room 
+https://app.diagrams.net/#G1x3WqNn-mRDC2gp8R26GpcoRQnVYARqZt#%7B%22pageId%22%3A%225Qm3VaMvlqlQeWINwW_l%22%7D

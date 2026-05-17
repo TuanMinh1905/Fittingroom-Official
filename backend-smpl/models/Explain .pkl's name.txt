@@ -1,0 +1,5 @@
+Tên file giải mã: basicmodel_[giới tính]_lbs_[10 β]_[207 pose]_[version].pkl
+
+lbs = Linear Blend Skinning
+10 = 10 shape parameters (β)
+207 = 207 pose parameters (69 joints × 3)

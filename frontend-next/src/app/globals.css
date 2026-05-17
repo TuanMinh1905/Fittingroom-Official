@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+/* Dùng để “đăng ký” một font custom từ file (.ttf, .woff2...) và đặt tên cho nó để CSS gọi lại.
+Trong file của bạn, nó đăng ký tên "font-longreach" từ /fonts/SVN-DKLongreach.ttf.
+*/
+@font-face {
+  font-family: "font-longreach";
+  src: url("/fonts/SVN-DKLongreach.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* MonaSans family map theo weight de dung voi class Tailwind: font-medium, font-bold... */
+@font-face {
+  font-family: "MonaSans";
+  src: url("/fonts/MonaSans-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MonaSans";
+  src: url("/fonts/MonaSans-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MonaSans";
+  src: url("/fonts/MonaSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MonaSans";
+  src: url("/fonts/MonaSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MonaSans";
+  src: url("/fonts/MonaSans-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MonaSans";
+  src: url("/fonts/MonaSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MonaSans";
+  src: url("/fonts/MonaSans-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MonaSans";
+  src: url("/fonts/MonaSans-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+:root {
+  --background: #ffffff;
+  --secondary-background: #F0F8FF;
+
+  --primary: #5DADE2;
+  --primary-hover: #0070f3cc;
+
+  --text-primary: #414545;
+  --discount: #FF6B6B;
+  --border-product: #D8DCE0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.font-longreach {
+  font-family: "font-longreach", Arial, Helvetica, sans-serif;
+}
+
+.font-monasans {
+  font-family: "MonaSans", Arial, Helvetica, sans-serif;
+}
+
+/*@apply là cú pháp của Tailwind để gói nhiều class utility thành một class CSS riêng.*/
+.rowCenter {
+  @apply flex items-center justify-center;
+}
+
+.colCenter {
+  @apply flex flex-col items-center justify-center;
+}
