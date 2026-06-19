@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import LoginModal from "./loginModal";
+import { useCartStore } from "@/store/cartStore";
 
 const navItems = ["Trang chủ", "Danh mục", "Giới thiệu", "Blog"];
 
@@ -20,6 +21,9 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
     const [gender, setGender] = useState<"male" | "female">("female");
     const router = useRouter();
     const searchRef = useRef<HTMLDivElement>(null);
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+    const totalItems = useCartStore((state) => state.getTotalItems());
 
     // Xử lý tìm kiếm với debounce 1.5s
     useEffect(() => {
@@ -117,7 +121,7 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
 
                     <div className="rowCenter gap-[12px]">
                         <div className="relative" ref={searchRef}>
-                            <div className="h-[48px] w-[315px] rowCenter rounded-[12px] border-[2px] border-[var(--primary)] bg-white relative z-10">
+                            <div className="h-[48px] w-[260px] rowCenter rounded-[12px] border-[2px] border-[var(--primary)] bg-white relative z-10">
                                 
                                 <input
                                     type="text"
@@ -168,6 +172,19 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
                                 className="h-[64px] object-cover -mt-2 -ml-1 scale-x-[-1]" 
                             />
                         </button>
+
+                        <Link 
+                            href="/cart"
+                            className="relative flex h-[48px] w-[48px] items-center justify-center rounded-xl border-[2px] border-[var(--primary)] bg-white text-[var(--primary)] transition hover:bg-[var(--primary)] hover:text-white shrink-0"
+                            title="Giỏ hàng"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                            {mounted && totalItems > 0 && (
+                                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm border border-white">
+                                    {totalItems}
+                                </span>
+                            )}
+                        </Link>
 
                         {user ? (
                             <div className="flex items-center gap-2 ml-4">

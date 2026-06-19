@@ -34,20 +34,20 @@ const seedProducts = async () => {
         for (const cat of categories) {
             const slug = cat.slug as keyof typeof mockData;
             const catSettings = mockData[slug];
-            
+
             if (!catSettings) continue;
 
             for (let i = 0; i < 10; i++) {
                 // Tạo giá ngẫu nhiên với độ làm tròn
                 const randomPrice = Math.floor(Math.random() * (catSettings.priceMax - catSettings.priceMin) + catSettings.priceMin);
                 const roundedPrice = Math.floor(randomPrice / 1000) * 1000;
-                
+
                 // Giảm giá 5-20% cho khoảng 50% sản phẩm
                 const hasDiscount = Math.random() > 0.5;
                 const discountPrice = hasDiscount ? roundedPrice - Math.floor((roundedPrice * (Math.random() * 0.15 + 0.05)) / 1000) * 1000 : undefined;
-                
+
                 const productName = `${catSettings.names[i]} - Mẫu ${i + 1}`;
-                
+
                 // Tạo slug từ tên sản phẩm
                 const createSlug = (str: string) => {
                     return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").replace(/([^0-9a-z-\s])/g, "").replace(/(\s+)/g, "-").replace(/-+/g, "-").replace(/^-+|-+$/g, "");
@@ -59,7 +59,7 @@ const seedProducts = async () => {
                     slug: productSlug,
                     price: roundedPrice,
                     discountPrice: discountPrice,
-                    description: `Sản phẩm ${catSettings.names[i].toLowerCase()} thiết kế tinh tế, đem lại sự thoải mái khi sử dụng. 100% chính hãng tại PetPet, ít calo, phù hợp làm snack hàng ngày không lo béo phì. Cấu trúc giòn vừa giúp kích thích nhai và hỗ trợ răng miệng. Phù hợp cho nhiều mục đích khác nhau.`,
+                    description: `Sản phẩm ${catSettings.names[i].toLowerCase()} thiết kế tinh tế, đem lại sự thoải mái khi sử dụng. 100% chính hãng tại TMF, ít calo, phù hợp làm snack hàng ngày không lo béo phì. Cấu trúc giòn vừa giúp kích thích nhai và hỗ trợ răng miệng. Phù hợp cho nhiều mục đích khác nhau.`,
                     imageUrl: `https://picsum.photos/seed/${cat.slug}${i}/400/400`,
                     categorySlug: cat.slug,
                     rating: Number((Math.random() * 1.5 + 3.5).toFixed(1)), // Rating từ 3.5 đến 5.0

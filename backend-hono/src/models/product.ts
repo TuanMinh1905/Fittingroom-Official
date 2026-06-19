@@ -30,7 +30,7 @@ const ProductSchema = new Schema<IProduct>(
         categorySlug: { type: String, required: true },
         rating: { type: Number, default: 0 },
         soldCount: { type: Number, default: 0 },
-        brand: { type: String, required: true, default: 'PetPet' },
+        brand: { type: String, required: true, default: 'TMF' },
         expiryDate: { type: String, required: false },
         stock: { type: Number, default: 100 },
         shippingInfo: { type: String, default: 'Miễn phí vận chuyển' }

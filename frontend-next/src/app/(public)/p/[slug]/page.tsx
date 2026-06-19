@@ -42,7 +42,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <div className="mx-auto w-full max-w-[1200px] px-[16px] py-4 flex flex-col gap-4">
         {/* Breadcrumb can be part of ProductMainInfo or here */}
         <div className="text-sm text-gray-500 py-2">
-          Petpet / {product.categorySlug} / <span className="text-gray-800">{product.name}</span>
+          TMF / {product.categorySlug} / <span className="text-gray-800">{product.name}</span>
         </div>
 
         {/* Top Section */}

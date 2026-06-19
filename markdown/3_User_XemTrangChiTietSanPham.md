@@ -6,7 +6,7 @@ Note: _This is purely the output of the chat conversation and does not contain a
 
 Rất tốt. Giờ ta sẽ đến với chức năng user xem chi tiết sản phẩm. Sau đây là yêu cầu của tôi : 
 
-- Ở dưới trang home tôi có section mà hiện mấy cái sản phẩm ( Như ảnh 1 ). Khi ấn vào đó sẽ Navigate sang trang khác với đường link url có dạng như thế này : https://petpet.vn/vi/p/balo-dung-thu-cung-trong-gio. Hãy nhớ rằng đó chỉ là đường link tham khảo. Hãy format đúng về với project của chúng ta
+- Ở dưới trang home tôi có section mà hiện mấy cái sản phẩm ( Như ảnh 1 ). Khi ấn vào đó sẽ Navigate sang trang khác với đường link url có dạng như thế này : https://TMF.vn/vi/p/balo-dung-thu-cung-trong-gio. Hãy nhớ rằng đó chỉ là đường link tham khảo. Hãy format đúng về với project của chúng ta
 
 - Khi navigate sang trang mới, hãy thiết kế hiển thị sản phẩm và thiết kế cái trang nàuy với từng cái section tương ứng với thứ tự mà tôi gửi ảnh cho bạn từ ảnh thứ 2 trở đi.  
 

@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 import { Product } from "@/store/productStore";
+import { useRouter } from "next/navigation";
+import { useCartStore } from "@/store/cartStore";
+import toast from "react-hot-toast";
 
 interface Props {
   product: Product;
@@ -9,6 +12,24 @@ interface Props {
 
 export default function ProductMainInfo({ product }: Props) {
   const [quantity, setQuantity] = useState(1);
+  const router = useRouter();
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const handleAddToCart = () => {
+    addToCart(product, quantity);
+    toast.success(`Đã thêm ${quantity} sản phẩm vào giỏ hàng`, {
+      style: {
+        borderRadius: '10px',
+        background: '#333',
+        color: '#fff',
+      },
+    });
+  };
+
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    router.push('/cart');
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN").format(price) + " đ";
@@ -44,7 +65,7 @@ export default function ProductMainInfo({ product }: Props) {
         <h1 className="text-2xl font-medium text-gray-800 mb-2 leading-tight">
           {product.name}
         </h1>
-        
+
         <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
           <div className="flex items-center text-yellow-400">
             {'★'.repeat(Math.floor(product.rating || 5))}
@@ -90,9 +111,18 @@ export default function ProductMainInfo({ product }: Props) {
           </div>
         </div>
 
-        <div className="mt-auto">
-          <button className="w-full max-w-[300px] bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg">
-            Mua ngay trên app PETPET
+        <div className="mt-auto flex gap-4">
+          <button 
+            onClick={handleAddToCart}
+            className="w-full max-w-[220px] border-[2px] border-[var(--primary)] text-[var(--primary)] hover:bg-slate-50 font-bold py-3 px-6 rounded-lg transition-colors text-lg"
+          >
+            Thêm vào giỏ hàng
+          </button>
+          <button 
+            onClick={handleBuyNow}
+            className="w-full max-w-[220px] bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg"
+          >
+            Mua ngay
           </button>
         </div>
       </div>

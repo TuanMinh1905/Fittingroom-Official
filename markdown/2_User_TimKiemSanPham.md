@@ -8,7 +8,7 @@ Giờ tiếp theo sẽ đến chức năng tìm kiếm sản phẩm. Đây là t
 
 - Hãy làm cho tôi auto complete ở thanh tìm kiếm. 
 - Khi User gõ tìm kiếm, hãy cho tới khi user ngừng nhập 1, 2 giây thì mới hiện ra kết quả tìm kiếm để tránh bị lặp API
-- Khi Enter kết quả tìm kiếm hoặc nhấn vào kết quả hiện ra khi gõ tìm kiếm. Sẽ navigate đến 1 trang mới với đường link động. Ví dụ như là https://petpet.vn/vi/search_product?c=tui-don-phan. Đây chỉ là đường liink ví dụ, hãy format lại đúng với project của chúng ta
+- Khi Enter kết quả tìm kiếm hoặc nhấn vào kết quả hiện ra khi gõ tìm kiếm. Sẽ navigate đến 1 trang mới với đường link động. Ví dụ như là https://TMF.vn/vi/search_product?c=tui-don-phan. Đây chỉ là đường liink ví dụ, hãy format lại đúng với project của chúng ta
 - Khi navigate sang trang mới, hãy thiết kế hiển thị sản phẩm và thiết kế cái trang này giống như ảnh 2 tôi gửi bạn . Hãy nhớ rằng chỉ là ảnh để tham khảo, hãy format đúng phông màu, font chữ đúng với project của chúng ta
 
 *Listed directory [components](file:///c:/Users/GP/Desktop/TMF-Official/TMF-NodeJS-FittingRoom3D/apps/frontend-next/src/components) *
