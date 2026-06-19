@@ -19,6 +19,20 @@ products.get('/', async (c) => {
     return c.json(allProducts) // Trả về JSON cho client
 })
 
+// API tìm kiếm sản phẩm theo tên
+products.get('/search', async (c) => {
+    const q = c.req.query('q')
+    if (!q) {
+        return c.json([])
+    }
+    try {
+        const searchResults = await Product.find({ name: { $regex: q, $options: 'i' } })
+        return c.json(searchResults)
+    } catch (error) {
+        return c.json({ error: 'Failed to search products' }, 500)
+    }
+})
+
 // Thử tự làm thêm cái API get sản phẩm theo id 
 // c đối tượng chứa thông tin request và các method để trả response.
 products.get('/:id', async (c) => {
