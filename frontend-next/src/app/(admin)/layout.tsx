@@ -33,6 +33,9 @@ export default function AdminLayout({
             <a className="block rounded-xl px-4 py-3 transition hover:bg-slate-800 hover:text-white" href="/admin/orders">
               Orders
             </a>
+            <a className="block rounded-xl px-4 py-3 transition hover:bg-slate-800 hover:text-white" href="/admin/users">
+              Users
+            </a>
           </nav>
 
           <div className="mt-8 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-sm text-cyan-100">

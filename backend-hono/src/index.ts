@@ -10,6 +10,8 @@ import products from './routes/product.js'
 import category from './routes/category.js'
 import brand from './routes/brand.js'
 import blog from './routes/blog.js'
+import auth from './routes/auth.js'
+import user from './routes/user.js'
 
 const app = new Hono()
 
@@ -30,6 +32,9 @@ app.route('/products', products) // Gắn route products vào app chính
 app.route('/category', category) 
 app.route('/brand', brand) 
 app.route('/blog', blog) 
+app.route('/auth', auth)
+app.route('/users', user)
+
 
 const port = Number(process.env.PORT) || 8000
 serve({ fetch: app.fetch, port }, (info) => {

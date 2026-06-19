@@ -6,7 +6,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "seed": "tsx src/scripts/seed.ts",
-    "seed:categories": "tsx src/scripts/seed-categories.ts"
+    "seed:categories": "tsx src/scripts/seed-categories.ts",
+    "seed:users": "tsx src/scripts/seed-users.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.9",

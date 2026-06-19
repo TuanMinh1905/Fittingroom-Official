@@ -1,0 +1,77 @@
+# Kế hoạch Thêm Chức năng Đăng nhập và Quản lý User
+
+Thêm nút Đăng nhập vào trang public (Navbar), tích hợp form Modal (Đăng nhập/Đăng ký) và bổ sung mục Quản lý User vào trang Admin theo yêu cầu.
+
+## User Review Required
+
+> [!IMPORTANT]
+> - Hiện tại Form Đăng nhập/Đăng ký sẽ chỉ xử lý logic UI (chuyển đổi giữa 2 form Login/Register, validation cơ bản) do Backend chưa cung cấp API xác thực. Sau này có thể dễ dàng nối API vào.
+> - Nút Đăng nhập sẽ được thiết kế với màu sắc đồng nhất (màu `primary` hoặc outline) với các phần tử khác trên Navbar.
+> - Xin vui lòng xem xét và xác nhận hướng tiếp cận sử dụng **Modal (Popup)** cho Form Đăng nhập thay vì chuyển hướng sang một trang riêng biệt (page mới), vì Modal mang lại trải nghiệm mượt mà hơn.
+
+## Open Questions
+
+> [!TIP]
+> - Nút "Đăng nhập" có cần biểu tượng (icon) đi kèm không hay chỉ cần text đơn giản? (Mặc định tôi sẽ làm một nút text có viền giống nút chọn ngôn ngữ VN).
+> - Bạn có muốn tạo luôn bảng danh sách User tĩnh (mock data) bên trong trang Admin không, hay chỉ cần tạo trang trống để giữ chỗ?
+
+## Proposed Changes
+
+---
+
+### Component: Navbar & Layout
+
+Sửa đổi Navbar của trang public để chứa nút và quản lý trạng thái hiển thị Modal.
+
+#### [NEW] [loginModal.tsx](file:///c:/Users/GP/Desktop/TMF-Official/TMF-NodeJS-FittingRoom3D/apps/frontend-next/src/component/layout/loginModal.tsx)
+- Tạo component Modal hiển thị đè lên giao diện chính.
+- Chứa 2 tab/view: **Đăng nhập** và **Đăng ký** với các trường nhập liệu chuẩn (Email, Password, Username...).
+- Logic chuyển đổi giữa Login và Register.
+- Nút "Đóng" modal.
+
+#### [MODIFY] [navbar.tsx](file:///c:/Users/GP/Desktop/TMF-Official/TMF-NodeJS-FittingRoom3D/apps/frontend-next/src/component/layout/navbar.tsx)
+- Thêm directive `"use client"` để sử dụng React state quản lý bật/tắt Modal.
+- Thêm nút **Đăng nhập** (hoặc icon người dùng) ở vị trí đã đánh dấu (bên cạnh nút ngôn ngữ VN).
+- Tích hợp `<LoginModal />` và truyền props (ví dụ: `isOpen`, `onClose`) vào.
+
+---
+
+### Component: Admin Area
+
+Bổ sung mục quản lý Users trong hệ thống Dashboard Admin.
+
+#### [MODIFY] [layout.tsx](file:///c:/Users/GP/Desktop/TMF-Official/TMF-NodeJS-FittingRoom3D/apps/frontend-next/src/app/%28admin%29/layout.tsx)
+- Thêm thẻ `<a>` (link) "Users" vào thanh menu sidebar của Admin, vị trí dưới mục "Orders" hoặc "Brands".
+- Đảm bảo class styling giống hệt các thẻ link khác (`hover:bg-slate-800 hover:text-white`).
+
+#### [NEW] [page.tsx](file:///c:/Users/GP/Desktop/TMF-Official/TMF-NodeJS-FittingRoom3D/apps/frontend-next/src/app/%28admin%29/admin/users/page.tsx)
+- Tạo một trang mới cơ bản đại diện cho "Quản lý User" để khi bấm vào menu ở sidebar không bị lỗi 404.
+- Giao diện tạm thời sẽ là một tiêu đề "Quản lý Khách hàng" hoặc bảng danh sách (bản nháp).
+
+## Verification Plan
+
+### Manual Verification
+- Truy cập trang chủ (`/`), kiểm tra sự xuất hiện của nút "Đăng nhập" trên Navbar.
+- Bấm vào nút "Đăng nhập", kiểm tra xem form Modal có hiện ra chính giữa màn hình không.
+- Thử chuyển đổi qua lại giữa form "Đăng nhập" và "Đăng ký" trong Modal.
+- Truy cập vào trang admin (`/admin`), kiểm tra sidebar xem có menu "Users" không.
+- Bấm vào menu "Users" để đảm bảo hệ thống định tuyến đúng vào trang quản lý User mà không có lỗi.
+
+##################### HOÀN THIỆN ###########################
+
+Tôi đã tiếp nhận góp ý của bạn và tiến hành triển khai toàn bộ các tính năng từ Backend đến Frontend theo đúng yêu cầu!
+
+Dưới đây là tóm tắt nhanh những gì đã hoàn thành (chi tiết bạn có thể xem trong file walkthrough.md bên cạnh):
+
+Backend (Hono):
+Đã tạo model User trong Mongoose.
+Viết API Xác thực (/auth/login, /auth/register) có logic check pass và email.
+Viết API lấy danh sách User (/users).
+Đã chạy thành công lệnh Seed Data để tạo ra 5 Users và 2 Admins như yêu cầu.
+Frontend Public:
+Thêm nút "Đăng nhập" (chỉ có Text, không Icon) vào Navbar ngay cạnh nút VN.
+Tạo một Modal Popup gọi trực tiếp xuống các API trên. Giao diện đơn giản nhưng đúng logic xử lý lỗi và trạng thái tải.
+Frontend Admin:
+Đã thêm menu "Users" vào sidebar của Dashboard.
+Tạo trang /admin/users dạng bảng để liệt kê thông tin (Tên, Email, Role) lấy từ Database thật.
+Hai server dev của bạn hiện tại đều đang chạy và tự động cập nhật code mới, bạn có thể truy cập http://localhost:3000 để test thử ngay chức năng Đăng nhập, và truy cập http://localhost:3000/admin để xem danh sách Khách hàng nhé! Nếu cần điều chỉnh gì thêm (như màu sắc, độ rộng của bảng) thì cứ bảo tôi.

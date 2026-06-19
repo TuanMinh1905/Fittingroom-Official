@@ -11,7 +11,7 @@ export default function PublicLayout({
     <>
       <OnTop />
       <Navbar className="" />
-      <div className="rowCenter bg-gray-300">
+      <div className="rowCenter bg-white">
         <div className="w-[1200px] my-[20px]">{children}</div>
       </div>
       <Footer />
