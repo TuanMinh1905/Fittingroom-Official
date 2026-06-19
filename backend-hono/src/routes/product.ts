@@ -42,6 +42,14 @@ products.get('/:id', async (c) => {
     return c.json(product)
 })
 
+// API tìm sản phẩm theo slug
+products.get('/slug/:slug', async (c) => {
+    const slug = c.req.param('slug')
+    const product = await Product.findOne({ slug })
+    if (!product) return c.json({ message: 'Product not found' }, 404)
+    return c.json(product)
+})
+
 // Create product
 products.post('/', async (c) => {
     try {

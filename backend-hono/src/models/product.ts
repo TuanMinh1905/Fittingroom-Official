@@ -5,19 +5,35 @@ import mongoose, { Schema, Document } from 'mongoose';
 // _id, createdAt, updatedAt, save(), remove(),....
 export interface IProduct extends Document {
     name: string;
+    slug: string;
     price: number;
+    discountPrice?: number;
     description: string;
     imageUrl: string;
     categorySlug: string;
+    rating: number;
+    soldCount: number;
+    brand: string;
+    expiryDate?: string;
+    stock: number;
+    shippingInfo: string;
 }
 
 const ProductSchema = new Schema<IProduct>(
     {
         name: { type: String, required: true },
+        slug: { type: String, required: true, unique: true },
         price: { type: Number, required: true },
+        discountPrice: { type: Number, required: false },
         description: { type: String, required: true },
         imageUrl: { type: String, required: false },
         categorySlug: { type: String, required: true },
+        rating: { type: Number, default: 0 },
+        soldCount: { type: Number, default: 0 },
+        brand: { type: String, required: true, default: 'PetPet' },
+        expiryDate: { type: String, required: false },
+        stock: { type: Number, default: 100 },
+        shippingInfo: { type: String, default: 'Miễn phí vận chuyển' }
     }
 )
 

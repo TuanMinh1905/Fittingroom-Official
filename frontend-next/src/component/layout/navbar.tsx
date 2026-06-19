@@ -17,6 +17,7 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
     const [keyword, setKeyword] = useState("");
     const [results, setResults] = useState<any[]>([]);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [gender, setGender] = useState<"male" | "female">("female");
     const router = useRouter();
     const searchRef = useRef<HTMLDivElement>(null);
 
@@ -155,21 +156,45 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
                             )}
                         </div>
 
+                        {/* Nút chuyển đổi giới tính */}
+                        <button 
+                            onClick={() => setGender(gender === "female" ? "male" : "female")}
+                            className="h-[48px] w-[48px] rounded-full border-[2px] border-[var(--primary)] bg-[var(--primary)] overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-sm flex items-center justify-center shrink-0 ml-1"
+                            title={`Chuyển sang đồ ${gender === "female" ? "Nam" : "Nữ"}`}
+                        >
+                            <img 
+                                src={gender === "female" ? "/woman_main.png" : "/man_main.png"} 
+                                alt="Gender Toggle" 
+                                className="h-[64px] object-cover -mt-2 -ml-1 scale-x-[-1]" 
+                            />
+                        </button>
+
                         {user ? (
-                            <button
-                                type="button"
-                                onClick={handleLogout}
-                                className="flex h-[44px] items-center justify-center rounded-xl border-[2px] border-red-500 bg-red-500 px-6 text-[14px] font-semibold text-white transition hover:bg-white hover:text-red-500"
-                            >
-                                Đăng xuất
-                            </button>
+                            <div className="flex items-center gap-2 ml-4">
+                                <Link
+                                    href="/profile"
+                                    className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border-[2px] border-[var(--primary)] bg-white text-[var(--primary)] transition hover:bg-[var(--primary)] hover:text-white"
+                                    title="Thông tin cá nhân"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </Link>
+                                <button
+                                    type="button"
+                                    onClick={handleLogout}
+                                    className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border-[2px] border-red-500 bg-red-500 text-white transition hover:bg-white hover:text-red-500"
+                                    title="Đăng xuất"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                                </button>
+                            </div>
                         ) : (
                             <button
                                 type="button"
                                 onClick={() => setIsLoginModalOpen(true)}
-                                className="flex h-[44px] items-center justify-center rounded-xl border-[2px] border-[var(--primary)] bg-[var(--primary)] px-6 text-[14px] font-semibold text-white transition hover:bg-white hover:text-[var(--primary)]"
+                                className="flex h-[44px] w-[44px] ml-4 items-center justify-center rounded-xl border-[2px] border-[var(--primary)] bg-[var(--primary)] text-white transition hover:bg-white hover:text-[var(--primary)]"
+                                title="Đăng nhập"
                             >
-                                Đăng nhập
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
                             </button>
                         )}
 

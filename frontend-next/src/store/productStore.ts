@@ -3,10 +3,18 @@ import { create } from "zustand";
 export type Product = {
   _id: string;
   name: string;
+  slug: string;
   price: number;
+  discountPrice?: number;
   description: string;
   imageUrl?: string;
   categorySlug?: string;
+  rating?: number;
+  soldCount?: number;
+  brand?: string;
+  expiryDate?: string;
+  stock?: number;
+  shippingInfo?: string;
 };
 
 type ProductState = {
