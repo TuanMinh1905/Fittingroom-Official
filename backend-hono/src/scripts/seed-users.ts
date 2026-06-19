@@ -6,6 +6,7 @@ import { connectDB } from '../db/mongoose.js';
 dotenv.config();
 
 const users = [
+  { name: 'Tuấn Minh', email: 'tuanminhadmin@gmail.com', password: '365daband', role: 'admin' },
   { name: 'Admin 1', email: 'admin1@tmf.com', password: 'password123', role: 'admin' },
   { name: 'Admin 2', email: 'admin2@tmf.com', password: 'password123', role: 'admin' },
   { name: 'User 1', email: 'user1@tmf.com', password: 'password123', role: 'user' },

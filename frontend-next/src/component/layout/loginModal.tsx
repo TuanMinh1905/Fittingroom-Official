@@ -40,7 +40,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         setError(data.message || "Có lỗi xảy ra");
       } else {
         alert(isLoginView ? "Đăng nhập thành công!" : "Đăng ký thành công!");
-        // Có thể lưu token/user data vào localStorage hoặc context ở đây
+        localStorage.setItem("user", JSON.stringify(data.user));
+        window.dispatchEvent(new Event("loginSuccess"));
         onClose();
       }
     } catch (err) {

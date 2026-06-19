@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoginModal from "./loginModal";
 
 const navItems = ["Trang chủ", "Danh mục", "Giới thiệu", "Blog"];
@@ -12,6 +12,35 @@ type NavbarPageProps = {
 
 export default function NavbarPage({ className = "" }: NavbarPageProps) {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [user, setUser] = useState<any>(null);
+
+    // Cập nhật state từ localStorage khi load và sau khi đăng nhập
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (e) {
+                // Ignore parse errors
+            }
+        }
+        
+        // Listen to custom event for login updates
+        const handleLoginSuccess = () => {
+            const updatedUser = localStorage.getItem("user");
+            if (updatedUser) setUser(JSON.parse(updatedUser));
+        };
+        
+        window.addEventListener("loginSuccess", handleLoginSuccess);
+        return () => window.removeEventListener("loginSuccess", handleLoginSuccess);
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        setUser(null);
+        // Refresh to reset state
+        window.location.reload();
+    };
 
     return (
         <>
@@ -47,22 +76,23 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
                             <img src="/man_main.png" alt="Search icon" aria-hidden="true" className="h-[64px] scale-x-[-1] object-cover" />
                         </div>
 
-                        <button
-                            type="button"
-                            className="rowCenter h-[44px] w-[197px] rounded-[12px] border-[2px] border-[var(--primary)] bg-white"
-                        >
-                            <span className="rowCenter h-[42px] w-[42px] translate-x-[-35px] rounded-full bg-[var(--primary)]">
-                                <img src="/avt_main.png" alt="" aria-hidden="true" className="scale-[1.25] rounded-full object-cover" />
-                            </span>
-                            
-                            <span className="ml-3 text-[14px] font-medium translate-x-[20px] font-monasans text-[var(--text-primary)]">
-                                Chàng trai
-                            </span>
-
-                            <svg viewBox="0 0 20 20" className="h-4 w-4 fill-none translate-x-[25px] font-medium font-monasans stroke-current stroke-[2]">
-                                <path d="M5 7l5 6 5-6" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </button>
+                        {user ? (
+                            <button
+                                type="button"
+                                onClick={handleLogout}
+                                className="flex h-[44px] items-center justify-center rounded-xl border-[2px] border-red-500 bg-red-500 px-6 text-[14px] font-semibold text-white transition hover:bg-white hover:text-red-500"
+                            >
+                                Đăng xuất
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={() => setIsLoginModalOpen(true)}
+                                className="flex h-[44px] items-center justify-center rounded-xl border-[2px] border-[var(--primary)] bg-[var(--primary)] px-6 text-[14px] font-semibold text-white transition hover:bg-white hover:text-[var(--primary)]"
+                            >
+                                Đăng nhập
+                            </button>
+                        )}
 
                         <button
                             type="button"
@@ -72,14 +102,6 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
                                 ★
                             </span>
                             VN
-                        </button>
-                        
-                        <button
-                            type="button"
-                            onClick={() => setIsLoginModalOpen(true)}
-                            className="flex h-[44px] items-center justify-center rounded-xl border-[2px] border-[var(--primary)] bg-[var(--primary)] px-6 text-[14px] font-semibold text-white transition hover:bg-white hover:text-[var(--primary)]"
-                        >
-                            Đăng nhập
                         </button>
                     </div>
                 </div>
