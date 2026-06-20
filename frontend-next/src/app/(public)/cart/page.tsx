@@ -141,9 +141,9 @@ export default function CartPage() {
                   <p className="text-xs text-gray-400 mt-1 text-right">(Đã bao gồm VAT nếu có)</p>
                 </div>
 
-                <button className="w-full bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold py-4 rounded-xl transition-colors text-lg shadow-sm">
+                <Link href="/checkout" className="w-full bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold py-4 rounded-xl transition-colors text-lg shadow-sm flex items-center justify-center">
                   Tiến hành thanh toán
-                </button>
+                </Link>
               </div>
             </div>
           </div>

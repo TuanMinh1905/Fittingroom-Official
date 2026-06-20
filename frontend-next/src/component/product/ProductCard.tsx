@@ -5,12 +5,14 @@ import Link from "next/link";
 import { Product } from "@/store/productStore";
 import { useCartStore } from "@/store/cartStore";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const router = useRouter();
   const addToCart = useCartStore((state) => state.addToCart);
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -24,6 +26,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         color: '#fff',
       },
     });
+  };
+
+  const handleTryOn = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push("/fitting-room");
   };
 
   // Format giá tiền Việt Nam
@@ -80,17 +88,28 @@ export default function ProductCard({ product }: ProductCardProps) {
               )}
             </div>
 
-            <button
-              onClick={handleAddToCart}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border border-red-500 transition-colors hover:bg-red-50"
-              title="Thêm vào giỏ hàng"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
-                <circle cx="9" cy="21" r="1"/>
-                <circle cx="20" cy="21" r="1"/>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-              </svg>
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handleTryOn}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[var(--primary)] transition-colors hover:bg-[var(--primary)] hover:text-white text-[var(--primary)]"
+                title="Thử đồ ngay"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/>
+                </svg>
+              </button>
+              <button
+                onClick={handleAddToCart}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-red-500 transition-colors hover:bg-red-50"
+                title="Thêm vào giỏ hàng"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>

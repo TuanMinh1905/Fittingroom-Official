@@ -5,8 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import LoginModal from "./loginModal";
 import { useCartStore } from "@/store/cartStore";
-
-const navItems = ["Trang chủ", "Danh mục", "Giới thiệu", "Blog"];
+const navItems = ["Trang chủ", "Danh mục", "Thử đồ", "Blog"];
 
 type NavbarPageProps = {
     className?: string;
@@ -110,7 +109,7 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
                             {navItems.map((item, index) => (
                                 <Link
                                     key={item}
-                                    href={index === 0 ? "/" : "/"}
+                                    href={item === "Thử đồ" ? "/fitting-room" : "/"}
                                     className={`transition hover:text-slate-900 ${index === 0 ? "text-slate-900 underline decoration-4 underline-offset-8 decoration-yellow-400" : ""}`}
                                 >
                                     {item}

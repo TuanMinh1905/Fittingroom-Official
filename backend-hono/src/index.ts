@@ -12,6 +12,7 @@ import brand from './routes/brand.js'
 import blog from './routes/blog.js'
 import auth from './routes/auth.js'
 import user from './routes/user.js'
+import order from './routes/order.js'
 
 const app = new Hono()
 
@@ -34,6 +35,7 @@ app.route('/brand', brand)
 app.route('/blog', blog) 
 app.route('/auth', auth)
 app.route('/users', user)
+app.route('/orders', order)
 
 
 const port = Number(process.env.PORT) || 8000
