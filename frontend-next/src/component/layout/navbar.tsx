@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import LoginModal from "./loginModal";
 import { useCartStore } from "@/store/cartStore";
 const navItems = ["Trang chủ", "Danh mục", "Thử đồ", "Blog"];
@@ -12,6 +12,7 @@ type NavbarPageProps = {
 };
 
 export default function NavbarPage({ className = "" }: NavbarPageProps) {
+    const pathname = usePathname();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [user, setUser] = useState<any>(null);
     const [keyword, setKeyword] = useState("");
@@ -106,15 +107,19 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
                         </Link>
 
                         <nav aria-label="Main navigation" className="rowCenter text-[16px] font-monasans text-[var(--text-primary)] font-regular gap-[24px]">
-                            {navItems.map((item, index) => (
-                                <Link
-                                    key={item}
-                                    href={item === "Thử đồ" ? "/fitting-room" : "/"}
-                                    className={`transition hover:text-slate-900 ${index === 0 ? "text-slate-900 underline decoration-4 underline-offset-8 decoration-yellow-400" : ""}`}
-                                >
-                                    {item}
-                                </Link>
-                            ))}
+                            {navItems.map((item) => {
+                                const href = item === "Thử đồ" ? "/fitting-room" : item === "Danh mục" ? "/category" : item === "Blog" ? "/blog" : "/";
+                                const isActive = href === "/" ? pathname === "/" : (pathname === href || pathname?.startsWith(href + "/"));
+                                return (
+                                    <Link
+                                        key={item}
+                                        href={href}
+                                        className={`transition hover:text-slate-900 font-semibold ${isActive ? "text-slate-900 underline decoration-4 underline-offset-8 decoration-yellow-400" : "text-slate-500"}`}
+                                    >
+                                        {item}
+                                    </Link>
+                                );
+                            })}
                         </nav>
                     </div>
 

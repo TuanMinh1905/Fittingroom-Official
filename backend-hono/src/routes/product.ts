@@ -9,6 +9,7 @@ import { Hono } from 'hono'
 // Khi chạy: Node.js đọc file .js
 // Nên import path phải là .js để Node.js tìm được
 import { Product } from '../models/product.js'
+import { Brand } from '../models/brand.js'
 
 // Tạo router riêng cho products
 const products = new Hono()
@@ -48,6 +49,32 @@ products.get('/slug/:slug', async (c) => {
     const product = await Product.findOne({ slug })
     if (!product) return c.json({ message: 'Product not found' }, 404)
     return c.json(product)
+})
+
+// API lấy sản phẩm theo categorySlug
+products.get('/category/:categorySlug', async (c) => {
+    const categorySlug = c.req.param('categorySlug')
+    try {
+        const categoryProducts = await Product.find({ categorySlug })
+        return c.json(categoryProducts)
+    } catch (error) {
+        return c.json({ error: 'Failed to fetch products for category' }, 500)
+    }
+})
+
+// API lấy sản phẩm theo brandSlug
+products.get('/brand/:brandSlug', async (c) => {
+    const brandSlug = c.req.param('brandSlug')
+    try {
+        const brandItem = await Brand.findOne({ slug: brandSlug })
+        if (!brandItem) {
+            return c.json([])
+        }
+        const brandProducts = await Product.find({ brand: brandItem.name })
+        return c.json(brandProducts)
+    } catch (error) {
+        return c.json({ error: 'Failed to fetch products for brand' }, 500)
+    }
 })
 
 // Create product
