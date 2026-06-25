@@ -18,8 +18,14 @@ interface AIChatboxProps {
   gender: "male" | "female";
   topGarment: GarmentContext | null;
   bottomGarment: GarmentContext | null;
-  /** Khi nào trigger auto-analyze (thay đổi = trigger mới) */
-  triggerKey?: number;
+  /** Chatbox đang mở hay đóng — do parent kiểm soát */
+  isOpen: boolean;
+  /** Callback để đóng chatbox */
+  onClose: () => void;
+  /** Nếu true, khi mở chatbox lần đầu sẽ tự gọi AI phân tích 1 lần */
+  pendingAnalysis?: boolean;
+  /** Callback sau khi AI analysis đã được kích hoạt (để parent reset flag) */
+  onAnalysisTriggered?: () => void;
 }
 
 const BACKEND_URL = "http://localhost:8003";
@@ -40,35 +46,42 @@ export default function AIChatbox({
   gender,
   topGarment,
   bottomGarment,
-  triggerKey,
+  isOpen,
+  onClose,
+  pendingAnalysis,
+  onAnalysisTriggered,
 }: AIChatboxProps) {
   const [messages, setMessages] = useState<ChatMessageData[]>([
     {
       id: "welcome",
       role: "system",
-      content: "AI Tư Vấn Size — Hãy thử đồ rồi hỏi tôi!",
+      content: "AI Tư Vấn Size — Nhấn nút bên dưới để nhận ý kiến sau khi thử đồ!",
       timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const lastTriggerRef = useRef<number | undefined>(undefined);
+  const analysisTriggeredRef = useRef(false);
 
   // Auto scroll to bottom (chỉ cuộn trong chatbox, không cuộn cả page)
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [messages, isTyping]);
 
-  // Auto-trigger khi render 3D xong
+  // Khi chatbox mở và có pendingAnalysis → trigger AI 1 lần duy nhất
   useEffect(() => {
-    if (triggerKey !== undefined && triggerKey !== lastTriggerRef.current) {
-      lastTriggerRef.current = triggerKey;
+    if (isOpen && pendingAnalysis && !analysisTriggeredRef.current) {
+      analysisTriggeredRef.current = true;
       handleAutoAnalyze();
+      onAnalysisTriggered?.();
     }
-  }, [triggerKey]);
+    // Reset flag khi chatbox đóng để lần sau mở lại có thể trigger mới
+    if (!isOpen) {
+      analysisTriggeredRef.current = false;
+    }
+  }, [isOpen, pendingAnalysis]);
 
   const buildContext = useCallback((): string => {
     const lines: string[] = [];
@@ -207,20 +220,7 @@ export default function AIChatbox({
 
   // ── Render ──────────────────────────────────────────────
 
-  if (isMinimized) {
-    return (
-      <button
-        onClick={() => setIsMinimized(false)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 text-white rounded-full shadow-xl hover:shadow-2xl hover:scale-110 transition-all flex items-center justify-center group"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-        {/* Notification dot */}
-        <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse" />
-      </button>
-    );
-  }
+  if (!isOpen) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-50 w-[360px] h-[550px] flex flex-col bg-gray-50 rounded-2xl overflow-hidden border border-gray-200 shadow-2xl transition-all animate-[slideIn_0.3s_ease-out]">
@@ -239,15 +239,13 @@ export default function AIChatbox({
           </div>
         </div>
         <button
-          onClick={() => setIsMinimized(true)}
+          onClick={onClose}
           className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
-          title="Thu nhỏ"
+          title="Đóng"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="4 14 10 14 10 20" />
-            <polyline points="20 10 14 10 14 4" />
-            <line x1="14" y1="10" x2="21" y2="3" />
-            <line x1="3" y1="21" x2="10" y2="14" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
       </div>

@@ -15,16 +15,16 @@ const GARMENT_TYPE_MAP: Record<string, string[]> = {
 
 // Số đo cơ thể thực tế với giá trị mặc định theo giới tính
 const BODY_DEFAULTS = {
-  male:   { shoulder: 46, arm: 60, bust: 96, waist: 82, hip: 96, leg: 80 },
+  male: { shoulder: 46, arm: 60, bust: 96, waist: 82, hip: 96, leg: 80 },
   female: { shoulder: 38, arm: 55, bust: 88, waist: 70, hip: 98, leg: 74 },
 };
 const BODY_MEASUREMENTS = [
-  { key: "shoulder" as const, label: "Bề ngang vai",    unit: "cm", min: 28, max: 58 },
-  { key: "arm" as const,      label: "Chiều dài tay",   unit: "cm", min: 40, max: 75 },
-  { key: "bust" as const,     label: "Vòng ngực",       unit: "cm", min: 70, max: 130 },
-  { key: "waist" as const,    label: "Vòng eo",         unit: "cm", min: 55, max: 120 },
-  { key: "hip" as const,      label: "Vòng hông",       unit: "cm", min: 75, max: 130 },
-  { key: "leg" as const,      label: "Chiều dài chân", unit: "cm", min: 55, max: 100 },
+  { key: "shoulder" as const, label: "Bề ngang vai", unit: "cm", min: 28, max: 58 },
+  { key: "arm" as const, label: "Chiều dài tay", unit: "cm", min: 40, max: 75 },
+  { key: "bust" as const, label: "Vòng ngực", unit: "cm", min: 70, max: 130 },
+  { key: "waist" as const, label: "Vòng eo", unit: "cm", min: 55, max: 120 },
+  { key: "hip" as const, label: "Vòng hông", unit: "cm", min: 75, max: 130 },
+  { key: "leg" as const, label: "Chiều dài chân", unit: "cm", min: 55, max: 100 },
 ];
 type BodyKey = typeof BODY_MEASUREMENTS[number]["key"];
 
@@ -53,7 +53,9 @@ export default function FittingRoomPage() {
   const [resultImg, setResultImg] = useState<string | null>(null);
   const [meshData, setMeshData] = useState<MeshData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [chatTriggerKey, setChatTriggerKey] = useState(0);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [pendingAnalysis, setPendingAnalysis] = useState(false);
+  const [hasTryOnResult, setHasTryOnResult] = useState(false);
 
   const topItems = items.filter(i => i.categorySlug === "ao").slice(0, 3);
   const bottomItems = items.filter(i => i.categorySlug === "quan").slice(0, 3);
@@ -171,8 +173,11 @@ export default function FittingRoomPage() {
       }
       // Luôn lưu ảnh fallback
       setResultImg(`data:image/png;base64,${data.image_small}`);
-      // Trigger AI chatbox phân tích
-      setChatTriggerKey(prev => prev + 1);
+      // Đánh dấu có kết quả mới — chờ người dùng chủ động mở AI chatbox
+      setHasTryOnResult(true);
+      setPendingAnalysis(true);
+      // Tự động mở chatbox nếu người dùng đã từng mở trước đó
+      // (không tự mở lần đầu để tránh làm phiền)
     } catch (e: any) {
       setError(e.message || "Có lỗi xảy ra khi kết nối TailorNet.");
     } finally {
@@ -245,6 +250,15 @@ export default function FittingRoomPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <style>{`
+        @keyframes customPulseOpacity {
+          0%, 100% { opacity: 0.7; }
+          50% { opacity: 1; }
+        }
+        .custom-pulse-opacity {
+          animation: customPulseOpacity 1.5s ease-in-out infinite;
+        }
+      `}</style>
       <h1 className="text-3xl font-bold text-center mb-8 font-monasans text-[var(--text-primary)]">
         Phòng Thử Đồ Ảo (Virtual Fitting Room)
       </h1>
@@ -254,7 +268,7 @@ export default function FittingRoomPage() {
         <div className="w-full lg:w-1/4 bg-white rounded-2xl shadow-sm border border-gray-200 flex flex-col h-[700px] overflow-hidden">
           <div className="p-4 border-b">
             <h2 className="text-xl font-bold text-[var(--primary)] flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" /></svg>
               Đồ đang chọn ({items.length})
             </h2>
           </div>
@@ -290,14 +304,42 @@ export default function FittingRoomPage() {
         </div>
 
         {/* Section 2: Khu vực render */}
-        <div className="w-full lg:w-2/4 bg-gray-900 rounded-2xl shadow-sm border border-gray-700 flex flex-col items-center justify-center relative overflow-hidden h-[700px]">
-          <FittingRoom3DViewer
-            meshData={meshData}
-            fallbackImage={resultImg}
-            isLoading={isLoading}
-            error={error}
-            onClearError={() => setError(null)}
-          />
+        <div className="w-full lg:w-2/4 flex flex-col gap-4">
+          <div className="bg-gray-900 rounded-2xl shadow-sm border border-gray-700 flex flex-col items-center justify-center relative overflow-hidden h-[700px]">
+            <FittingRoom3DViewer
+              meshData={meshData}
+              fallbackImage={resultImg}
+              isLoading={isLoading}
+              error={error}
+              onClearError={() => setError(null)}
+            />
+          </div>
+
+          {/* Nút mở AI ở vị trí dưới cùng giữa màn hình */}
+          {hasTryOnResult && !isLoading && (
+            <div className="flex justify-center w-full">
+              <button
+                onClick={() => setIsChatOpen(true)}
+                className="relative w-full max-w-md group flex items-center justify-center transition-transform hover:scale-[1.02] custom-pulse-opacity"
+              >
+                {/* Lớp viền sáng (glow) phía sau */}
+                <div 
+                  className="absolute -inset-1.5 rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 blur-md" 
+                ></div>
+                
+                <div className="relative w-full flex items-center justify-center gap-2.5 px-5 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-bold text-white shadow-xl border border-white/20">
+                  <span className="text-xl animate-bounce" style={{ animationDuration: '2s' }}>🤖</span>
+                  <span className="text-[14px] uppercase tracking-wide">Xem ý kiến và trò chuyện với AI</span>
+                  {pendingAnalysis && (
+                    <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full border-2 border-white flex items-center justify-center shadow-lg">
+                      <span className="absolute w-full h-full bg-red-500 rounded-full animate-ping opacity-75" />
+                      <span className="relative text-[10px] font-bold text-white">1</span>
+                    </span>
+                  )}
+                </div>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Section 3: Thông số */}
@@ -405,13 +447,13 @@ export default function FittingRoomPage() {
             {isLoading ? (
               <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>Đang xử lý...</span></>
             ) : (
-              <><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg><span>ẤN THỬ ĐỒ NGAY</span></>
+              <><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" /></svg><span>ẤN THỬ ĐỒ NGAY</span></>
             )}
           </button>
         </div>
       </div>
-      
-      {/* Floating AI Chatbox */}
+
+      {/* Floating AI Chatbox — chỉ mở khi người dùng chủ động click */}
       <AIChatbox
         body={{ ...bodyMeasures, height, weight }}
         gender={gender}
@@ -427,7 +469,10 @@ export default function FittingRoomPage() {
           color: selectedOptions[selectedBottomId].color,
           name: items.find(i => i._id === selectedBottomId)?.name,
         } : null}
-        triggerKey={chatTriggerKey}
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        pendingAnalysis={pendingAnalysis}
+        onAnalysisTriggered={() => setPendingAnalysis(false)}
       />
     </div>
   );
