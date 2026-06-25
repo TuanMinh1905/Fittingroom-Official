@@ -2,29 +2,37 @@ import { useMemo } from "react";
 import "@react-three/fiber";
 import * as THREE from "three";
 
-export default function HumanMesh({vertices, faces}: {vertices: number[], faces: number[]}) {
-    // script logic
+interface HumanMeshProps {
+  vertices: number[];
+  faces: number[];
+  color?: string;
+}
 
-    // useMeno giống với onMouted trong Nuxt, chạy 1 lần khi component được mount, và chỉ chạy lại khi dependency thay đổi
-    const geometry = useMemo(() => {
-        const g = new THREE.BufferGeometry();
+/**
+ * Render body mesh (SMPL) với skin tone.
+ * vertices: mảng phẳng [x0,y0,z0, x1,y1,z1, ...]
+ * faces: mảng phẳng [i0,i1,i2, ...]
+ */
+export default function HumanMesh({ vertices, faces, color = "#e8beac" }: HumanMeshProps) {
+  const geometry = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    const positionArray = new Float32Array(vertices);
+    const indexArray = new Uint32Array(faces);
 
-        // Convert vertices and faces to typed arrays
-        const positionArray = new Float32Array(vertices);
-        const indexArray = new Uint32Array(faces);
+    g.setAttribute("position", new THREE.BufferAttribute(positionArray, 3));
+    g.setIndex(new THREE.BufferAttribute(indexArray, 1));
+    g.computeVertexNormals();
+    return g;
+  }, [vertices, faces]);
 
-        g.setAttribute("position", new THREE.BufferAttribute(positionArray, 3));
-        g.setIndex(new THREE.BufferAttribute(indexArray, 1));
-        g.computeVertexNormals(); // Tính toán normal cho ánh sáng
-        return g;
-    }, [vertices, faces]);
-
-
-    // HTML render
-    return ( 
-        <mesh geometry={geometry}>
-            <meshStandardMaterial color="orange" />
-        </mesh>
-    );
-
+  return (
+    <mesh geometry={geometry}>
+      <meshStandardMaterial
+        color={color}
+        roughness={0.7}
+        metalness={0.05}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
 }

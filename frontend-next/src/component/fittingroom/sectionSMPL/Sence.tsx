@@ -1,54 +1,86 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import HumanMesh from "./HumanMesh"; // Import component HumanMesh
+import { OrbitControls, Environment, ContactShadows } from "@react-three/drei";
+import HumanMesh from "./HumanMesh";
+import GarmentMesh from "./GarmentMesh";
 
-// Canvas là khung render 3D. Nó tạo scene + renderer + camera
-// position: vị trí camera trong không gian 3D
-// fov: góc nhìn camera (nhỏ hơn thì zoom-in kiểu tele, lớn hơn thì wide).
+// Kiểu dữ liệu cho garment mesh
+export interface GarmentData {
+  vertices: number[];
+  faces: number[];
+  color?: string | [number, number, number, number];
+  type?: string;
+}
 
-/* ambientLight là Ánh sáng môi trường chiếu đều mọi hướng. */
-/* Không tạo bóng đổ rõ, chỉ làm scene đỡ tối. */
-/* intensity=0.5 là độ sáng vừa phải. */
+interface SceneProps {
+  bodyVertices: number[];
+  bodyFaces: number[];
+  garments?: GarmentData[];
+  skinColor?: string;
+}
 
-// directionalLight là ánh sáng chiếu từ một hướng cụ thể, tạo bóng đổ rõ ràng.
-// position là vị trí nguồn sáng.
-// Chiếu có hướng nên tạo cảm giác khối rõ hơn.
-// intensity=1.2 sáng hơn ambient.
-
-// gridHelper tạo lưới trên mặt đất, giúp định hướng trong không gian 3D.
-// Lưới tham chiếu mặt sàn để dễ nhìn orientation/scale.
-// 4: kích thước tổng của lưới.
-// 20: số ô chia.
-// "#999999" và "#dddddd": màu line đậm/nhạt
-
-// <group rotation={[0, Math.PI, 0]}> ... </group>
-// Nhóm object để transform chung (rotate/scale/position).
-// Ở đây xoay quanh trục Y một góc Math.PI (180 độ).
-// Mục đích: quay model lại đúng hướng camera.
-
-// HumanMesh vertices={vertices} faces={faces} 
-// Component bạn tự viết, nhận dữ liệu mesh từ backend.
-// Bên trong nó tạo BufferGeometry từ vertices + faces.
-// Rồi render ra object mesh người.
-
-// OrbitControls 
-// Cho phép dùng chuột để:
-// xoay camera quanh model
-// zoom in/out
-
-export function Scene({ vertices, faces }: { vertices: number[]; faces: number[] }) {
+/**
+ * 3D Scene hiển thị model người + quần áo.
+ *
+ * - 3-point lighting: ambient + directional + fill light
+ * - ContactShadows tạo bóng mềm dưới chân
+ * - OrbitControls cho phép xoay/zoom/pan
+ * - Background gradient tối (dark studio feel)
+ */
+export function Scene({ bodyVertices, bodyFaces, garments = [], skinColor = "#e8beac" }: SceneProps) {
   return (
-    <Canvas camera={{ position: [0, 0.9, 2.2], fov: 45 }}>
-      
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[2, 3, 2]} intensity={1.2} />
-      <gridHelper args={[4, 20, "#999999", "#dddddd"]} />
+    <Canvas
+      camera={{ position: [0, 0.9, 2.5], fov: 40 }}
+      style={{ background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" }}
+      gl={{ antialias: true, alpha: false }}
+    >
+      {/* Lighting: 3-point setup */}
+      <ambientLight intensity={0.4} color="#e6e6ff" />
+      {/* Key light — phía trước-trên-phải */}
+      <directionalLight position={[3, 4, 3]} intensity={1.5} color="#ffffff" castShadow />
+      {/* Fill light — phía trái, nhẹ hơn */}
+      <directionalLight position={[-3, 2, 1]} intensity={0.6} color="#b0c4ff" />
+      {/* Back/rim light — phía sau để tạo viền sáng */}
+      <directionalLight position={[0, 3, -3]} intensity={0.4} color="#ffeedd" />
 
+      {/* Floor grid */}
+      <gridHelper args={[4, 20, "#334466", "#223344"]} position={[0, -0.85, 0]} />
+
+      {/* Contact shadow — bóng mềm dưới chân */}
+      <ContactShadows
+        position={[0, -0.85, 0]}
+        opacity={0.5}
+        scale={4}
+        blur={2.5}
+        far={1.5}
+      />
+
+      {/* Model group — xoay 180° để quay mặt về phía camera */}
       <group rotation={[0, Math.PI, 0]}>
-        <HumanMesh vertices={vertices} faces={faces} />
+        {/* Body mesh */}
+        <HumanMesh vertices={bodyVertices} faces={bodyFaces} color={skinColor} />
+
+        {/* Garment meshes */}
+        {garments.map((g, idx) => (
+          <GarmentMesh
+            key={`garment-${idx}-${g.type || idx}`}
+            vertices={g.vertices}
+            faces={g.faces}
+            color={g.color}
+          />
+        ))}
       </group>
 
-      <OrbitControls />
+      {/* OrbitControls: xoay chuột trái, zoom scroll, pan chuột phải */}
+      <OrbitControls
+        target={[0, 0.3, 0]}
+        minDistance={1}
+        maxDistance={5}
+        enablePan={true}
+        enableDamping={true}
+        dampingFactor={0.08}
+        maxPolarAngle={Math.PI * 0.85}
+        minPolarAngle={Math.PI * 0.1}
+      />
     </Canvas>
   );
 }

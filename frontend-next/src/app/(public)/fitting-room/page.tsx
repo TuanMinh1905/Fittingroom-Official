@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useCartStore } from "@/store/cartStore";
 import Link from "next/link";
+import FittingRoom3DViewer, { type MeshData } from "@/component/fittingroom/FittingRoom3DViewer";
 
 const TRYON_PROXY = "/api/tryon";
 const SIZE_NEXT: Record<string, string> = { XS: "S", S: "M", M: "L", L: "XL", XL: "XXL" };
@@ -49,6 +50,7 @@ export default function FittingRoomPage() {
   const [selectedBottomId, setSelectedBottomId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [resultImg, setResultImg] = useState<string | null>(null);
+  const [meshData, setMeshData] = useState<MeshData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const topItems = items.filter(i => i.categorySlug === "ao").slice(0, 3);
@@ -81,6 +83,7 @@ export default function FittingRoomPage() {
     setIsLoading(true);
     setError(null);
     setResultImg(null);
+    setMeshData(null);
 
     // Số đo cơ thể bổ sung gửi kèm
     const bodyExtra = {
@@ -141,7 +144,11 @@ export default function FittingRoomPage() {
         data = await res.json();
       }
 
-      // Hiển thị ảnh "ôm sát" (size user chọn)
+      // Ưu tiên hiển thị 3D mesh nếu có, fallback sang ảnh 2D
+      if (data.mesh_data && data.mesh_data.body_vertices && data.mesh_data.body_vertices.length > 0) {
+        setMeshData(data.mesh_data);
+      }
+      // Luôn lưu ảnh fallback
       setResultImg(`data:image/png;base64,${data.image_small}`);
     } catch (e: any) {
       setError(e.message || "Có lỗi xảy ra khi kết nối TailorNet.");
@@ -260,32 +267,14 @@ export default function FittingRoomPage() {
         </div>
 
         {/* Section 2: Khu vực render */}
-        <div className="w-full lg:w-2/4 bg-gray-50 rounded-2xl shadow-sm border-2 border-dashed border-gray-300 flex flex-col items-center justify-center relative overflow-hidden h-[700px]">
-          {isLoading ? (
-            <div className="text-center z-10 p-6">
-              <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-gray-700 mb-2">Đang render 3D...</h2>
-              <p className="text-gray-500 text-sm">Quá trình có thể mất vài phút, vui lòng chờ.</p>
-            </div>
-          ) : error ? (
-            <div className="text-center z-10 p-6 max-w-sm">
-              <div className="text-red-500 text-4xl mb-3">⚠️</div>
-              <h2 className="text-lg font-bold text-red-600 mb-2">Có lỗi xảy ra</h2>
-              <p className="text-sm text-gray-600 bg-red-50 p-3 rounded-lg border border-red-200">{error}</p>
-              <button onClick={() => setError(null)} className="mt-4 text-sm text-[var(--primary)] hover:underline">Thử lại</button>
-            </div>
-          ) : resultImg ? (
-            <div className="w-full h-full flex flex-col items-center justify-center p-4">
-              <img src={resultImg} alt="Kết quả thử đồ" className="max-h-full max-w-full object-contain rounded-xl shadow-lg" />
-            </div>
-          ) : (
-            <div className="text-center z-10 p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="mx-auto text-gray-400 mb-4"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-              <h2 className="text-2xl font-bold text-gray-700 mb-2">Khu vực Render 3D</h2>
-              <p className="text-gray-500">Chọn đồ và nhấn "Thử đồ ngay" để xem kết quả.</p>
-            </div>
-          )}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[500px] border border-gray-200 rounded-[100px] opacity-30 pointer-events-none" />
+        <div className="w-full lg:w-2/4 bg-gray-900 rounded-2xl shadow-sm border border-gray-700 flex flex-col items-center justify-center relative overflow-hidden h-[700px]">
+          <FittingRoom3DViewer
+            meshData={meshData}
+            fallbackImage={resultImg}
+            isLoading={isLoading}
+            error={error}
+            onClearError={() => setError(null)}
+          />
         </div>
 
         {/* Section 3: Thông số */}
