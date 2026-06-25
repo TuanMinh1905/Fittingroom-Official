@@ -57,9 +57,9 @@ export default function AIChatbox({
   const inputRef = useRef<HTMLInputElement>(null);
   const lastTriggerRef = useRef<number | undefined>(undefined);
 
-  // Auto scroll to bottom
+  // Auto scroll to bottom (chỉ cuộn trong chatbox, không cuộn cả page)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [messages, isTyping]);
 
   // Auto-trigger khi render 3D xong
@@ -223,7 +223,7 @@ export default function AIChatbox({
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-50 rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
+    <div className="fixed bottom-6 right-6 z-50 w-[360px] h-[550px] flex flex-col bg-gray-50 rounded-2xl overflow-hidden border border-gray-200 shadow-2xl transition-all animate-[slideIn_0.3s_ease-out]">
       {/* Header */}
       <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2.5">

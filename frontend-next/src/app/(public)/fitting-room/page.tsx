@@ -270,39 +270,15 @@ export default function FittingRoomPage() {
           </div>
         </div>
 
-        {/* Section 2: Khu vực render + AI Chatbox */}
-        <div className="w-full lg:w-2/4 flex flex-col gap-4">
-          {/* 3D Viewer */}
-          <div className="bg-gray-900 rounded-2xl shadow-sm border border-gray-700 flex flex-col items-center justify-center relative overflow-hidden h-[460px]">
-            <FittingRoom3DViewer
-              meshData={meshData}
-              fallbackImage={resultImg}
-              isLoading={isLoading}
-              error={error}
-              onClearError={() => setError(null)}
-            />
-          </div>
-
-          {/* AI Chatbox */}
-          <div className="h-[228px]">
-            <AIChatbox
-              body={{ ...bodyMeasures, height, weight }}
-              gender={gender}
-              topGarment={selectedTopId && selectedOptions[selectedTopId] ? {
-                garmentType: selectedOptions[selectedTopId].garmentType,
-                size: selectedOptions[selectedTopId].size,
-                color: selectedOptions[selectedTopId].color,
-                name: items.find(i => i._id === selectedTopId)?.name,
-              } : null}
-              bottomGarment={selectedBottomId && selectedOptions[selectedBottomId] ? {
-                garmentType: selectedOptions[selectedBottomId].garmentType,
-                size: selectedOptions[selectedBottomId].size,
-                color: selectedOptions[selectedBottomId].color,
-                name: items.find(i => i._id === selectedBottomId)?.name,
-              } : null}
-              triggerKey={chatTriggerKey}
-            />
-          </div>
+        {/* Section 2: Khu vực render */}
+        <div className="w-full lg:w-2/4 bg-gray-900 rounded-2xl shadow-sm border border-gray-700 flex flex-col items-center justify-center relative overflow-hidden h-[700px]">
+          <FittingRoom3DViewer
+            meshData={meshData}
+            fallbackImage={resultImg}
+            isLoading={isLoading}
+            error={error}
+            onClearError={() => setError(null)}
+          />
         </div>
 
         {/* Section 3: Thông số */}
@@ -415,6 +391,25 @@ export default function FittingRoomPage() {
           </button>
         </div>
       </div>
+      
+      {/* Floating AI Chatbox */}
+      <AIChatbox
+        body={{ ...bodyMeasures, height, weight }}
+        gender={gender}
+        topGarment={selectedTopId && selectedOptions[selectedTopId] ? {
+          garmentType: selectedOptions[selectedTopId].garmentType,
+          size: selectedOptions[selectedTopId].size,
+          color: selectedOptions[selectedTopId].color,
+          name: items.find(i => i._id === selectedTopId)?.name,
+        } : null}
+        bottomGarment={selectedBottomId && selectedOptions[selectedBottomId] ? {
+          garmentType: selectedOptions[selectedBottomId].garmentType,
+          size: selectedOptions[selectedBottomId].size,
+          color: selectedOptions[selectedBottomId].color,
+          name: items.find(i => i._id === selectedBottomId)?.name,
+        } : null}
+        triggerKey={chatTriggerKey}
+      />
     </div>
   );
 }
