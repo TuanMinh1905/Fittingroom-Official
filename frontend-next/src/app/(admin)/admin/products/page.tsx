@@ -9,12 +9,14 @@ interface Product {
   description: string;
   imageUrl?: string;
   categorySlug?: string;
+  brand?: string;
 }
 
 const API_URL = "http://localhost:8000/products";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [brands, setBrands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -26,6 +28,7 @@ export default function AdminProductsPage() {
     description: "",
     imageUrl: "",
     categorySlug: "ao", // Default
+    brand: "Nike", // Default
   });
 
   const fetchProducts = async () => {
@@ -41,8 +44,22 @@ export default function AdminProductsPage() {
     }
   };
 
+  const fetchBrands = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/brand");
+      const data = await res.json();
+      setBrands(data);
+      if (data.length > 0 && !formData.brand) {
+        setFormData(prev => ({ ...prev, brand: data[0].name }));
+      }
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
+    fetchBrands();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -51,7 +68,14 @@ export default function AdminProductsPage() {
 
   const openAddModal = () => {
     setEditingId(null);
-    setFormData({ name: "", price: 0, description: "", imageUrl: "", categorySlug: "ao" });
+    setFormData({ 
+      name: "", 
+      price: 0, 
+      description: "", 
+      imageUrl: "", 
+      categorySlug: "ao", 
+      brand: brands.length > 0 ? brands[0].name : "Nike" 
+    });
     setShowModal(true);
   };
 
@@ -63,6 +87,7 @@ export default function AdminProductsPage() {
       description: product.description,
       imageUrl: product.imageUrl || "",
       categorySlug: product.categorySlug || "ao",
+      brand: product.brand || (brands.length > 0 ? brands[0].name : "Nike"),
     });
     setShowModal(true);
   };
@@ -122,6 +147,7 @@ export default function AdminProductsPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên sản phẩm</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Thương hiệu</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phân loại</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mô tả</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Giá</th>
@@ -131,7 +157,7 @@ export default function AdminProductsPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">Chưa có sản phẩm nào.</td>
+                  <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">Chưa có sản phẩm nào.</td>
                 </tr>
               ) : (
                 products.map((product) => (
@@ -146,6 +172,11 @@ export default function AdminProductsPage() {
                           <div className="text-xs text-gray-500">ID: {product._id}</div>
                         </div>
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                        {product.brand || "Nike"}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -186,6 +217,20 @@ export default function AdminProductsPage() {
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Hình ảnh (URL)</label>
                 <input type="text" name="imageUrl" value={formData.imageUrl} onChange={handleChange} className="w-full border border-gray-300 rounded-md px-3 py-2" />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Thương hiệu</label>
+                <select name="brand" value={formData.brand} onChange={handleChange as any} className="w-full border border-gray-300 rounded-md px-3 py-2">
+                  {brands.length === 0 ? (
+                    <option value="Nike">Nike</option>
+                  ) : (
+                    brands.map((b) => (
+                      <option key={b._id} value={b.name}>
+                        {b.name}
+                      </option>
+                    ))
+                  )}
+                </select>
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Phân loại (Slug)</label>

@@ -13,6 +13,18 @@ blog.get('/', async (c) => {
     }
 })
 
+// Lấy blog theo slug
+blog.get('/post/:slug', async (c) => {
+    try {
+        const slug = c.req.param('slug')
+        const blogItem = await Blog.findOne({ slug })
+        if (!blogItem) return c.json({ message: 'Blog not found' }, 404)
+        return c.json(blogItem)
+    } catch (error) {
+        return c.json({ error: 'Failed to fetch blog' }, 500)
+    }
+})
+
 // Lấy blog theo id
 blog.get('/:id', async (c) => {
     try {

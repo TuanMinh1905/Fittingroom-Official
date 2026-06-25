@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -149,24 +151,32 @@ export default function AdminLayout({
           </div>
 
           <nav className="mt-8 space-y-2 text-sm font-medium text-slate-300">
-            <a className="block rounded-xl bg-slate-800/80 px-4 py-3 text-white" href="/admin">
-              Dashboard
-            </a>
-            <a className="block rounded-xl px-4 py-3 transition hover:bg-slate-800 hover:text-white" href="/admin/products">
-              Products
-            </a>
-            <a className="block rounded-xl px-4 py-3 transition hover:bg-slate-800 hover:text-white" href="/admin/categories">
-              Categories
-            </a>
-            <a className="block rounded-xl px-4 py-3 transition hover:bg-slate-800 hover:text-white" href="/admin/brands">
-              Brands
-            </a>
-            <a className="block rounded-xl px-4 py-3 transition hover:bg-slate-800 hover:text-white" href="/admin/orders">
-              Orders
-            </a>
-            <a className="block rounded-xl px-4 py-3 transition hover:bg-slate-800 hover:text-white" href="/admin/users">
-              Users
-            </a>
+            {[
+              { label: "Dashboard", href: "/admin" },
+              { label: "Products", href: "/admin/products" },
+              { label: "Categories", href: "/admin/categories" },
+              { label: "Brands", href: "/admin/brands" },
+              { label: "Orders", href: "/admin/orders" },
+              { label: "Users", href: "/admin/users" },
+              { label: "Blogs", href: "/admin/blogs" },
+            ].map((item) => {
+              const isActive = item.href === "/admin" 
+                ? pathname === "/admin" 
+                : pathname?.startsWith(item.href);
+              return (
+                <a
+                  key={item.href}
+                  className={`block rounded-xl px-4 py-3 transition ${
+                    isActive 
+                      ? "bg-slate-800 text-white font-semibold" 
+                      : "hover:bg-slate-800 hover:text-white"
+                  }`}
+                  href={item.href}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
           </nav>
 
           <div className="mt-8 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-sm text-cyan-100">

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { useCategoryStore } from "@/store/categoryStore";
+import Link from "next/link";
 
 export default function Category() {
   const { categories, fetchCategories, loading, error } = useCategoryStore();
@@ -45,14 +46,20 @@ export default function Category() {
         {error && <p className="text-red-500">{error}</p>}
 
         {!loading && !error && categories.map((item) => (
-          <div key={item._id} className="colCenter shrink-0 gap-[8px] w-[120px] h-[144px]">
-            <img 
-              src={item.imageCategory || "/placeholder.png"} 
-              alt={item.name} 
-              className="w-full h-full object-cover rounded-md"
-            />
-            <h3 className="text-center text-sm font-medium">{item.name}</h3>
-          </div>
+          <Link 
+            key={item._id} 
+            href={`/category/${item.slug}`} 
+            className="colCenter shrink-0 gap-[8px] w-[120px] h-[144px] hover:scale-105 transition-transform duration-200 block text-slate-800"
+          >
+            <div className="w-full h-[116px] overflow-hidden rounded-md border border-slate-100">
+              <img 
+                src={item.imageCategory || "/placeholder.png"} 
+                alt={item.name} 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <h3 className="text-center text-sm font-medium leading-none mt-1">{item.name}</h3>
+          </Link>
         ))}
       </section>
 
