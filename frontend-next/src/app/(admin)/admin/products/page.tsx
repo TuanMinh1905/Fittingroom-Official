@@ -12,7 +12,7 @@ interface Product {
   brand?: string;
 }
 
-const API_URL = "http://localhost:8000/products";
+const API_URL = "http://localhost:8003/products";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);

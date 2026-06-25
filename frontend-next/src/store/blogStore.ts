@@ -17,7 +17,7 @@ type BlogState = {
   fetchBlogBySlug: (slug: string) => Promise<Blog | null>;
 };
 
-const BLOGS_API = "http://localhost:8000/blog";
+const BLOGS_API = "http://localhost:8003/blog";
 
 export const useBlogStore = create<BlogState>((set) => ({
   blogs: [],

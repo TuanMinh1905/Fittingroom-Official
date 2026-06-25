@@ -38,7 +38,7 @@ app.route('/users', user)
 app.route('/orders', order)
 
 
-const port = Number(process.env.PORT) || 8000
+const port = Number(process.env.PORT) || 8003
 serve({ fetch: app.fetch, port }, (info) => {
   console.log(`Server running at http://localhost:${info.port}`)
 })

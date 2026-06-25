@@ -18,7 +18,7 @@ type CategoryState = {
   deleteCategory: (id: string) => Promise<void>;
 };
 
-const API_URL = "http://localhost:8000/category";
+const API_URL = "http://localhost:8003/category";
 
 export const useCategoryStore = create<CategoryState>((set) => ({
   categories: [],

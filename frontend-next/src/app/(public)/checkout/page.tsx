@@ -61,7 +61,7 @@ export default function CheckoutPage() {
         totalPrice: getTotalPrice()
       };
 
-      const response = await fetch("http://localhost:8000/orders", {
+      const response = await fetch("http://localhost:8003/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

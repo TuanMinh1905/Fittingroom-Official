@@ -10,7 +10,7 @@ interface Blog {
   description: string;
 }
 
-const API_URL = "http://localhost:8000/blog";
+const API_URL = "http://localhost:8003/blog";
 
 export default function AdminBlogsPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);

@@ -17,6 +17,8 @@ export interface IProduct extends Document {
     expiryDate?: string;
     stock: number;
     shippingInfo: string;
+    colorCodes?: string[];
+    sizes?: string[];
 }
 
 const ProductSchema = new Schema<IProduct>(
@@ -33,7 +35,9 @@ const ProductSchema = new Schema<IProduct>(
         brand: { type: String, required: true, default: 'TMF' },
         expiryDate: { type: String, required: false },
         stock: { type: Number, default: 100 },
-        shippingInfo: { type: String, default: 'Miễn phí vận chuyển' }
+        shippingInfo: { type: String, default: 'Miễn phí vận chuyển' },
+        colorCodes: [{ type: String }],
+        sizes: [{ type: String }]
     }
 )
 

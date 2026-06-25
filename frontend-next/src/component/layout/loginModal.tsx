@@ -28,7 +28,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         ? { email, password }
         : { name, email, password };
 
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(`http://localhost:8003${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

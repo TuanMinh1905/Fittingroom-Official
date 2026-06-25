@@ -31,7 +31,7 @@ type ProductState = {
   fetchProductsByBrand: (brandSlug: string) => Promise<void>;
 };
 
-const PRODUCTS_API = "http://localhost:8000/products";
+const PRODUCTS_API = "http://localhost:8003/products";
 
 export const useProductStore = create<ProductState>((set) => ({
   products: [],

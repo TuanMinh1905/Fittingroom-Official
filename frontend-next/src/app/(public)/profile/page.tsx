@@ -45,7 +45,7 @@ export default function ProfilePage() {
         setMessage({ type: "", text: "" });
 
         try {
-            const res = await fetch(`http://localhost:8000/users/${user._id}`, {
+            const res = await fetch(`http://localhost:8003/users/${user._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

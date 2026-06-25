@@ -11,7 +11,7 @@ interface Brand {
   logo?: string;
 }
 
-const API_URL = "http://localhost:8000/brand";
+const API_URL = "http://localhost:8003/brand";
 
 export default function AdminBrandsPage() {
   const [brands, setBrands] = useState<Brand[]>([]);

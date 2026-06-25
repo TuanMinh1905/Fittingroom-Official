@@ -18,7 +18,7 @@ function SearchContent() {
         }
 
         setLoading(true);
-        fetch(`http://localhost:8000/products/search?q=${encodeURIComponent(keyword)}`)
+        fetch(`http://localhost:8003/products/search?q=${encodeURIComponent(keyword)}`)
             .then(res => res.json())
             .then(data => {
                 setProducts(data);

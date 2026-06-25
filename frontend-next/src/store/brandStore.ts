@@ -16,7 +16,7 @@ type BrandState = {
   fetchBrands: () => Promise<void>;
 };
 
-const BRANDS_API = "http://localhost:8000/brand";
+const BRANDS_API = "http://localhost:8003/brand";
 
 export const useBrandStore = create<BrandState>((set) => ({
   brands: [],

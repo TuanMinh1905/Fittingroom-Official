@@ -9,13 +9,13 @@ interface PageProps {
 }
 
 async function getProductBySlug(slug: string) {
-  const res = await fetch(`http://localhost:8000/products/slug/${slug}`, { cache: 'no-store' });
+  const res = await fetch(`http://localhost:8003/products/slug/${slug}`, { cache: 'no-store' });
   if (!res.ok) return null;
   return res.json();
 }
 
 async function getAllProducts() {
-  const res = await fetch(`http://localhost:8000/products`, { cache: 'no-store' });
+  const res = await fetch(`http://localhost:8003/products`, { cache: 'no-store' });
   if (!res.ok) return [];
   return res.json();
 }

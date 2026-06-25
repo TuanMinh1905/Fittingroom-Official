@@ -29,7 +29,7 @@ export default function NavbarPage({ className = "" }: NavbarPageProps) {
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             if (keyword.trim()) {
-                fetch(`http://localhost:8000/products/search?q=${encodeURIComponent(keyword)}`)
+                fetch(`http://localhost:8003/products/search?q=${encodeURIComponent(keyword)}`)
                     .then(res => res.json())
                     .then(data => {
                         setResults(data);
