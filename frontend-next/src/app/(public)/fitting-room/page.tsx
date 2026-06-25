@@ -101,10 +101,26 @@ export default function FittingRoomPage() {
       const topOpt = selectedTopId ? selectedOptions[selectedTopId] : null;
       const botOpt = selectedBottomId ? selectedOptions[selectedBottomId] : null;
 
+      // Helper: tra sizeChart của product → lấy số đo cho size đã chọn
+      const getGarmentMeasurements = (itemId: string, size: string) => {
+        const item = items.find(i => i._id === itemId);
+        const entry = item?.sizeChart?.find((sc: any) => sc.size === size);
+        if (!entry) return {};
+        return {
+          garment_length_cm: entry.length_cm,
+          garment_chest_cm: entry.chest_half_cm,
+          garment_shoulder_cm: entry.shoulder_cm,
+          garment_waist_cm: entry.waist_cm,
+          garment_hip_cm: entry.hip_cm,
+        };
+      };
+
       let data: any;
 
       if (selectedTopId && selectedBottomId && topOpt && botOpt) {
         // Outfit mode: áo + quần
+        const topMeasures = getGarmentMeasurements(selectedTopId, topOpt.size);
+        const botMeasures = getGarmentMeasurements(selectedBottomId, botOpt.size);
         const payload = {
           height_cm: height,
           weight_kg: weight,
@@ -113,8 +129,8 @@ export default function FittingRoomPage() {
           extreme_demo: false,
           ...bodyExtra,
           garments: [
-            { garment_type: topOpt.garmentType, size_small: topOpt.size, size_large: SIZE_NEXT[topOpt.size] || "XL", color_hex: topOpt.color },
-            { garment_type: botOpt.garmentType, size_small: botOpt.size, size_large: SIZE_NEXT[botOpt.size] || "XL", color_hex: botOpt.color },
+            { garment_type: topOpt.garmentType, size_small: topOpt.size, size_large: SIZE_NEXT[topOpt.size] || "XL", color_hex: topOpt.color, ...topMeasures },
+            { garment_type: botOpt.garmentType, size_small: botOpt.size, size_large: SIZE_NEXT[botOpt.size] || "XL", color_hex: botOpt.color, ...botMeasures },
           ],
         };
         const res = await fetch(`${TRYON_PROXY}?endpoint=try-on-outfit`, {
@@ -126,6 +142,8 @@ export default function FittingRoomPage() {
       } else {
         // Single mode: chỉ áo hoặc chỉ quần
         const opt = topOpt || botOpt!;
+        const itemId = selectedTopId || selectedBottomId!;
+        const garmentMeasures = getGarmentMeasurements(itemId, opt.size);
         const payload = {
           height_cm: height,
           weight_kg: weight,
@@ -137,6 +155,7 @@ export default function FittingRoomPage() {
           extreme_demo: false,
           garment_color_hex: opt.color,
           ...bodyExtra,
+          ...garmentMeasures,
         };
         const res = await fetch(`${TRYON_PROXY}?endpoint=try-on`, {
           method: "POST", headers: { "Content-Type": "application/json" },

@@ -1,8 +1,20 @@
 // Product Schema
 import mongoose, { Schema, Document } from 'mongoose';
 
+// Số đo thực tế cho từng size (cm)
+export interface ISizeMeasurement {
+    size: string;           // "S", "M", "L", "XL"
+    // Áo
+    length_cm?: number;     // Chiều dài áo (đo từ đỉnh vai xuống lai áo)
+    chest_half_cm?: number; // Nửa vòng ngực (ngang ngực, đo 1 mặt áo trải phẳng)
+    shoulder_cm?: number;   // Chiều rộng vai
+    // Quần
+    waist_cm?: number;      // Vòng eo (chu vi)
+    hip_cm?: number;        // Vòng hông (chu vi)
+}
+
 // Extends là kế thừa từ lớp Document của Mongoose, để có thêm mấy cái thuộc tính như
-// _id, createdAt, updatedAt, save(), remove(),....
+// _id, createdAt, updatedAt, save(), remove(),...
 export interface IProduct extends Document {
     name: string;
     slug: string;
@@ -19,7 +31,17 @@ export interface IProduct extends Document {
     shippingInfo: string;
     colorCodes?: string[];
     sizes?: string[];
+    sizeChart?: ISizeMeasurement[];
 }
+
+const SizeMeasurementSchema = new Schema<ISizeMeasurement>({
+    size: { type: String, required: true },
+    length_cm: { type: Number },
+    chest_half_cm: { type: Number },
+    shoulder_cm: { type: Number },
+    waist_cm: { type: Number },
+    hip_cm: { type: Number },
+}, { _id: false });
 
 const ProductSchema = new Schema<IProduct>(
     {
@@ -37,13 +59,15 @@ const ProductSchema = new Schema<IProduct>(
         stock: { type: Number, default: 100 },
         shippingInfo: { type: String, default: 'Miễn phí vận chuyển' },
         colorCodes: [{ type: String }],
-        sizes: [{ type: String }]
+        sizes: [{ type: String }],
+        sizeChart: [SizeMeasurementSchema],
     }
 )
 
 
 
 export const Product = mongoose.model<IProduct>('Product', ProductSchema)
+
 
 
 

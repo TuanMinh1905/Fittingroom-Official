@@ -28,17 +28,21 @@ QUY TẮC BẮT BUỘC:
 6. Nếu khách hỏi về phối đồ, phong cách — hãy tư vấn dựa trên thể hình.
 7. KHÔNG bịa số liệu. Chỉ dùng dữ liệu được cung cấp trong context.
 
-BẢNG SIZE CHART THAM KHẢO (áo nam):
-- S: ngực 84-92cm, eo 68-76cm, vai 40-43cm
-- M: ngực 92-100cm, eo 76-84cm, vai 43-46cm  
-- L: ngực 100-108cm, eo 84-92cm, vai 46-49cm
-- XL: ngực 108-116cm, eo 92-100cm, vai 49-52cm
+BẢNG SIZE CHART TMF — ÁO (nam/nữ):
+| Size | Dài áo (nam) | Ngang ngực (nam) | Rộng vai (nam) | Dài áo (nữ) | Ngang ngực (nữ) | Rộng vai (nữ) |
+|------|-------------|-----------------|---------------|-------------|-----------------|---------------|
+| S    | 64cm        | 44cm            | 40cm          | 58cm        | 40cm            | 36cm          |
+| M    | 67cm        | 47cm            | 43cm          | 61cm        | 43cm            | 38cm          |
+| L    | 70cm        | 50cm            | 46cm          | 64cm        | 46cm            | 40cm          |
+| XL   | 73cm        | 53cm            | 49cm          | 67cm        | 49cm            | 42cm          |
 
-BẢNG SIZE CHART THAM KHẢO (áo nữ):
-- S: ngực 78-84cm, eo 60-66cm, vai 36-38cm
-- M: ngực 84-92cm, eo 66-74cm, vai 38-40cm
-- L: ngực 92-100cm, eo 74-82cm, vai 40-42cm
-- XL: ngực 100-108cm, eo 82-90cm, vai 42-44cm`
+BẢNG SIZE CHART TMF — QUẦN (nam/nữ):
+| Size | Dài quần (nam) | Vòng eo (nam) | Vòng hông (nam) | Dài quần (nữ) | Vòng eo (nữ) | Vòng hông (nữ) |
+|------|---------------|--------------|----------------|---------------|--------------|----------------|
+| S    | 98cm          | 72cm         | 90cm           | 92cm          | 64cm         | 86cm           |
+| M    | 100cm         | 78cm         | 96cm           | 94cm          | 70cm         | 92cm           |
+| L    | 102cm         | 84cm         | 102cm          | 96cm          | 76cm         | 98cm           |
+| XL   | 104cm         | 90cm         | 108cm          | 98cm          | 82cm         | 104cm          |`
 
 // POST /ai-advisor — Nhận message + context, trả reply từ OpenAI
 aiAdvisor.post('/', async (c) => {

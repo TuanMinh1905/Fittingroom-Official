@@ -1,5 +1,14 @@
 import { create } from "zustand";
 
+export type SizeMeasurement = {
+  size: string;
+  length_cm?: number;
+  chest_half_cm?: number;
+  shoulder_cm?: number;
+  waist_cm?: number;
+  hip_cm?: number;
+};
+
 export type Product = {
   _id: string;
   name: string;
@@ -18,6 +27,9 @@ export type Product = {
   number?: string | number;
   size?: string;
   color?: string;
+  sizes?: string[];
+  colorCodes?: string[];
+  sizeChart?: SizeMeasurement[];
 };
 
 type ProductState = {

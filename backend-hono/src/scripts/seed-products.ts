@@ -3,6 +3,32 @@ import { Product } from '../models/product.js'
 import { Category } from '../models/category.js'
 import { connectDB } from '../db/mongoose.js'
 
+// ── Hằng số dùng chung ──────────────────────────────────────────────────────
+const standardSizes = ['S', 'M', 'L', 'XL']
+const standardColors = ['#000000', '#FFFFFF', '#0000FF', '#FF0000']
+
+function createSlug(name: string): string {
+    return name.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+        .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
+// ── Bảng size chart TMF (cm) — quy ước chung cho mọi sản phẩm cùng loại ────
+const SIZE_CHART_AO = [
+    { size: 'S',  length_cm: 64, chest_half_cm: 44, shoulder_cm: 40 },
+    { size: 'M',  length_cm: 67, chest_half_cm: 47, shoulder_cm: 43 },
+    { size: 'L',  length_cm: 70, chest_half_cm: 50, shoulder_cm: 46 },
+    { size: 'XL', length_cm: 73, chest_half_cm: 53, shoulder_cm: 49 },
+]
+
+const SIZE_CHART_QUAN = [
+    { size: 'S',  length_cm: 98,  waist_cm: 72, hip_cm: 90 },
+    { size: 'M',  length_cm: 100, waist_cm: 78, hip_cm: 96 },
+    { size: 'L',  length_cm: 102, waist_cm: 84, hip_cm: 102 },
+    { size: 'XL', length_cm: 104, waist_cm: 90, hip_cm: 108 },
+]
+
 const seedProducts = async () => {
     try {
         await connectDB()
@@ -139,7 +165,10 @@ const seedProducts = async () => {
                     stock: Math.floor(Math.random() * 100) + 5,
                     shippingInfo: 'Miễn phí vận chuyển',
                     colorCodes: standardColors,
-                    sizes: standardSizes
+                    sizes: standardSizes,
+                    // Bảng size chart thực tế (cm) — áo dùng SIZE_CHART_AO, quần dùng SIZE_CHART_QUAN
+                    ...(cat.slug === 'ao' ? { sizeChart: SIZE_CHART_AO } : {}),
+                    ...(cat.slug === 'quan' ? { sizeChart: SIZE_CHART_QUAN } : {}),
                 });
             }
         }
