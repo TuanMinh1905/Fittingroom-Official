@@ -1,6 +1,7 @@
 // Đây là file chứa route chính được nhắc tới ở file route con product
 // Route chính được gắn bởi cái app á
 
+import 'dotenv/config'
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
@@ -13,6 +14,7 @@ import blog from './routes/blog.js'
 import auth from './routes/auth.js'
 import user from './routes/user.js'
 import order from './routes/order.js'
+import aiAdvisor from './routes/ai-advisor.js'
 
 const app = new Hono()
 
@@ -36,6 +38,7 @@ app.route('/blog', blog)
 app.route('/auth', auth)
 app.route('/users', user)
 app.route('/orders', order)
+app.route('/ai-advisor', aiAdvisor)
 
 
 const port = Number(process.env.PORT) || 8003

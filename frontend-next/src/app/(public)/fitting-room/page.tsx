@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useCartStore } from "@/store/cartStore";
 import Link from "next/link";
 import FittingRoom3DViewer, { type MeshData } from "@/component/fittingroom/FittingRoom3DViewer";
+import AIChatbox from "@/component/fittingroom/chatbox/AIChatbox";
 
 const TRYON_PROXY = "/api/tryon";
 const SIZE_NEXT: Record<string, string> = { XS: "S", S: "M", M: "L", L: "XL", XL: "XXL" };
@@ -52,6 +53,7 @@ export default function FittingRoomPage() {
   const [resultImg, setResultImg] = useState<string | null>(null);
   const [meshData, setMeshData] = useState<MeshData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [chatTriggerKey, setChatTriggerKey] = useState(0);
 
   const topItems = items.filter(i => i.categorySlug === "ao").slice(0, 3);
   const bottomItems = items.filter(i => i.categorySlug === "quan").slice(0, 3);
@@ -150,6 +152,8 @@ export default function FittingRoomPage() {
       }
       // Luôn lưu ảnh fallback
       setResultImg(`data:image/png;base64,${data.image_small}`);
+      // Trigger AI chatbox phân tích
+      setChatTriggerKey(prev => prev + 1);
     } catch (e: any) {
       setError(e.message || "Có lỗi xảy ra khi kết nối TailorNet.");
     } finally {
@@ -266,15 +270,39 @@ export default function FittingRoomPage() {
           </div>
         </div>
 
-        {/* Section 2: Khu vực render */}
-        <div className="w-full lg:w-2/4 bg-gray-900 rounded-2xl shadow-sm border border-gray-700 flex flex-col items-center justify-center relative overflow-hidden h-[700px]">
-          <FittingRoom3DViewer
-            meshData={meshData}
-            fallbackImage={resultImg}
-            isLoading={isLoading}
-            error={error}
-            onClearError={() => setError(null)}
-          />
+        {/* Section 2: Khu vực render + AI Chatbox */}
+        <div className="w-full lg:w-2/4 flex flex-col gap-4">
+          {/* 3D Viewer */}
+          <div className="bg-gray-900 rounded-2xl shadow-sm border border-gray-700 flex flex-col items-center justify-center relative overflow-hidden h-[460px]">
+            <FittingRoom3DViewer
+              meshData={meshData}
+              fallbackImage={resultImg}
+              isLoading={isLoading}
+              error={error}
+              onClearError={() => setError(null)}
+            />
+          </div>
+
+          {/* AI Chatbox */}
+          <div className="h-[228px]">
+            <AIChatbox
+              body={{ ...bodyMeasures, height, weight }}
+              gender={gender}
+              topGarment={selectedTopId && selectedOptions[selectedTopId] ? {
+                garmentType: selectedOptions[selectedTopId].garmentType,
+                size: selectedOptions[selectedTopId].size,
+                color: selectedOptions[selectedTopId].color,
+                name: items.find(i => i._id === selectedTopId)?.name,
+              } : null}
+              bottomGarment={selectedBottomId && selectedOptions[selectedBottomId] ? {
+                garmentType: selectedOptions[selectedBottomId].garmentType,
+                size: selectedOptions[selectedBottomId].size,
+                color: selectedOptions[selectedBottomId].color,
+                name: items.find(i => i._id === selectedBottomId)?.name,
+              } : null}
+              triggerKey={chatTriggerKey}
+            />
+          </div>
         </div>
 
         {/* Section 3: Thông số */}
