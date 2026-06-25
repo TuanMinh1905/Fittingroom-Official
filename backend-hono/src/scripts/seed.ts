@@ -51,7 +51,7 @@ async function seed() {
 
   const productImages: Record<string, string[]> = {
     'ao': [
-      'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&q=80', // Áo thun Pima
+      'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500&q=80',//Áo thun Pima
       'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80', // Áo sơ mi Oxford
       'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=500&q=80', // Áo khoác Denim
       'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&q=80', // Áo hoodie nỉ
