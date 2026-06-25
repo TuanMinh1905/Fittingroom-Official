@@ -43,19 +43,19 @@ export function Scene({ bodyVertices, bodyFaces, garments = [], skinColor = "#e8
       <directionalLight position={[0, 3, -3]} intensity={0.4} color="#ffeedd" />
 
       {/* Floor grid */}
-      <gridHelper args={[4, 20, "#334466", "#223344"]} position={[0, -0.85, 0]} />
+      <gridHelper args={[4, 20, "#334466", "#223344"]} position={[0, -1.2, 0]} />
 
       {/* Contact shadow — bóng mềm dưới chân */}
       <ContactShadows
-        position={[0, -0.85, 0]}
+        position={[0, -1.2, 0]}
         opacity={0.5}
         scale={4}
         blur={2.5}
         far={1.5}
       />
 
-      {/* Model group — xoay 180° để quay mặt về phía camera */}
-      <group rotation={[0, Math.PI, 0]}>
+      {/* Model group — chính diện hướng về camera */}
+      <group>
         {/* Body mesh */}
         <HumanMesh vertices={bodyVertices} faces={bodyFaces} color={skinColor} />
 
