@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Viewer - Product Diagnostics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 20px;
+        }
+        h1 {
+            color: #3b82f6;
+        }
+        .category-section {
+            margin-bottom: 40px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+        .category-title {
+            font-size: 24px;
+            text-transform: uppercase;
+            border-left: 5px solid #3b82f6;
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 10px;
+            text-align: center;
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            background-color: #333;
+        }
+        .card-title {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .card-url {
+            font-size: 10px;
+            color: #888;
+            word-break: break-all;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Image Diagnostics</h1>
+    <p>Verify if the product images match their names.</p>
+
+    <div id="container"></div>
+
+    <script>
+        const productImages = {
+            'ao': [
+                'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80',
+                'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80',
+                'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=500&q=80',
+                'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&q=80',
+                'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&q=80',
+                'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=500&q=80',
+                'https://images.unsplash.com/photo-1548883354-7622d03aca27?w=500&q=80',
+                'https://images.unsplash.com/photo-A7f7XRKgUWc?w=500&q=80',
+                'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=500&q=80',
+                'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&q=80',
+            ],
+            'quan': [
+                'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&q=80',
+                'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=500&q=80',
+                'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500&q=80',
+                'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=500&q=80',
+                'https://images.unsplash.com/photo-1551854838-212c50b4c184?w=500&q=80',
+                'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500&q=80',
+                'https://images.unsplash.com/photo-Cn3s6bVVHNo?w=500&q=80',
+                'https://images.unsplash.com/photo-1598554889165-8139a49f2883?w=500&q=80',
+                'https://images.unsplash.com/photo-d5GlpSOAzzg?w=500&q=80',
+                'https://images.unsplash.com/photo-1602573991155-21f01438313c?w=500&q=80',
+            ],
+            'giay': [
+                'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80',
+                'https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=500&q=80',
+                'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&q=80',
+                'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=500&q=80',
+                'https://images.unsplash.com/photo-1638247025967-b4e38f787b76?w=500&q=80',
+                'https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&q=80',
+                'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=500&q=80',
+                'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&q=80',
+                'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&q=80',
+                'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=500&q=80',
+            ],
+            'mu': [
+                'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&q=80',
+                'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500&q=80',
+                'https://images.unsplash.com/photo-1576871337622-98d48d4aa53e?w=500&q=80',
+                'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=80',
+                'https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=500&q=80',
+                'https://images.unsplash.com/photo-1513105041248-6a2e4d61994a?w=500&q=80',
+                'https://images.unsplash.com/photo-1622263623241-2f310047916e?w=500&q=80',
+                'https://images.unsplash.com/photo-1575424909138-46b05e5919ec?w=500&q=80',
+                'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80',
+                'https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?w=500&q=80',
+            ],
+            'tat': [
+                'https://images.unsplash.com/photo-1582966772680-860e372bb558?w=500&q=80',
+                'https://images.unsplash.com/photo-XMg8GBzNmgA?w=500&q=80',
+                'https://images.unsplash.com/photo-1562183241-b937e95585b6?w=500&q=80',
+                'https://images.unsplash.com/photo-1560243563-062bff001d68?w=500&q=80',
+                'https://images.unsplash.com/photo-1627041833314-8799e4013cc2?w=500&q=80',
+                'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=500&q=80',
+                'https://images.unsplash.com/photo-axt96zsVXL8?w=500&q=80',
+                'https://images.unsplash.com/photo-1606990260057-d2e850b4ec73?w=500&q=80',
+                'https://images.unsplash.com/photo-1608228079968-c7681afb7f1d?w=500&q=80',
+                'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80',
+            ],
+            'phu-kien': [
+                'https://images.unsplash.com/photo-1624222247344-550fb8ec5519?w=500&q=80',
+                'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&q=80',
+                'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80',
+                'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500&q=80',
+                'https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&q=80',
+                'https://images.unsplash.com/photo-1627124118400-f925b1800584?w=500&q=80',
+                'https://images.unsplash.com/photo-1630019852942-f89202989a59?w=500&q=80',
+                'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&q=80',
+                'https://images.unsplash.com/photo-AV30EuHJaNM?w=500&q=80',
+                'https://images.unsplash.com/photo-1543330091-27228394c7dc?w=500&q=80',
+            ]
+        };
+
+        const mockData = {
+            'ao': ['Áo thun Pima', 'Áo sơ mi Oxford', 'Áo khoác Denim', 'Áo hoodie nỉ', 'Áo len Cardigan', 'Áo polo cộc tay', 'Áo khoác gió', 'Áo thun dài tay', 'Áo gile len', 'Áo vest công sở'],
+            'quan': ['Quần jean dáng suông', 'Quần kaki ống rộng', 'Quần âu nam/nữ', 'Quần đùi dạo phố', 'Quần jogger thể thao', 'Quần baggy năng động', 'Quần lót lụa', 'Quần yếm bò', 'Quần thô túi hộp', 'Quần xếp ly'],
+            'giay': ['Giày thể thao Runner', 'Giày Oxford da thật', 'Giày Sneaker cổ cao', 'Giày lười Loafer', 'Giày bốt Chelsea', 'Giày đi bộ mềm mại', 'Dép sandal da', 'Dép quai hậu', 'Giày gót nhọn', 'Boot da lộn'],
+            'mu': ['Mũ lưỡi trai chóp', 'Mũ bucket vải thô', 'Mũ len Beanie', 'Mũ cói đi biển', 'Mũ Beret cổ điển', 'Mũ nồi họa tiết', 'Mũ snapback', 'Mũ vành rộng', 'Nón rơm phong cách', 'Mũ phớt họa sĩ'],
+            'tat': ['Tất gân cổ cao', 'Tất thuyền thể thao', 'Tất len dày dặn', 'Tất lười chống trượt', 'Tất họa tiết quả trám', 'Tất lưới mỏng', 'Tất đi ngủ lông cừu', 'Tất vớ hoạt hình', 'Tất cổ trung 5 màu', 'Tất nén chuyên dụng'],
+            'phu-kien': ['Thắt lưng da bò', 'Kính râm chống nắng', 'Vòng cổ kim loại', 'Đồng hồ thanh lịch', 'Túi chéo canvas', 'Ví da nam/nữ', 'Khuyên tai nữ', 'Nhẫn bạc 925', 'Khăn quàng cổ lụa', 'Găng tay len mịn']
+        };
+
+        const container = document.getElementById('container');
+        for (const cat in productImages) {
+            const section = document.createElement('div');
+            section.className = 'category-section';
+
+            const title = document.createElement('div');
+            title.className = 'category-title';
+            title.innerText = cat;
+            section.appendChild(title);
+
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+
+            productImages[cat].forEach((url, i) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = mockData[cat][i];
+                card.appendChild(img);
+
+                const cardTitle = document.createElement('div');
+                cardTitle.className = 'card-title';
+                cardTitle.innerText = `${i}: ${mockData[cat][i]}`;
+                card.appendChild(cardTitle);
+
+                const cardUrl = document.createElement('div');
+                cardUrl.className = 'card-url';
+                cardUrl.innerText = url;
+                card.appendChild(cardUrl);
+
+                grid.appendChild(card);
+            });
+
+            section.appendChild(grid);
+            container.appendChild(section);
+        }
+    </script>
+</body>
+</html>
