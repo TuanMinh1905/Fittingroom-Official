@@ -3,14 +3,17 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useCartStore } from "@/store/cartStore";
+import { useCartStore, calculateShippingFee, SHIPPING_THRESHOLD } from "@/store/cartStore";
 import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, getTotalPrice, clearCart } = useCartStore();
+  const subtotal = getTotalPrice();
+  const shippingFee = calculateShippingFee(subtotal);
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
     customerName: "",
@@ -21,14 +24,28 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     setMounted(true);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        setFormData(prev => ({
+          ...prev,
+          customerName: user.name || "",
+          phoneNumber: user.phone || "",
+          address: user.address || "",
+        }));
+      } catch (e) {
+        console.error("Lỗi khi parse user từ localStorage:", e);
+      }
+    }
   }, []);
 
   // Nếu giỏ hàng trống thì redirect về trang chủ
   useEffect(() => {
-    if (mounted && items.length === 0) {
+    if (mounted && items.length === 0 && !isSuccess) {
       router.push("/");
     }
-  }, [mounted, items, router]);
+  }, [mounted, items, router, isSuccess]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN").format(price) + " đ";
@@ -49,8 +66,25 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
+      if (formData.paymentMethod === "BANK") {
+        // Giả lập kiểm tra giao dịch chuyển khoản ngân hàng trong 1.5s
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+      }
+
+      // Check if user is logged in
+      const storedUser = localStorage.getItem("user");
+      let currentUser: any = null;
+      if (storedUser) {
+        try {
+          currentUser = JSON.parse(storedUser);
+        } catch (e) {
+          console.error("Lỗi khi parse user từ localStorage:", e);
+        }
+      }
+
       const orderPayload = {
         ...formData,
+        userId: currentUser?._id || undefined,
         items: items.map(item => ({
           productId: item._id,
           name: item.name,
@@ -58,7 +92,8 @@ export default function CheckoutPage() {
           quantity: item.quantity,
           imageUrl: item.imageUrl
         })),
-        totalPrice: getTotalPrice()
+        shippingFee: shippingFee,
+        totalPrice: subtotal + shippingFee
       };
 
       const response = await fetch("http://localhost:8003/orders", {
@@ -73,9 +108,49 @@ export default function CheckoutPage() {
         throw new Error("Không thể đặt hàng, vui lòng thử lại sau!");
       }
 
+      // Update user profile details if user is logged in
+      if (currentUser && currentUser._id) {
+        try {
+          let needsUpdate = false;
+          const updatePayload: any = {};
+
+          if (!currentUser.phone || currentUser.phone !== formData.phoneNumber) {
+            updatePayload.phone = formData.phoneNumber;
+            needsUpdate = true;
+          }
+          if (!currentUser.address || currentUser.address !== formData.address) {
+            updatePayload.address = formData.address;
+            needsUpdate = true;
+          }
+          if (!currentUser.name || currentUser.name !== formData.customerName) {
+            updatePayload.name = formData.customerName;
+            needsUpdate = true;
+          }
+
+          if (needsUpdate) {
+            const userRes = await fetch(`http://localhost:8000/users/${currentUser._id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatePayload),
+            });
+            if (userRes.ok) {
+              const userData = await userRes.json();
+              const updatedUser = { ...currentUser, ...userData.user };
+              localStorage.setItem("user", JSON.stringify(updatedUser));
+            }
+          }
+        } catch (error) {
+          console.error("Lỗi khi tự động cập nhật thông tin user:", error);
+        }
+      }
+
       // Xóa giỏ hàng và chuyển hướng
+      setIsSuccess(true);
       clearCart();
-      router.push("/checkout/success");
+      toast.success("Thanh toán và đặt hàng thành công!");
+      router.push(`/checkout/success?method=${formData.paymentMethod}&phone=${formData.phoneNumber}`);
       
     } catch (error: any) {
       console.error("Lỗi khi đặt hàng:", error);
@@ -148,7 +223,11 @@ export default function CheckoutPage() {
               <h2 className="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Phương thức thanh toán</h2>
               
               <div className="space-y-4 mb-8">
-                <label className="flex items-center p-4 border border-[var(--primary)] rounded-xl cursor-pointer bg-blue-50/50 transition-colors">
+                <label className={`flex items-center p-4 border rounded-xl cursor-pointer transition-colors ${
+                  formData.paymentMethod === "COD"
+                    ? "border-[var(--primary)] bg-blue-50/50"
+                    : "border-gray-200 hover:bg-gray-50"
+                }`}>
                   <input 
                     type="radio" 
                     name="paymentMethod" 
@@ -158,37 +237,88 @@ export default function CheckoutPage() {
                     className="w-5 h-5 text-[var(--primary)]"
                   />
                   <div className="ml-4">
-                    <span className="block font-medium text-gray-900">Thanh toán khi nhận hàng (COD)</span>
+                    <span className="block font-medium text-gray-900 font-monasans">Thanh toán khi nhận hàng (COD)</span>
                     <span className="text-sm text-gray-500">Bạn sẽ thanh toán bằng tiền mặt khi shipper giao hàng tới.</span>
                   </div>
                 </label>
                 
-                {/* Có thể mở rộng phương thức khác ở đây sau này */}
-                <label className="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 opacity-60">
+                <label className={`flex items-center p-4 border rounded-xl cursor-pointer transition-colors ${
+                  formData.paymentMethod === "BANK"
+                    ? "border-[var(--primary)] bg-blue-50/50"
+                    : "border-gray-200 hover:bg-gray-50"
+                }`}>
                   <input 
                     type="radio" 
                     name="paymentMethod" 
                     value="BANK" 
-                    disabled
-                    className="w-5 h-5 text-gray-400"
+                    checked={formData.paymentMethod === "BANK"}
+                    onChange={handleInputChange}
+                    className="w-5 h-5 text-[var(--primary)]"
                   />
                   <div className="ml-4">
-                    <span className="block font-medium text-gray-900">Chuyển khoản ngân hàng (Bảo trì)</span>
-                    <span className="text-sm text-gray-500">Hệ thống đang bảo trì phương thức thanh toán này.</span>
+                    <span className="block font-medium text-gray-900 font-monasans">Chuyển khoản ngân hàng (VietQR)</span>
+                    <span className="text-sm text-gray-500">Quét mã QR qua ứng dụng ngân hàng của bạn để thanh toán nhanh chóng.</span>
                   </div>
                 </label>
               </div>
+
+              {formData.paymentMethod === "BANK" && (
+                <div className="mt-6 p-6 border border-blue-100 bg-blue-50/30 rounded-2xl mb-8 transition-all">
+                  <h3 className="text-lg font-bold text-gray-800 mb-4 font-monasans flex items-center gap-2">
+                    <svg className="w-5 h-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Thông tin chuyển khoản qua VietQR
+                  </h3>
+                  <div className="flex flex-col md:flex-row gap-6 items-center">
+                    <div className="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm shrink-0">
+                      <img 
+                        src={`https://img.vietqr.io/image/MB-999988889999-compact2.png?amount=${subtotal + shippingFee}&addInfo=TMF%20${formData.phoneNumber || 'KHACHHANG'}&accountName=CONG%20TY%20TMF%20SHOP`}
+                        alt="VietQR Code"
+                        className="w-48 h-48 object-contain"
+                      />
+                    </div>
+                    <div className="flex-1 w-full space-y-3 text-sm">
+                      <div className="flex justify-between border-b border-gray-100 pb-2">
+                        <span className="text-gray-500 font-medium">Ngân hàng:</span>
+                        <span className="font-bold text-gray-800">MB Bank (Ngân hàng Quân đội)</span>
+                      </div>
+                      <div className="flex justify-between border-b border-gray-100 pb-2">
+                        <span className="text-gray-500 font-medium">Số tài khoản:</span>
+                        <span className="font-bold text-[var(--primary)] font-mono text-base">999988889999</span>
+                      </div>
+                      <div className="flex justify-between border-b border-gray-100 pb-2">
+                        <span className="text-gray-500 font-medium">Chủ tài khoản:</span>
+                        <span className="font-bold text-gray-800 uppercase">CONG TY TMF SHOP</span>
+                      </div>
+                      <div className="flex justify-between border-b border-gray-100 pb-2">
+                        <span className="text-gray-500 font-medium">Số tiền:</span>
+                        <span className="font-bold text-rose-500 text-base">{formatPrice(subtotal + shippingFee)}</span>
+                      </div>
+                      <div className="flex justify-between pb-1">
+                        <span className="text-gray-500 font-medium">Nội dung chuyển khoản:</span>
+                        <span className="font-bold text-gray-800 bg-yellow-100 px-2 py-0.5 rounded font-mono">
+                          TMF {formData.phoneNumber || 'KHACHHANG'}
+                        </span>
+                      </div>
+                      <p className="text-xs text-amber-600 bg-amber-50 p-3 rounded-xl border border-amber-100 leading-relaxed font-medium">
+                        ⚠️ Quý khách vui lòng quét mã QR hoặc nhập chính xác nội dung chuyển khoản trên để hệ thống tự động xác nhận nhanh nhất.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="hidden lg:block mt-8">
                 <button 
                   type="submit" 
                   disabled={loading}
-                  className="w-full bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold py-4 rounded-xl transition-colors text-lg shadow-sm disabled:opacity-70 flex justify-center items-center gap-2"
+                  className="w-full bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold py-4 rounded-xl transition-colors text-lg shadow-sm disabled:opacity-70 flex justify-center items-center gap-2 cursor-pointer"
                 >
                   {loading ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Đang xử lý...
+                      {formData.paymentMethod === "BANK" ? "Đang xác thực giao dịch chuyển khoản..." : "Đang xử lý..."}
                     </>
                   ) : "Xác nhận đặt hàng"}
                 </button>
@@ -227,18 +357,25 @@ export default function CheckoutPage() {
               <div className="space-y-3 text-sm mb-6 border-t pt-4">
                 <div className="flex justify-between text-gray-600">
                   <span>Tạm tính ({items.length} sản phẩm)</span>
-                  <span className="font-medium text-gray-800">{formatPrice(getTotalPrice())}</span>
+                  <span className="font-medium text-gray-800">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Phí vận chuyển</span>
-                  <span className="font-medium text-gray-800">Miễn phí</span>
+                  <span className="font-medium text-gray-800">
+                    {shippingFee > 0 ? formatPrice(shippingFee) : "Miễn phí"}
+                  </span>
                 </div>
+                {shippingFee > 0 && (
+                  <div className="text-xs text-amber-600 bg-amber-50 p-2.5 rounded-xl border border-amber-100/50 font-medium mt-2">
+                    💡 Mua thêm <span className="font-bold">{formatPrice(SHIPPING_THRESHOLD - subtotal)}</span> để được miễn phí vận chuyển!
+                  </div>
+                )}
               </div>
 
               <div className="pt-4 border-t border-gray-200 mb-6">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-bold text-gray-800">Tổng cộng</span>
-                  <span className="text-2xl font-bold text-[var(--primary)]">{formatPrice(getTotalPrice())}</span>
+                  <span className="text-2xl font-bold text-[var(--primary)]">{formatPrice(subtotal + shippingFee)}</span>
                 </div>
               </div>
 
@@ -246,12 +383,12 @@ export default function CheckoutPage() {
                 <button 
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="w-full bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold py-4 rounded-xl transition-colors text-lg shadow-sm disabled:opacity-70 flex justify-center items-center gap-2"
+                  className="w-full bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold py-4 rounded-xl transition-colors text-lg shadow-sm disabled:opacity-70 flex justify-center items-center gap-2 cursor-pointer"
                 >
                   {loading ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Đang xử lý...
+                      {formData.paymentMethod === "BANK" ? "Đang xác thực giao dịch chuyển khoản..." : "Đang xử lý..."}
                     </>
                   ) : "Xác nhận đặt hàng"}
                 </button>

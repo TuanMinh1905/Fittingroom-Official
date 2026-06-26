@@ -186,7 +186,7 @@ async function seed() {
     { name: 'User 4', email: 'user4@tmf.com', password: 'password123', role: 'user' },
     { name: 'User 5', email: 'user5@tmf.com', password: 'password123', role: 'user' },
   ]
-  const users = await User.insertMany(usersData)
+  const users = await User.create(usersData)
   console.log(`Seeded ${users.length} users`)
 
   // 6. Seed Blogs

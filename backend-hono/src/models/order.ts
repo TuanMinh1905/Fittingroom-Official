@@ -9,11 +9,13 @@ export interface IOrderItem {
 }
 
 export interface IOrder extends Document {
+    userId?: string;
     customerName: string;
     phoneNumber: string;
     address: string;
     paymentMethod: string;
     items: IOrderItem[];
+    shippingFee: number;
     totalPrice: number;
     status: string;
     createdAt?: Date;
@@ -29,11 +31,13 @@ const OrderItemSchema = new Schema<IOrderItem>({
 });
 
 const OrderSchema = new Schema<IOrder>({
+    userId: { type: String, required: false },
     customerName: { type: String, required: true },
     phoneNumber: { type: String, required: true },
     address: { type: String, required: true },
     paymentMethod: { type: String, default: 'COD' },
     items: { type: [OrderItemSchema], required: true },
+    shippingFee: { type: Number, default: 0 },
     totalPrice: { type: Number, required: true },
     status: { type: String, default: 'Pending' },
 }, {

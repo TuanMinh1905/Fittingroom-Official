@@ -64,6 +64,17 @@ export default function ProfilePage() {
         }
     }, [router]);
 
+    // Read active tab from URL query parameter on load
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            const tabParam = params.get("tab");
+            if (tabParam === "orders" || tabParam === "profile" || tabParam === "security") {
+                setActiveTab(tabParam as TabType);
+            }
+        }
+    }, []);
+
     // Fetch orders when orders tab is active
     useEffect(() => {
         if (activeTab === "orders" && user) {
@@ -77,9 +88,12 @@ export default function ProfilePage() {
             const res = await fetch("http://localhost:8000/orders");
             if (res.ok) {
                 const data = await res.json();
-                // Filter orders by phone matching user's phone or form phone
+                // Filter orders by phone matching user's phone or form phone, or by userId
                 const searchPhone = user.phone || formData.phone;
                 const userOrders = data.filter((order: any) => {
+                    if (order.userId && user._id && order.userId === user._id) {
+                        return true;
+                    }
                     const phoneClean = order.phoneNumber?.replace(/\s+/g, "");
                     const targetClean = searchPhone?.replace(/\s+/g, "");
                     return phoneClean && targetClean && phoneClean === targetClean;
@@ -676,6 +690,30 @@ export default function ProfilePage() {
                                                                     </span>
                                                                 </div>
                                                             ))}
+                                                        </div>
+
+                                                        {/* Price Breakdown */}
+                                                        <div className="border-t border-slate-100 pt-4 space-y-2.5 text-xs text-slate-600 font-medium bg-slate-50/40 p-4 rounded-xl">
+                                                            <div className="flex justify-between">
+                                                                <span>Tạm tính</span>
+                                                                <span className="text-slate-800 font-semibold">
+                                                                    {((order.totalPrice || 0) - (order.shippingFee || 0)).toLocaleString("vi-VN")} đ
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span>Phí vận chuyển</span>
+                                                                <span className="text-slate-800 font-semibold">
+                                                                    {order.shippingFee && order.shippingFee > 0 
+                                                                        ? `${order.shippingFee.toLocaleString("vi-VN")} đ` 
+                                                                        : "Miễn phí"}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex justify-between border-t border-slate-100 pt-2.5 text-sm font-bold text-slate-800">
+                                                                <span>Tổng cộng</span>
+                                                                <span className="text-[var(--primary)] text-base font-extrabold">
+                                                                    {(order.totalPrice || 0).toLocaleString("vi-VN")} đ
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 )}
