@@ -116,4 +116,4 @@ docker-compose up --build
 **💡 Tips & Lưu ý:**
 - Đảm bảo bạn đã cài đặt sẵn **Node.js**, **Python** và **pnpm** trên máy tính.
 - Nếu bạn chưa có `pnpm`, có thể cài đặt bằng lệnh: `npm install -g pnpm`.
-- Hãy kiểm tra các file `.env` nếu có, để đảm bảo các thành phần được cấu hình đúng URL kết nối với nhau.
+- Hãy kiểm tra các file `.env` nếu có, để đảm bảo các thành phần được cấu hình đúng URL kết nối với nhau....
