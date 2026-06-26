@@ -691,6 +691,30 @@ export default function ProfilePage() {
                                                                 </div>
                                                             ))}
                                                         </div>
+
+                                                        {/* Price Breakdown */}
+                                                        <div className="border-t border-slate-100 pt-4 space-y-2.5 text-xs text-slate-600 font-medium bg-slate-50/40 p-4 rounded-xl">
+                                                            <div className="flex justify-between">
+                                                                <span>Tạm tính</span>
+                                                                <span className="text-slate-800 font-semibold">
+                                                                    {((order.totalPrice || 0) - (order.shippingFee || 0)).toLocaleString("vi-VN")} đ
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span>Phí vận chuyển</span>
+                                                                <span className="text-slate-800 font-semibold">
+                                                                    {order.shippingFee && order.shippingFee > 0 
+                                                                        ? `${order.shippingFee.toLocaleString("vi-VN")} đ` 
+                                                                        : "Miễn phí"}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex justify-between border-t border-slate-100 pt-2.5 text-sm font-bold text-slate-800">
+                                                                <span>Tổng cộng</span>
+                                                                <span className="text-[var(--primary)] text-base font-extrabold">
+                                                                    {(order.totalPrice || 0).toLocaleString("vi-VN")} đ
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>

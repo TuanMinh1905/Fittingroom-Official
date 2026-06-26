@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useCartStore } from "@/store/cartStore";
+import { useCartStore, calculateShippingFee, SHIPPING_THRESHOLD } from "@/store/cartStore";
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, getTotalPrice } = useCartStore();
+  const subtotal = getTotalPrice();
+  const shippingFee = calculateShippingFee(subtotal);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -125,18 +127,25 @@ export default function CartPage() {
                 <div className="space-y-4 text-sm mb-6">
                   <div className="flex justify-between text-gray-600">
                     <span>Tạm tính</span>
-                    <span className="font-medium text-gray-800">{formatPrice(getTotalPrice())}</span>
+                    <span className="font-medium text-gray-800">{formatPrice(subtotal)}</span>
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Phí vận chuyển</span>
-                    <span className="font-medium text-gray-800">Miễn phí</span>
+                    <span className="font-medium text-gray-800">
+                      {shippingFee > 0 ? formatPrice(shippingFee) : "Miễn phí"}
+                    </span>
                   </div>
+                  {shippingFee > 0 && (
+                    <div className="text-xs text-amber-600 bg-amber-50 p-3 rounded-xl border border-amber-100/50 leading-relaxed font-medium">
+                      💡 Mua thêm <span className="font-bold">{formatPrice(SHIPPING_THRESHOLD - subtotal)}</span> để được miễn phí vận chuyển!
+                    </div>
+                  )}
                 </div>
 
                 <div className="pt-4 border-t border-gray-100 mb-8">
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-gray-800">Tổng cộng</span>
-                    <span className="text-2xl font-bold text-[var(--primary)]">{formatPrice(getTotalPrice())}</span>
+                    <span className="text-2xl font-bold text-[var(--primary)]">{formatPrice(subtotal + shippingFee)}</span>
                   </div>
                   <p className="text-xs text-gray-400 mt-1 text-right">(Đã bao gồm VAT nếu có)</p>
                 </div>

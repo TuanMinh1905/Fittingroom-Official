@@ -71,3 +71,13 @@ export const useCartStore = create<CartState>()(
     }
   )
 );
+
+export const SHIPPING_THRESHOLD = 500000;
+export const SHIPPING_FEE = 30000;
+
+export const calculateShippingFee = (subtotal: number) => {
+  if (subtotal === 0 || subtotal >= SHIPPING_THRESHOLD) {
+    return 0;
+  }
+  return SHIPPING_FEE;
+};

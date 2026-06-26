@@ -15,6 +15,7 @@ export interface IOrder extends Document {
     address: string;
     paymentMethod: string;
     items: IOrderItem[];
+    shippingFee: number;
     totalPrice: number;
     status: string;
     createdAt?: Date;
@@ -36,6 +37,7 @@ const OrderSchema = new Schema<IOrder>({
     address: { type: String, required: true },
     paymentMethod: { type: String, default: 'COD' },
     items: { type: [OrderItemSchema], required: true },
+    shippingFee: { type: Number, default: 0 },
     totalPrice: { type: Number, required: true },
     status: { type: String, default: 'Pending' },
 }, {

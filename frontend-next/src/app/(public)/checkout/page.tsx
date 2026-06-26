@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useCartStore } from "@/store/cartStore";
+import { useCartStore, calculateShippingFee, SHIPPING_THRESHOLD } from "@/store/cartStore";
 import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, getTotalPrice, clearCart } = useCartStore();
+  const subtotal = getTotalPrice();
+  const shippingFee = calculateShippingFee(subtotal);
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -90,7 +92,8 @@ export default function CheckoutPage() {
           quantity: item.quantity,
           imageUrl: item.imageUrl
         })),
-        totalPrice: getTotalPrice()
+        shippingFee: shippingFee,
+        totalPrice: subtotal + shippingFee
       };
 
       const response = await fetch("http://localhost:8000/orders", {
@@ -270,7 +273,7 @@ export default function CheckoutPage() {
                   <div className="flex flex-col md:flex-row gap-6 items-center">
                     <div className="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm shrink-0">
                       <img 
-                        src={`https://img.vietqr.io/image/MB-999988889999-compact2.png?amount=${getTotalPrice()}&addInfo=TMF%20${formData.phoneNumber || 'KHACHHANG'}&accountName=CONG%20TY%20TMF%20SHOP`}
+                        src={`https://img.vietqr.io/image/MB-999988889999-compact2.png?amount=${subtotal + shippingFee}&addInfo=TMF%20${formData.phoneNumber || 'KHACHHANG'}&accountName=CONG%20TY%20TMF%20SHOP`}
                         alt="VietQR Code"
                         className="w-48 h-48 object-contain"
                       />
@@ -290,7 +293,7 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex justify-between border-b border-gray-100 pb-2">
                         <span className="text-gray-500 font-medium">Số tiền:</span>
-                        <span className="font-bold text-rose-500 text-base">{formatPrice(getTotalPrice())}</span>
+                        <span className="font-bold text-rose-500 text-base">{formatPrice(subtotal + shippingFee)}</span>
                       </div>
                       <div className="flex justify-between pb-1">
                         <span className="text-gray-500 font-medium">Nội dung chuyển khoản:</span>
@@ -354,18 +357,25 @@ export default function CheckoutPage() {
               <div className="space-y-3 text-sm mb-6 border-t pt-4">
                 <div className="flex justify-between text-gray-600">
                   <span>Tạm tính ({items.length} sản phẩm)</span>
-                  <span className="font-medium text-gray-800">{formatPrice(getTotalPrice())}</span>
+                  <span className="font-medium text-gray-800">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Phí vận chuyển</span>
-                  <span className="font-medium text-gray-800">Miễn phí</span>
+                  <span className="font-medium text-gray-800">
+                    {shippingFee > 0 ? formatPrice(shippingFee) : "Miễn phí"}
+                  </span>
                 </div>
+                {shippingFee > 0 && (
+                  <div className="text-xs text-amber-600 bg-amber-50 p-2.5 rounded-xl border border-amber-100/50 font-medium mt-2">
+                    💡 Mua thêm <span className="font-bold">{formatPrice(SHIPPING_THRESHOLD - subtotal)}</span> để được miễn phí vận chuyển!
+                  </div>
+                )}
               </div>
 
               <div className="pt-4 border-t border-gray-200 mb-6">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-bold text-gray-800">Tổng cộng</span>
-                  <span className="text-2xl font-bold text-[var(--primary)]">{formatPrice(getTotalPrice())}</span>
+                  <span className="text-2xl font-bold text-[var(--primary)]">{formatPrice(subtotal + shippingFee)}</span>
                 </div>
               </div>
 

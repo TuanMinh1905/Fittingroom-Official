@@ -121,7 +121,7 @@ export default function AdminLayout({
               {loading ? "Đang xử lý..." : "Đăng nhập Admin"}
             </button>
           </form>
-          
+
           <div className="mt-6 text-center">
             <a href="/" className="text-sm text-cyan-400 hover:underline">← Quay về trang chủ</a>
           </div>
@@ -160,17 +160,16 @@ export default function AdminLayout({
               { label: "Users", href: "/admin/users" },
               { label: "Blogs", href: "/admin/blogs" },
             ].map((item) => {
-              const isActive = item.href === "/admin" 
-                ? pathname === "/admin" 
+              const isActive = item.href === "/admin"
+                ? pathname === "/admin"
                 : pathname?.startsWith(item.href);
               return (
                 <a
                   key={item.href}
-                  className={`block rounded-xl px-4 py-3 transition ${
-                    isActive 
-                      ? "bg-slate-800 text-white font-semibold" 
+                  className={`block rounded-xl px-4 py-3 transition ${isActive
+                      ? "bg-slate-800 text-white font-semibold"
                       : "hover:bg-slate-800 hover:text-white"
-                  }`}
+                    }`}
                   href={item.href}
                 >
                   {item.label}
@@ -179,10 +178,7 @@ export default function AdminLayout({
             })}
           </nav>
 
-          <div className="mt-8 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-sm text-cyan-100">
-            <p className="font-semibold">Admin layout riêng</p>
-            <p className="mt-1 text-cyan-100/80">Không dùng chung navbar/footer của public site.</p>
-          </div>
+
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
