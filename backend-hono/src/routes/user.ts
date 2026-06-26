@@ -17,14 +17,15 @@ user.put('/:id', async (c) => {
         const id = c.req.param('id');
         const body = await c.req.json();
         
-        const existingUser = await User.findById(id);
+        const existingUser = await User.findById(id).select('+password');
         if (!existingUser) {
             return c.json({ message: 'User not found' }, 404);
         }
         
         // Kiểm tra và cập nhật mật khẩu nếu có yêu cầu đổi mật khẩu
         if (body.password !== undefined && body.newPassword !== undefined) {
-            if (existingUser.password !== body.password) {
+            const isMatch = await existingUser.comparePassword(body.password);
+            if (!isMatch) {
                 return c.json({ message: 'Mật khẩu hiện tại không chính xác' }, 400);
             }
             existingUser.password = body.newPassword;
@@ -39,8 +40,10 @@ user.put('/:id', async (c) => {
         if (body.birthday !== undefined) existingUser.birthday = body.birthday;
         
         const updatedUser = await existingUser.save();
+        const userObj = updatedUser.toObject();
+        delete userObj.password;
         
-        return c.json({ message: 'User updated successfully', user: updatedUser });
+        return c.json({ message: 'User updated successfully', user: userObj });
     } catch (error) {
         return c.json({ message: 'Internal server error', error }, 500);
     }

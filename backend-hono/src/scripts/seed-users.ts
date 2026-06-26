@@ -26,7 +26,7 @@ const seedUsers = async () => {
     console.log('Deleted old users');
 
     // Thêm dữ liệu mới
-    await User.insertMany(users);
+    await User.create(users);
     console.log('Seeded users successfully');
 
     process.exit(0);

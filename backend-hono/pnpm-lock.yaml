@@ -11,6 +11,9 @@ importers:
       '@hono/node-server':
         specifier: ^1.19.9
         version: 1.19.9(hono@4.12.2)
+      bcryptjs:
+        specifier: ^2.4.3
+        version: 2.4.3
       dotenv:
         specifier: ^17.3.1
         version: 17.3.1
@@ -21,6 +24,9 @@ importers:
         specifier: ^9.2.1
         version: 9.2.1
     devDependencies:
+      '@types/bcryptjs':
+        specifier: ^2.4.6
+        version: 2.4.6
       '@types/node':
         specifier: ^20.11.17
         version: 20.19.33
@@ -198,6 +204,9 @@ packages:
   '@mongodb-js/saslprep@1.4.6':
     resolution: {integrity: sha512-y+x3H1xBZd38n10NZF/rEBlvDOOMQ6LKUTHqr8R9VkJ+mmQOYtJFxIlkkK8fZrtOiL6VixbOBWMbZGBdal3Z1g==}
 
+  '@types/bcryptjs@2.4.6':
+    resolution: {integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ==}
+
   '@types/node@20.19.33':
     resolution: {integrity: sha512-Rs1bVAIdBs5gbTIKza/tgpMuG1k3U/UMJLWecIMxNdJFDMzcM5LOiLVRYh3PilWEYDIeUDv7bpiHPLPsbydGcw==}
 
@@ -206,6 +215,9 @@ packages:
 
   '@types/whatwg-url@13.0.0':
     resolution: {integrity: sha512-N8WXpbE6Wgri7KUSvrmQcqrMllKZ9uxkYWMt+mCSGwNc0Hsw9VQTW7ApqI4XNrx6/SaM2QQJCzMPDEXE058s+Q==}
+
+  bcryptjs@2.4.3:
+    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
 
   bson@7.2.0:
     resolution: {integrity: sha512-YCEo7KjMlbNlyHhz7zAZNDpIpQbd+wOEHJYezv0nMYTn4x31eIUM2yomNNubclAt63dObUzKHWsBLJ9QcZNSnQ==}
@@ -411,6 +423,8 @@ snapshots:
     dependencies:
       sparse-bitfield: 3.0.3
 
+  '@types/bcryptjs@2.4.6': {}
+
   '@types/node@20.19.33':
     dependencies:
       undici-types: 6.21.0
@@ -420,6 +434,8 @@ snapshots:
   '@types/whatwg-url@13.0.0':
     dependencies:
       '@types/webidl-conversions': 7.0.3
+
+  bcryptjs@2.4.3: {}
 
   bson@7.2.0: {}
 
