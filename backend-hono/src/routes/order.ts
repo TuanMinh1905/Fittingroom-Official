@@ -24,6 +24,7 @@ app.post('/', async (c) => {
         }
 
         const newOrder = new Order({
+            userId: body.userId,
             customerName: body.customerName,
             phoneNumber: body.phoneNumber,
             address: body.address,

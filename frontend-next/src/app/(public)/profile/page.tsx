@@ -64,6 +64,17 @@ export default function ProfilePage() {
         }
     }, [router]);
 
+    // Read active tab from URL query parameter on load
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            const tabParam = params.get("tab");
+            if (tabParam === "orders" || tabParam === "profile" || tabParam === "security") {
+                setActiveTab(tabParam as TabType);
+            }
+        }
+    }, []);
+
     // Fetch orders when orders tab is active
     useEffect(() => {
         if (activeTab === "orders" && user) {
@@ -77,9 +88,12 @@ export default function ProfilePage() {
             const res = await fetch("http://localhost:8000/orders");
             if (res.ok) {
                 const data = await res.json();
-                // Filter orders by phone matching user's phone or form phone
+                // Filter orders by phone matching user's phone or form phone, or by userId
                 const searchPhone = user.phone || formData.phone;
                 const userOrders = data.filter((order: any) => {
+                    if (order.userId && user._id && order.userId === user._id) {
+                        return true;
+                    }
                     const phoneClean = order.phoneNumber?.replace(/\s+/g, "");
                     const targetClean = searchPhone?.replace(/\s+/g, "");
                     return phoneClean && targetClean && phoneClean === targetClean;
