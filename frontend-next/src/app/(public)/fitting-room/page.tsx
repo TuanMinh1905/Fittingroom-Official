@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useCartStore } from "@/store/cartStore";
 import Link from "next/link";
 import FittingRoom3DViewer, { type MeshData } from "@/component/fittingroom/FittingRoom3DViewer";
+import { analyzeFit, type BodyMeasurements } from "@/component/fittingroom/chatbox/fitEngine";
 import AIChatbox from "@/component/fittingroom/chatbox/AIChatbox";
 
 const TRYON_PROXY = "/api/tryon";
@@ -56,6 +57,7 @@ export default function FittingRoomPage() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [pendingAnalysis, setPendingAnalysis] = useState(false);
   const [hasTryOnResult, setHasTryOnResult] = useState(false);
+  const [tooBigWarning, setTooBigWarning] = useState<string | null>(null);
 
   const topItems = items.filter(i => i.categorySlug === "ao").slice(0, 3);
   const bottomItems = items.filter(i => i.categorySlug === "quan").slice(0, 3);
@@ -80,9 +82,67 @@ export default function FittingRoomPage() {
     setSelectedOptions(prev => ({ ...prev, [id]: { ...prev[id], [key]: val } }));
   };
 
+  /**
+   * Kiểm tra trước khi gọi TailorNet: nếu đồ quá chật ("Rất chật")
+   * thì chặn render và mở chatbox AI với cảnh báo.
+   * Trả về danh sách tên đồ bị quá chật, hoặc [] nếu OK.
+   */
+  const checkFitBeforeTryOn = (): string[] => {
+    const bodyForFit: BodyMeasurements = {
+      shoulder: bodyMeasures.shoulder,
+      arm: bodyMeasures.arm,
+      bust: bodyMeasures.bust,
+      waist: bodyMeasures.waist,
+      hip: bodyMeasures.hip,
+      leg: bodyMeasures.leg,
+      height,
+      weight,
+    };
+    const tooTight: string[] = [];
+
+    if (selectedTopId && selectedOptions[selectedTopId]) {
+      const opt = selectedOptions[selectedTopId];
+      const analysis = analyzeFit(bodyForFit, opt.size, opt.garmentType, gender);
+      if (analysis.overallScore <= -1.2) {
+        const item = items.find(i => i._id === selectedTopId);
+        const label = item?.name ? `"${item.name}"` : `áo size ${opt.size}`;
+        tooTight.push(`${label} (size ${opt.size}) → Gợi ý: size ${analysis.recommendedSize}`);
+      }
+    }
+
+    if (selectedBottomId && selectedOptions[selectedBottomId]) {
+      const opt = selectedOptions[selectedBottomId];
+      const analysis = analyzeFit(bodyForFit, opt.size, opt.garmentType, gender);
+      if (analysis.overallScore <= -1.2) {
+        const item = items.find(i => i._id === selectedBottomId);
+        const label = item?.name ? `"${item.name}"` : `quần size ${opt.size}`;
+        tooTight.push(`${label} (size ${opt.size}) → Gợi ý: size ${analysis.recommendedSize}`);
+      }
+    }
+
+    return tooTight;
+  };
+
   const handleTryOn = async () => {
     if (!height || !weight) { setError("Vui lòng nhập chiều cao và cân nặng!"); return; }
     if (!selectedTopId && !selectedBottomId) { setError("Vui lòng chọn ít nhất 1 áo hoặc 1 quần!"); return; }
+
+    // ── Kiểm tra fit trước khi render ─────────────────────────
+    const tooTightItems = checkFitBeforeTryOn();
+    if (tooTightItems.length > 0) {
+      // Tạo thông báo chi tiết cho chatbox
+      const warningLines = [
+        `🚨 **Không thể mặc vừa!**\n`,
+        ...tooTightItems.map(item => `• ${item}`),
+        `\n❌ Kích thước cơ thể của bạn **vượt quá giới hạn** của những sản phẩm trên.`,
+        `Hãy chọn **size lớn hơn** để tránh bị chật và có trải nghiệm thử đồ tốt hơn nhé! 👗`,
+      ];
+      setTooBigWarning(warningLines.join("\n"));
+      setHasTryOnResult(true); // Cho hiện nút chatbox
+      setPendingAnalysis(false); // Không auto-analyze
+      setIsChatOpen(true); // Tự động mở chatbox ngay
+      return; // Chặn gọi TailorNet
+    }
 
     setIsLoading(true);
     setError(null);
@@ -173,6 +233,8 @@ export default function FittingRoomPage() {
       }
       // Luôn lưu ảnh fallback
       setResultImg(`data:image/png;base64,${data.image_small}`);
+      // Reset cảnh báo too-tight (nếu có từ lần trước)
+      setTooBigWarning(null);
       // Đánh dấu có kết quả mới — chờ người dùng chủ động mở AI chatbox
       setHasTryOnResult(true);
       setPendingAnalysis(true);
@@ -473,6 +535,7 @@ export default function FittingRoomPage() {
         onClose={() => setIsChatOpen(false)}
         pendingAnalysis={pendingAnalysis}
         onAnalysisTriggered={() => setPendingAnalysis(false)}
+        initialWarningMessage={tooBigWarning}
       />
     </div>
   );

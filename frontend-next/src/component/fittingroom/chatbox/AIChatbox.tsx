@@ -26,6 +26,8 @@ interface AIChatboxProps {
   pendingAnalysis?: boolean;
   /** Callback sau khi AI analysis đã được kích hoạt (để parent reset flag) */
   onAnalysisTriggered?: () => void;
+  /** Nếu có, chatbox sẽ hiển thị ngay cảnh báo này thay vì gọi AI */
+  initialWarningMessage?: string | null;
 }
 
 const BACKEND_URL = "http://localhost:8003";
@@ -50,6 +52,7 @@ export default function AIChatbox({
   onClose,
   pendingAnalysis,
   onAnalysisTriggered,
+  initialWarningMessage,
 }: AIChatboxProps) {
   const [messages, setMessages] = useState<ChatMessageData[]>([
     {
@@ -71,8 +74,9 @@ export default function AIChatbox({
   }, [messages, isTyping]);
 
   // Khi chatbox mở và có pendingAnalysis → trigger AI 1 lần duy nhất
+  // (nhưng chỉ khi không có initialWarningMessage — nếu có warning thì chỉ hiển warning)
   useEffect(() => {
-    if (isOpen && pendingAnalysis && !analysisTriggeredRef.current) {
+    if (isOpen && pendingAnalysis && !analysisTriggeredRef.current && !initialWarningMessage) {
       analysisTriggeredRef.current = true;
       handleAutoAnalyze();
       onAnalysisTriggered?.();
@@ -81,7 +85,40 @@ export default function AIChatbox({
     if (!isOpen) {
       analysisTriggeredRef.current = false;
     }
-  }, [isOpen, pendingAnalysis]);
+  }, [isOpen, pendingAnalysis, initialWarningMessage]);
+
+  // Hiển thị initialWarningMessage ngay khi chatbox mở (nếu có)
+  useEffect(() => {
+    if (isOpen && initialWarningMessage) {
+      setMessages([
+        {
+          id: "welcome",
+          role: "system",
+          content: "AI Tư Vấn Size — Phân tích kích cỡ thực tế",
+          timestamp: new Date(),
+        },
+        {
+          id: "size-warning",
+          role: "ai",
+          content: initialWarningMessage,
+          timestamp: new Date(),
+          isWarning: true,
+        },
+      ]);
+    } else if (!isOpen) {
+      // Reset messages khi đóng chatbox (chuẩn bị cho lần mở tiếp theo)
+      if (!initialWarningMessage) {
+        setMessages([
+          {
+            id: "welcome",
+            role: "system",
+            content: "AI Tư Vấn Size — Nhấn nút bên dưới để nhận ý kiến sau khi thử đồ!",
+            timestamp: new Date(),
+          },
+        ]);
+      }
+    }
+  }, [isOpen, initialWarningMessage]);
 
   const buildContext = useCallback((): string => {
     const lines: string[] = [];

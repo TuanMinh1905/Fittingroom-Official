@@ -9,6 +9,7 @@ export interface ChatMessageData {
   role: MessageRole;
   content: string;
   timestamp: Date;
+  isWarning?: boolean;
 }
 
 interface ChatMessageProps {
@@ -22,6 +23,7 @@ interface ChatMessageProps {
 export default function ChatMessage({ message }: ChatMessageProps) {
   const isUser = message.role === "user";
   const isSystem = message.role === "system";
+  const isWarning = message.isWarning === true;
 
   if (isSystem) {
     return (
@@ -37,17 +39,23 @@ export default function ChatMessage({ message }: ChatMessageProps) {
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-3 animate-[slideIn_0.3s_ease-out]`}>
       {/* Avatar AI */}
       {!isUser && (
-        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shrink-0 mr-2 mt-1 shadow-md">
-          <span className="text-white text-xs font-bold">AI</span>
+        <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mr-2 mt-1 shadow-md ${
+          isWarning
+            ? "bg-gradient-to-br from-red-500 to-orange-500"
+            : "bg-gradient-to-br from-cyan-500 to-blue-600"
+        }`}>
+          <span className="text-white text-xs font-bold">{isWarning ? "⚠️" : "AI"}</span>
         </div>
       )}
 
       {/* Bubble */}
       <div
-        className={`max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
+        className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
           isUser
             ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-br-md"
-            : "bg-white text-gray-800 border border-gray-100 rounded-bl-md"
+            : isWarning
+              ? "bg-gradient-to-br from-red-50 to-orange-50 text-gray-800 border-2 border-red-200 rounded-bl-md"
+              : "bg-white text-gray-800 border border-gray-100 rounded-bl-md"
         }`}
       >
         {/* Render content với markdown đơn giản */}
