@@ -1,0 +1,51 @@
+Thân hình mid 
+
+Áo min 
+Áo mid 
+Áo max 
+
+Quần min 
+Quần mid 
+Quần max 
+
+Áo min quần min => Lỗi đè mesh 
+Áo mid quần mid => Cũng lỗi đè mesh 
+Áo min quần max 
+Áo max quần min 
+Áo max quần Max 
+
+----------------------
+
+Thân hình min
+
+Áo min 
+Áo mid 
+Áo max 
+
+Quần min 
+Quần mid 
+Quần max 
+
+Áo min quần min => Lỗi đè mesh 
+Áo mid quần mid => Cũng lỗi đè mesh 
+Áo min quần max 
+Áo max quần min 
+Áo max quần Max 
+
+----------------------
+
+Thân hình max
+
+Áo min 
+Áo mid 
+Áo max 
+
+Quần min 
+Quần mid 
+Quần max 
+
+Áo min quần min => Lỗi đè mesh 
+Áo mid quần mid => Cũng lỗi đè mesh 
+Áo min quần max 
+Áo max quần min 
+Áo max quần Max 

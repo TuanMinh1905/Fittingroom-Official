@@ -37,11 +37,32 @@ export default function FittingRoomPage() {
   const [poseIdx, setPoseIdx] = useState(0);
   const [bodyMeasures, setBodyMeasures] = useState({ ...BODY_DEFAULTS.male });
 
-  const handleGenderChange = (g: "male" | "female") => {
+  const handleGenderChange = async (g: "male" | "female") => {
+    if (isGenderSwitching || g === gender) return; // Không làm gì nếu đang switch hoặc cùng gender
     setGender(g);
     setBodyMeasures({ ...BODY_DEFAULTS[g] });
     setHeight(g === "male" ? 175 : 162);
     setWeight(g === "male" ? 75 : 60);
+    // Reset kết quả cũ
+    setMeshData(null);
+    setResultImg(null);
+    setError(null);
+    setHasTryOnResult(false);
+    setPendingAnalysis(false);
+    setTooBigWarning(null);
+    // Báo backend evict model cũ + pre-load SMPL mới ngay lập tức
+    setIsGenderSwitching(true);
+    try {
+      await fetch(`${TRYON_PROXY}?endpoint=switch-gender`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gender: g }),
+      });
+    } catch {
+      // Ignore — chỉ là pre-warm, không ảnh hưởng try-on chính
+    } finally {
+      setIsGenderSwitching(false);
+    }
   };
 
   const handleBodyChange = (key: BodyKey, value: number) => {
@@ -51,6 +72,7 @@ export default function FittingRoomPage() {
   const [selectedTopId, setSelectedTopId] = useState<string | null>(null);
   const [selectedBottomId, setSelectedBottomId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGenderSwitching, setIsGenderSwitching] = useState(false);
   const [resultImg, setResultImg] = useState<string | null>(null);
   const [meshData, setMeshData] = useState<MeshData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -353,7 +375,7 @@ export default function FittingRoomPage() {
               Đồ đang chọn ({items.length})
             </h2>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-5">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-5">
             {items.length === 0 ? (
               <div className="text-center text-gray-500 mt-10">
                 <p>Chưa có sản phẩm nào</p>
@@ -424,39 +446,48 @@ export default function FittingRoomPage() {
         </div>
 
         {/* Section 3: Thông số */}
-        <div className="w-full lg:w-1/4 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col h-[700px]">
+        <div className="w-full lg:w-1/4 bg-white rounded-2xl shadow-sm border border-gray-200 p-4 lg:p-5 flex flex-col h-[700px]">
           <h2 className="text-xl font-bold mb-4 border-b pb-2 text-gray-800">Thông số người mẫu</h2>
-          <div className="flex-1 overflow-y-auto space-y-4 pr-1" style={{ scrollbarWidth: 'thin' }}>
+          <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-4 pr-1" style={{ scrollbarWidth: 'thin' }}>
             {/* Giới tính */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Giới tính</label>
               <div className="grid grid-cols-2 gap-3">
-                {(["male", "female"] as const).map(g => (
-                  <button key={g} onClick={() => handleGenderChange(g)}
-                    className={`py-2.5 rounded-xl border-2 flex flex-col items-center justify-center gap-1 transition-all text-sm font-medium
-                      ${gender === g
-                        ? g === "male" ? "border-[var(--primary)] bg-[var(--primary)]/5 text-[var(--primary)]" : "border-pink-500 bg-pink-50 text-pink-600"
-                        : "border-gray-200 text-gray-500 hover:bg-gray-50"}`}>
-                    {g === "male" ? "♂" : "♀"} {g === "male" ? "Nam" : "Nữ"}
-                  </button>
-                ))}
+              {(["male", "female"] as const).map(g => (
+                <button key={g} onClick={() => handleGenderChange(g)}
+                  disabled={isGenderSwitching}
+                  className={`py-2.5 rounded-xl border-2 flex flex-col items-center justify-center gap-1 transition-all text-sm font-medium
+                    ${gender === g
+                      ? g === "male" ? "border-[var(--primary)] bg-[var(--primary)]/5 text-[var(--primary)]" : "border-pink-500 bg-pink-50 text-pink-600"
+                      : "border-gray-200 text-gray-500 hover:bg-gray-50"}
+                    ${isGenderSwitching ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}>
+                  {isGenderSwitching && gender === g ? (
+                    <span className="flex items-center gap-1">
+                      <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" />
+                      <span>{g === "male" ? "Nam" : "Nữ"}</span>
+                    </span>
+                  ) : (
+                    <>{g === "male" ? "♂" : "♀"} {g === "male" ? "Nam" : "Nữ"}</>
+                  )}
+                </button>
+              ))}
               </div>
             </div>
 
             {/* Chiều cao — slider + input */}
             <div>
               <label className="block text-sm font-bold text-gray-800 mb-1">CHIỀU CAO</label>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-400 w-7 shrink-0">140</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-gray-400 w-6 shrink-0">140</span>
                 <input type="range" min={140} max={220} step={1} value={height}
                   onChange={e => setHeight(Number(e.target.value))}
-                  className="flex-1 h-1.5 cursor-pointer appearance-none rounded-full bg-gray-200 accent-[var(--primary)]" />
-                <span className="text-xs text-gray-400 w-7 shrink-0 text-right">220</span>
+                  className="flex-1 min-w-[50px] h-1.5 cursor-pointer appearance-none rounded-full bg-gray-200 accent-[var(--primary)]" />
+                <span className="text-xs text-gray-400 w-6 shrink-0 text-right">220</span>
                 <div className="flex items-center border border-gray-300 rounded-lg bg-white overflow-hidden shrink-0">
                   <input type="number" value={height} min={140} max={220}
                     onChange={e => setHeight(Number(e.target.value) || 140)}
-                    className="w-12 text-center text-sm font-semibold text-gray-900 outline-none py-1.5 bg-transparent" />
-                  <span className="text-xs text-gray-500 pr-2">cm</span>
+                    className="w-10 text-center text-sm font-semibold text-gray-900 outline-none py-1.5 bg-transparent" />
+                  <span className="text-xs text-gray-500 pr-1.5">cm</span>
                 </div>
               </div>
             </div>
@@ -464,17 +495,17 @@ export default function FittingRoomPage() {
             {/* Cân nặng — slider + input */}
             <div>
               <label className="block text-sm font-bold text-gray-800 mb-1">CÂN NẶNG</label>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-400 w-7 shrink-0">30</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-gray-400 w-6 shrink-0">30</span>
                 <input type="range" min={30} max={150} step={1} value={weight}
                   onChange={e => setWeight(Number(e.target.value))}
-                  className="flex-1 h-1.5 cursor-pointer appearance-none rounded-full bg-gray-200 accent-[var(--primary)]" />
-                <span className="text-xs text-gray-400 w-7 shrink-0 text-right">150</span>
+                  className="flex-1 min-w-[50px] h-1.5 cursor-pointer appearance-none rounded-full bg-gray-200 accent-[var(--primary)]" />
+                <span className="text-xs text-gray-400 w-6 shrink-0 text-right">150</span>
                 <div className="flex items-center border border-gray-300 rounded-lg bg-white overflow-hidden shrink-0">
                   <input type="number" value={weight} min={30} max={150}
                     onChange={e => setWeight(Number(e.target.value) || 30)}
-                    className="w-12 text-center text-sm font-semibold text-gray-900 outline-none py-1.5 bg-transparent" />
-                  <span className="text-xs text-gray-500 pr-2">kg</span>
+                    className="w-10 text-center text-sm font-semibold text-gray-900 outline-none py-1.5 bg-transparent" />
+                  <span className="text-xs text-gray-500 pr-1.5">kg</span>
                 </div>
               </div>
             </div>
@@ -488,17 +519,17 @@ export default function FittingRoomPage() {
             {BODY_MEASUREMENTS.map(({ key, label, unit, min, max }) => (
               <div key={key}>
                 <label className="block text-sm font-bold text-gray-800 mb-1">{label.toUpperCase()}</label>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400 w-7 shrink-0">{min}</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-gray-400 w-6 shrink-0">{min}</span>
                   <input type="range" min={min} max={max} step={1} value={bodyMeasures[key]}
                     onChange={e => handleBodyChange(key, Number(e.target.value))}
-                    className="flex-1 h-1.5 cursor-pointer appearance-none rounded-full bg-gray-200 accent-[var(--primary)]" />
-                  <span className="text-xs text-gray-400 w-7 shrink-0 text-right">{max}</span>
+                    className="flex-1 min-w-[50px] h-1.5 cursor-pointer appearance-none rounded-full bg-gray-200 accent-[var(--primary)]" />
+                  <span className="text-xs text-gray-400 w-6 shrink-0 text-right">{max}</span>
                   <div className="flex items-center border border-gray-300 rounded-lg bg-white overflow-hidden shrink-0">
                     <input type="number" value={bodyMeasures[key]} min={min} max={max}
                       onChange={e => handleBodyChange(key, Number(e.target.value) || min)}
-                      className="w-12 text-center text-sm font-semibold text-gray-900 outline-none py-1.5 bg-transparent" />
-                    <span className="text-xs text-gray-500 pr-2">{unit}</span>
+                      className="w-10 text-center text-sm font-semibold text-gray-900 outline-none py-1.5 bg-transparent" />
+                    <span className="text-xs text-gray-500 pr-1.5">{unit}</span>
                   </div>
                 </div>
               </div>
