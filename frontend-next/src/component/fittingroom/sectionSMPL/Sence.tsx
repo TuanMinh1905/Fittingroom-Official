@@ -1,5 +1,6 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Environment, ContactShadows } from "@react-three/drei";
+import { OrbitControls, ContactShadows } from "@react-three/drei";
+import { useEffect, useRef } from "react";
 import HumanMesh from "./HumanMesh";
 import GarmentMesh from "./GarmentMesh";
 
@@ -16,6 +17,62 @@ interface SceneProps {
   bodyFaces: number[];
   garments?: GarmentData[];
   skinColor?: string;
+  /** Giá trị dọc từ thanh trượt: 0 = nhìn chân, 50 = giữa, 100 = nhìn đầu */
+  verticalOffset?: number;
+}
+
+/**
+ * Component nội bộ để điều khiển camera target theo verticalOffset.
+ * Khi slider thay đổi, target.y sẽ di chuyển theo,
+ * giúp xem từng phần cơ thể mà không cần zoom hay xoay.
+ */
+function CameraTargetController({ verticalOffset }: { verticalOffset: number }) {
+  useEffect(() => {
+    // Map slider: 0 (chân) → target.y = -1.0, 50 (giữa) → 0.3, 100 (đầu) → 1.6
+    const minY = -1.0;
+    const maxY = 1.6;
+    const targetY = minY + (verticalOffset / 100) * (maxY - minY);
+
+    // Update OrbitControls target qua custom event
+    window.dispatchEvent(
+      new CustomEvent("update-camera-target", { detail: { y: targetY } })
+    );
+  }, [verticalOffset]);
+
+  return null;
+}
+
+/**
+ * OrbitControls wrapper nhận custom event để update target.
+ */
+function SmartOrbitControls() {
+  const controlsRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { y } = (e as CustomEvent).detail;
+      if (controlsRef.current) {
+        controlsRef.current.target.set(0, y, 0);
+        controlsRef.current.update();
+      }
+    };
+    window.addEventListener("update-camera-target", handler);
+    return () => window.removeEventListener("update-camera-target", handler);
+  }, []);
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      target={[0, 0.3, 0]}
+      minDistance={1}
+      maxDistance={5}
+      enablePan={true}
+      enableDamping={true}
+      dampingFactor={0.08}
+      maxPolarAngle={Math.PI * 0.85}
+      minPolarAngle={Math.PI * 0.1}
+    />
+  );
 }
 
 /**
@@ -26,7 +83,7 @@ interface SceneProps {
  * - OrbitControls cho phép xoay/zoom/pan
  * - Background gradient tối (dark studio feel)
  */
-export function Scene({ bodyVertices, bodyFaces, garments = [], skinColor = "#e8beac" }: SceneProps) {
+export function Scene({ bodyVertices, bodyFaces, garments = [], skinColor = "#e8beac", verticalOffset = 50 }: SceneProps) {
   return (
     <Canvas
       camera={{ position: [0, 0.9, 2.5], fov: 40 }}
@@ -70,17 +127,11 @@ export function Scene({ bodyVertices, bodyFaces, garments = [], skinColor = "#e8
         ))}
       </group>
 
+      {/* Camera target controller — điều khiển bởi slider */}
+      <CameraTargetController verticalOffset={verticalOffset} />
+
       {/* OrbitControls: xoay chuột trái, zoom scroll, pan chuột phải */}
-      <OrbitControls
-        target={[0, 0.3, 0]}
-        minDistance={1}
-        maxDistance={5}
-        enablePan={true}
-        enableDamping={true}
-        dampingFactor={0.08}
-        maxPolarAngle={Math.PI * 0.85}
-        minPolarAngle={Math.PI * 0.1}
-      />
+      <SmartOrbitControls />
     </Canvas>
   );
 }

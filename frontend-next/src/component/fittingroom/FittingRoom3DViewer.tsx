@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import type { GarmentData } from "./sectionSMPL/Sence";
 
@@ -39,6 +39,13 @@ interface FittingRoom3DViewerProps {
   onClearError?: () => void;
 }
 
+/** Nhãn cho thanh trượt dọc */
+const SLIDER_LABELS = [
+  { value: 85, label: "Đầu" },
+  { value: 50, label: "Thân" },
+  { value: 15, label: "Chân" },
+];
+
 /**
  * Component wrapper cho phòng thử đồ 3D.
  *
@@ -53,6 +60,13 @@ export default function FittingRoom3DViewer({
   error,
   onClearError,
 }: FittingRoom3DViewerProps) {
+  // State cho thanh cuộn dọc (0=chân, 50=giữa, 100=đầu)
+  const [verticalOffset, setVerticalOffset] = useState(50);
+
+  const handleSliderChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setVerticalOffset(Number(e.target.value));
+  }, []);
+
   // Loading state
   if (isLoading) {
     return (
@@ -100,24 +114,95 @@ export default function FittingRoom3DViewer({
     }));
 
     return (
-      <div className="w-full h-full relative">
-        <Scene
-          bodyVertices={meshData.body_vertices}
-          bodyFaces={meshData.body_faces}
-          garments={garmentData}
-        />
+      <div className="w-full h-full relative flex">
+        {/* 3D Canvas — chiếm hết không gian trừ thanh slider */}
+        <div className="flex-1 relative">
+          <Scene
+            bodyVertices={meshData.body_vertices}
+            bodyFaces={meshData.body_faces}
+            garments={garmentData}
+            verticalOffset={verticalOffset}
+          />
+        </div>
+
+        {/* ═══ Thanh trượt dọc (Vertical Slider) ═══ */}
+        <div
+          className="flex flex-col items-center justify-between py-4 px-1"
+          style={{
+            width: "44px",
+            background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+            borderLeft: "1px solid rgba(100, 160, 255, 0.15)",
+          }}
+        >
+          {/* Icon mũi tên lên */}
+          <div className="text-blue-300/60 text-xs select-none" title="Nhìn lên">▲</div>
+
+          {/* Nhãn vùng */}
+          <div className="relative flex-1 flex items-center" style={{ width: "100%" }}>
+            {/* Track labels bên trái slider */}
+            <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none" style={{ width: "100%" }}>
+              {SLIDER_LABELS.map((item) => (
+                <div
+                  key={item.label}
+                  className="text-center"
+                  style={{
+                    position: "absolute",
+                    top: `${100 - item.value}%`,
+                    transform: "translateY(-50%)",
+                    width: "100%",
+                  }}
+                >
+                  <span
+                    className="text-blue-200/40 font-medium select-none"
+                    style={{ fontSize: "8px", letterSpacing: "0.5px" }}
+                  >
+                    {item.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Vertical range input */}
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value={verticalOffset}
+              onChange={handleSliderChange}
+              className="vertical-slider-3d"
+              title={`Vị trí: ${verticalOffset}%`}
+              style={{
+                /* Xoay -90 để trở thành slider dọc */
+                writingMode: "vertical-lr" as any,
+                direction: "rtl",
+                width: "28px",
+                height: "100%",
+                cursor: "grab",
+                WebkitAppearance: "none",
+                appearance: "none",
+                background: "transparent",
+                margin: "0 auto",
+              }}
+            />
+          </div>
+
+          {/* Icon mũi tên xuống */}
+          <div className="text-blue-300/60 text-xs select-none" title="Nhìn xuống">▼</div>
+        </div>
+
         {/* Overlay hướng dẫn */}
-        <div className="absolute bottom-3 left-3 right-3 flex justify-center pointer-events-none">
+        <div className="absolute bottom-3 left-3 right-12 flex justify-center pointer-events-none">
           <div className="bg-black/50 backdrop-blur-sm text-white/70 text-xs px-4 py-2 rounded-full flex items-center gap-3">
             <span>🖱️ Xoay</span>
             <span className="w-px h-3 bg-white/20" />
             <span>🔍 Zoom</span>
             <span className="w-px h-3 bg-white/20" />
-            <span>✋ Di chuyển (chuột phải)</span>
+            <span>↕️ Thanh trượt dọc</span>
           </div>
         </div>
         {/* Badge 3D */}
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 right-14">
           <div className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg shadow-blue-500/30 flex items-center gap-1.5">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
@@ -127,6 +212,50 @@ export default function FittingRoom3DViewer({
             3D View
           </div>
         </div>
+
+        {/* CSS cho vertical slider */}
+        <style jsx global>{`
+          .vertical-slider-3d::-webkit-slider-runnable-track {
+            width: 4px;
+            background: linear-gradient(to bottom, #3b82f6, #06b6d4, #3b82f6);
+            border-radius: 2px;
+            opacity: 0.4;
+          }
+          .vertical-slider-3d::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa, #06b6d4);
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5), 0 0 20px rgba(6, 182, 212, 0.3);
+            cursor: grab;
+            margin-left: -7px;
+          }
+          .vertical-slider-3d::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.7), 0 0 30px rgba(6, 182, 212, 0.5);
+          }
+          .vertical-slider-3d::-moz-range-track {
+            width: 4px;
+            background: linear-gradient(to bottom, #3b82f6, #06b6d4, #3b82f6);
+            border-radius: 2px;
+            opacity: 0.4;
+          }
+          .vertical-slider-3d::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa, #06b6d4);
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5), 0 0 20px rgba(6, 182, 212, 0.3);
+            cursor: grab;
+          }
+          .vertical-slider-3d:active {
+            cursor: grabbing;
+          }
+        `}</style>
       </div>
     );
   }
