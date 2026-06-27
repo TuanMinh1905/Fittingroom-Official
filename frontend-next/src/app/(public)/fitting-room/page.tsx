@@ -15,9 +15,14 @@ const GARMENT_TYPE_MAP: Record<string, string[]> = {
 };
 
 // Số đo cơ thể thực tế với giá trị mặc định theo giới tính
+// (Giá trị tham chiếu: nam 175cm/75kg, nữ 162cm/60kg)
 const BODY_DEFAULTS = {
   male: { shoulder: 46, arm: 60, bust: 96, waist: 82, hip: 96, leg: 80 },
   female: { shoulder: 38, arm: 55, bust: 88, waist: 70, hip: 98, leg: 74 },
+};
+const BODY_REF = {
+  male: { height: 175, weight: 75 },
+  female: { height: 162, weight: 60 },
 };
 const BODY_MEASUREMENTS = [
   { key: "shoulder" as const, label: "Bề ngang vai", unit: "cm", min: 28, max: 58 },
@@ -29,6 +34,39 @@ const BODY_MEASUREMENTS = [
 ];
 type BodyKey = typeof BODY_MEASUREMENTS[number]["key"];
 
+/**
+ * Ước lượng số đo cơ thể từ chiều cao + cân nặng.
+ * Dùng tỷ lệ anthropometric: vòng đo (bust, waist, hip) scale chủ yếu theo
+ * weight, chiều dài (arm, leg) scale chủ yếu theo height, vai scale theo cả hai.
+ */
+function estimateBodyMeasurements(
+  h: number,
+  w: number,
+  g: "male" | "female"
+): typeof BODY_DEFAULTS.male {
+  const ref = BODY_REF[g];
+  const defaults = BODY_DEFAULTS[g];
+  const hFactor = h / ref.height;       // tỷ lệ chiều cao
+  const wFactor = w / ref.weight;       // tỷ lệ cân nặng
+
+  const clamp = (val: number, key: BodyKey) => {
+    const m = BODY_MEASUREMENTS.find(b => b.key === key)!;
+    return Math.round(Math.min(m.max, Math.max(m.min, val)));
+  };
+
+  return {
+    // Vòng đo: scale mạnh theo weight, nhẹ theo height
+    bust:     clamp(defaults.bust     * Math.pow(wFactor, 0.55) * Math.pow(hFactor, 0.10), "bust"),
+    waist:    clamp(defaults.waist    * Math.pow(wFactor, 0.65) * Math.pow(hFactor, 0.05), "waist"),
+    hip:      clamp(defaults.hip      * Math.pow(wFactor, 0.50) * Math.pow(hFactor, 0.10), "hip"),
+    // Vai: pha trộn cả hai
+    shoulder: clamp(defaults.shoulder * Math.pow(hFactor, 0.45) * Math.pow(wFactor, 0.20), "shoulder"),
+    // Chiều dài: scale chủ yếu theo height
+    arm:      clamp(defaults.arm      * Math.pow(hFactor, 0.70) * Math.pow(wFactor, 0.05), "arm"),
+    leg:      clamp(defaults.leg      * Math.pow(hFactor, 0.70) * Math.pow(wFactor, 0.05), "leg"),
+  };
+}
+
 export default function FittingRoomPage() {
   const { items, removeFromCart } = useCartStore();
   const [height, setHeight] = useState(170);
@@ -37,12 +75,19 @@ export default function FittingRoomPage() {
   const [poseIdx, setPoseIdx] = useState(0);
   const [bodyMeasures, setBodyMeasures] = useState({ ...BODY_DEFAULTS.male });
 
+  // Tự động cập nhật số đo cơ thể khi height/weight thay đổi
+  useEffect(() => {
+    setBodyMeasures(estimateBodyMeasurements(height, weight, gender));
+  }, [height, weight, gender]);
+
   const handleGenderChange = async (g: "male" | "female") => {
-    if (isGenderSwitching || g === gender) return; // Không làm gì nếu đang switch hoặc cùng gender
+    if (isGenderSwitching || g === gender) return;
     setGender(g);
-    setBodyMeasures({ ...BODY_DEFAULTS[g] });
-    setHeight(g === "male" ? 175 : 162);
-    setWeight(g === "male" ? 75 : 60);
+    const newH = g === "male" ? 175 : 162;
+    const newW = g === "male" ? 75 : 60;
+    setHeight(newH);
+    setWeight(newW);
+    // bodyMeasures sẽ tự cập nhật qua useEffect [height, weight, gender]
     // Reset kết quả cũ
     setMeshData(null);
     setResultImg(null);
