@@ -7,7 +7,8 @@
     "start": "node dist/index.js",
     "seed": "tsx src/scripts/seed.ts",
     "seed:categories": "tsx src/scripts/seed-categories.ts",
-    "seed:users": "tsx src/scripts/seed-users.ts"
+    "seed:users": "tsx src/scripts/seed-users.ts",
+    "seed:shirts": "tsx src/scripts/seed-shirts.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

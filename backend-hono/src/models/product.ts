@@ -32,6 +32,9 @@ export interface IProduct extends Document {
     colorCodes?: string[];
     sizes?: string[];
     sizeChart?: ISizeMeasurement[];
+    // TailorNet garment type — dùng để load đúng AI model khi thử đồ ảo
+    // Giá trị hợp lệ: 't-shirt' | 'shirt' | 'pant' | 'short-pant' | 'skirt'
+    garment_type?: string;
 }
 
 const SizeMeasurementSchema = new Schema<ISizeMeasurement>({
@@ -61,6 +64,7 @@ const ProductSchema = new Schema<IProduct>(
         colorCodes: [{ type: String }],
         sizes: [{ type: String }],
         sizeChart: [SizeMeasurementSchema],
+        garment_type: { type: String, required: false, default: null },
     }
 )
 

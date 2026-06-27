@@ -30,6 +30,9 @@ export type Product = {
   sizes?: string[];
   colorCodes?: string[];
   sizeChart?: SizeMeasurement[];
+  // TailorNet garment type — được lưu từ DB, dùng để chọn đúng AI model khi thử đồ ảo
+  // Ví dụ: 't-shirt' | 'shirt' | 'pant' | 'short-pant' | 'skirt'
+  garment_type?: string;
 };
 
 type ProductState = {

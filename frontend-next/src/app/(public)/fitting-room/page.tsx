@@ -66,10 +66,15 @@ export default function FittingRoomPage() {
     const init: Record<string, { size: string; color: string; garmentType: string }> = {};
     items.forEach(item => {
       if (!selectedOptions[item._id]) {
+        // Ư u tiên đọc garment_type từ DB sản phẩm.
+        // Fallback: 't-shirt' cho áo, 'pant' cho quần (sản phẩm cũ chưa có garment_type).
+        const defaultGarmentType = item.garment_type
+          ? item.garment_type
+          : item.categorySlug === "ao" ? "t-shirt" : "pant";
         init[item._id] = {
           size: item.sizes?.[0] || "M",
           color: item.colorCodes?.[0] || "#0000FF",
-          garmentType: item.categorySlug === "ao" ? "t-shirt" : "pant",
+          garmentType: defaultGarmentType,
         };
       }
     });
@@ -83,11 +88,15 @@ export default function FittingRoomPage() {
   };
 
   /**
-   * Kiểm tra trước khi gọi TailorNet: nếu đồ quá chật ("Rất chật")
-   * thì chặn render và mở chatbox AI với cảnh báo.
-   * Trả về danh sách tên đồ bị quá chật, hoặc [] nếu OK.
+   * NGƯỠNG 1 — BLOCK (score <= -1.75): cơ thể vượt xa kích thước tối đa của quần áo
+   * đến mức TailorNet không thể deform mesh, gây ra hiện tượng body mesh xuyên qua cloth mesh.
+   * → Chặn hoàn toàn, mở chatbox AI cảnh báo.
+   *
+   * NGƯỠNG 2 — WARN (score <= -1.2): áo chật nhưng vẫn mặc được.
+   * TailorNet vẫn render được (áo bó sát người), chỉ hiện toast nhẹ để người dùng biết.
+   * → Vẫn gọi TailorNet bình thường.
    */
-  const checkFitBeforeTryOn = (): string[] => {
+  const checkFitBeforeTryOn = () => {
     const bodyForFit: BodyMeasurements = {
       shoulder: bodyMeasures.shoulder,
       arm: bodyMeasures.arm,
@@ -98,50 +107,54 @@ export default function FittingRoomPage() {
       height,
       weight,
     };
-    const tooTight: string[] = [];
 
-    if (selectedTopId && selectedOptions[selectedTopId]) {
-      const opt = selectedOptions[selectedTopId];
+    // Các item vượt ngưỡng BLOCK (gây mesh clipping)
+    const meshClipping: string[] = [];
+    // Các item chỉ bị chật bình thường (vẫn render, chỉ warn nhẹ)
+    const tightButOk: string[] = [];
+
+    const check = (itemId: string, isTop: boolean) => {
+      const opt = selectedOptions[itemId];
+      if (!opt) return;
       const analysis = analyzeFit(bodyForFit, opt.size, opt.garmentType, gender);
-      if (analysis.overallScore <= -1.2) {
-        const item = items.find(i => i._id === selectedTopId);
-        const label = item?.name ? `"${item.name}"` : `áo size ${opt.size}`;
-        tooTight.push(`${label} (size ${opt.size}) → Gợi ý: size ${analysis.recommendedSize}`);
-      }
-    }
+      const item = items.find(i => i._id === itemId);
+      const label = item?.name ? `"${item.name}"` : (isTop ? `áo` : `quần`);
 
-    if (selectedBottomId && selectedOptions[selectedBottomId]) {
-      const opt = selectedOptions[selectedBottomId];
-      const analysis = analyzeFit(bodyForFit, opt.size, opt.garmentType, gender);
-      if (analysis.overallScore <= -1.2) {
-        const item = items.find(i => i._id === selectedBottomId);
-        const label = item?.name ? `"${item.name}"` : `quần size ${opt.size}`;
-        tooTight.push(`${label} (size ${opt.size}) → Gợi ý: size ${analysis.recommendedSize}`);
+      if (analysis.overallScore <= -1.75) {
+        // Vượt ngưỡng mesh clipping — BLOCK
+        meshClipping.push(`${label} size ${opt.size} → gợi ý: **${analysis.recommendedSize}**`);
+      } else if (analysis.overallScore <= -1.2) {
+        // Chật nhưng TailorNet vẫn render được — chỉ WARN
+        tightButOk.push(`${label} size ${opt.size} (${analysis.overallLabel})`);
       }
-    }
+    };
 
-    return tooTight;
+    if (selectedTopId) check(selectedTopId, true);
+    if (selectedBottomId) check(selectedBottomId, false);
+
+    return { meshClipping, tightButOk };
   };
 
   const handleTryOn = async () => {
     if (!height || !weight) { setError("Vui lòng nhập chiều cao và cân nặng!"); return; }
     if (!selectedTopId && !selectedBottomId) { setError("Vui lòng chọn ít nhất 1 áo hoặc 1 quần!"); return; }
 
-    // ── Kiểm tra fit trước khi render ─────────────────────────
-    const tooTightItems = checkFitBeforeTryOn();
-    if (tooTightItems.length > 0) {
-      // Tạo thông báo chi tiết cho chatbox
+    // ── Kiểm tra fit: 2 ngưỡng (BLOCK vs WARN) ────────────────
+    const { meshClipping, tightButOk } = checkFitBeforeTryOn();
+
+    if (meshClipping.length > 0) {
+      // Ngưỡng BLOCK: cơ thể vượt xa kích thước → sẽ gây mesh clipping
       const warningLines = [
         `🚨 **Không thể mặc vừa!**\n`,
-        ...tooTightItems.map(item => `• ${item}`),
-        `\n❌ Kích thước cơ thể của bạn **vượt quá giới hạn** của những sản phẩm trên.`,
-        `Hãy chọn **size lớn hơn** để tránh bị chật và có trải nghiệm thử đồ tốt hơn nhé! 👗`,
+        ...meshClipping.map(item => `• ${item}`),
+        `\n❌ Số đo cơ thể của bạn **vượt quá giới hạn** của những sản phẩm này.`,
+        `Nếu cố mặc vào, hình ảnh 3D sẽ bị lỗi. Hãy chọn **size lớn hơn** nhé! 👗`,
       ];
       setTooBigWarning(warningLines.join("\n"));
-      setHasTryOnResult(true); // Cho hiện nút chatbox
-      setPendingAnalysis(false); // Không auto-analyze
-      setIsChatOpen(true); // Tự động mở chatbox ngay
-      return; // Chặn gọi TailorNet
+      setHasTryOnResult(true);
+      setPendingAnalysis(false);
+      setIsChatOpen(true);
+      return; // ← Chặn hoàn toàn, không gọi TailorNet
     }
 
     setIsLoading(true);
@@ -249,7 +262,13 @@ export default function FittingRoomPage() {
 
   const renderItem = (item: any, isTop: boolean) => {
     const isSelected = isTop ? selectedTopId === item._id : selectedBottomId === item._id;
-    const opt = selectedOptions[item._id] || { size: item.sizes?.[0] || "M", color: item.colorCodes?.[0] || "#0000FF", garmentType: isTop ? "t-shirt" : "pant" };
+    const opt = selectedOptions[item._id] || {
+      size: item.sizes?.[0] || "M",
+      color: item.colorCodes?.[0] || "#0000FF",
+      garmentType: item.garment_type
+        ? item.garment_type
+        : (isTop ? "t-shirt" : "pant"),
+    };
     const garmentOptions = isTop ? GARMENT_TYPE_MAP.ao : GARMENT_TYPE_MAP.quan;
 
     return (
