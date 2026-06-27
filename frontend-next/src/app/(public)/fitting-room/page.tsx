@@ -284,6 +284,14 @@ export default function FittingRoomPage() {
 
   const renderItem = (item: any, isTop: boolean) => {
     const isSelected = isTop ? selectedTopId === item._id : selectedBottomId === item._id;
+    const handleToggleSelect = () => {
+      if (isTop) {
+        setSelectedTopId(prev => (prev === item._id ? null : item._id));
+      } else {
+        setSelectedBottomId(prev => (prev === item._id ? null : item._id));
+      }
+    };
+
     const opt = selectedOptions[item._id] || {
       size: item.sizes?.[0] || "M",
       color: item.colorCodes?.[0] || "#0000FF",
@@ -296,12 +304,12 @@ export default function FittingRoomPage() {
     return (
       <div key={item._id}
         className={`flex gap-3 border ${isSelected ? "border-[var(--primary)] bg-[var(--primary)]/5" : "border-gray-100"} p-3 rounded-xl transition-colors cursor-pointer relative`}
-        onClick={() => isTop ? setSelectedTopId(item._id) : setSelectedBottomId(item._id)}
+        onClick={handleToggleSelect}
       >
         <div className="absolute top-3 left-3 z-10">
           <input type="radio" name={isTop ? "topSelect" : "bottomSelect"} checked={isSelected}
-            onChange={() => isTop ? setSelectedTopId(item._id) : setSelectedBottomId(item._id)}
-            onClick={e => e.stopPropagation()}
+            onChange={() => {}}
+            onClick={e => { e.stopPropagation(); handleToggleSelect(); }}
             className="w-4 h-4 accent-[var(--primary)] cursor-pointer"
           />
         </div>
