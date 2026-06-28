@@ -88,7 +88,7 @@ export function Scene({ bodyVertices, bodyFaces, garments = [], skinColor = "#e8
     <Canvas
       camera={{ position: [0, 0.9, 2.5], fov: 40 }}
       style={{ background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" }}
-      gl={{ antialias: true, alpha: false }}
+      gl={{ antialias: true, alpha: false, stencil: true }}
     >
       {/* Lighting: 3-point setup */}
       <ambientLight intensity={0.4} color="#e6e6ff" />
@@ -123,6 +123,7 @@ export function Scene({ bodyVertices, bodyFaces, garments = [], skinColor = "#e8
             vertices={g.vertices}
             faces={g.faces}
             color={g.color}
+            type={g.type}
           />
         ))}
       </group>

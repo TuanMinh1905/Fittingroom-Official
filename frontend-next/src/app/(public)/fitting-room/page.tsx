@@ -279,7 +279,22 @@ export default function FittingRoomPage() {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) { const e = await res.json(); throw new Error(e.error || "Lỗi TailorNet"); }
+        if (!res.ok) {
+          const e = await res.json();
+          if (res.status === 422) {
+            // Áo quá rộng — hiện warning thân thiện qua AI chatbox
+            const warnMsg = [
+              `👗 **Áo quá rộng!**\n`,
+              e.detail || "Áo quá rộng so với số đo cơ thể.",
+            ].join("\n");
+            setTooBigWarning(warnMsg);
+            setHasTryOnResult(true);
+            setPendingAnalysis(false);
+            setIsChatOpen(true);
+            return;
+          }
+          throw new Error(e.error || e.detail || "Lỗi TailorNet");
+        }
         data = await res.json();
       } else {
         // Single mode: chỉ áo hoặc chỉ quần
@@ -303,7 +318,22 @@ export default function FittingRoomPage() {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) { const e = await res.json(); throw new Error(e.error || "Lỗi TailorNet"); }
+        if (!res.ok) {
+          const e = await res.json();
+          if (res.status === 422) {
+            // Áo quá rộng — hiện warning thân thiện qua AI chatbox
+            const warnMsg = [
+              `👗 **Áo quá rộng!**\n`,
+              e.detail || "Áo quá rộng so với số đo cơ thể.",
+            ].join("\n");
+            setTooBigWarning(warnMsg);
+            setHasTryOnResult(true);
+            setPendingAnalysis(false);
+            setIsChatOpen(true);
+            return;
+          }
+          throw new Error(e.error || e.detail || "Lỗi TailorNet");
+        }
         data = await res.json();
       }
 

@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({ detail: `HTTP ${res.status}` }));
-      return NextResponse.json({ error: err.detail || "TailorNet error" }, { status: res.status });
+      return NextResponse.json({ error: err.detail || "TailorNet error", detail: err.detail }, { status: res.status });
     }
 
     const data = await res.json();

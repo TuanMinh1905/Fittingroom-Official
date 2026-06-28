@@ -172,10 +172,15 @@ export default function AIChatbox({
     try {
       // Gửi context + messages đến backend
       const context = buildContext();
-      const chatHistory = [...messages.filter(m => m.role !== "system"), userMsg].map(m => ({
-        role: m.role === "user" ? "user" : "model",
-        parts: [{ text: m.content }],
-      }));
+      // Chỉ lấy history trước câu hỏi hiện tại (không include userMsg — đã gửi trong field `message`)
+      // Giới hạn 6 message gần nhất để tránh history cũ (đặc biệt các câu từ chối) ảnh hưởng kết quả
+      const chatHistory = messages
+        .filter(m => m.role !== "system")
+        .slice(-6)
+        .map(m => ({
+          role: m.role === "user" ? "user" : "model",
+          parts: [{ text: m.content }],
+        }));
 
       const res = await fetch(`${BACKEND_URL}/ai-advisor`, {
         method: "POST",

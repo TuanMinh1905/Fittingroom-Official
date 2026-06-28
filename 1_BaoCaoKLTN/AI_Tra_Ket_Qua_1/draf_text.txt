@@ -1,0 +1,79 @@
+CHƯƠNG 2: CƠ SỞ LÝ THUYẾT
+2.1. TỔNG QUAN VỀ XÂY DỰNG GIAO DIỆN
+2.1.1. Ngôn ngữ lập trình TypeSCript
+Lý thuyết :
+TypeScript mở rộng JavaScript với hệ thống kiểu tĩnh, hỗ trợ kiểm tra lỗi ngay khi viết code, đồng thời vẫn transpile về JavaScript để chạy trên trình duyệt
+	Vai trò trong Project :
+Trong project này Khai báo kiểu cho các thực thể domain như Product, Category, Brand, Order,… (trong types/ và các store). 
+Giảm lỗi khi thao tác với dữ liệu từ backend (đúng tên field: id, name, slug, price, imageUrl,…), giúp refactor an toàn hơn.
+	2.1.2. Nuxt 4 ( Dựa trên vue 3 )
+	Lý thuyết :
+Nuxt là một framework xây dựng trên nền tảng Vue 3, hỗ trợ mô hình Universal / SSR (Server-Side Rendering), SPA và SSG. 
+Nuxt cung cấp cơ chế routing tự động dựa trên cấu trúc thư mục pages/. 
+Hệ thống layout, middleware, modules và runtimeConfig tập trung. 
+Tự động tích hợp Vite, HMR, TypeScript, code splitting, prefetch,…
+Vai trò trong project :
+Trong project này Nuxt tổ chức toàn bộ giao diện qua các page: trang chủ, shop, chi tiết sản phẩm (/p/[slug]), giỏ hàng (/cart), checkout (/checkout), đăng nhập/đăng ký, trang tài khoản, khu vực admin (/admin/...).
+SSR và cấu hình routeRules giúp tăng tốc load trang và tối ưu SEO cho các trang sản phẩm, thương hiệu, blog
+2.1.3. Pinia ( State Management )
+	Lý thuyết :
+Pinia là thư viện state management chính thức cho Vue 3 (thay thế Vuex), 
+Định nghĩa store với state, getters, actions. 
+Dùng được với Composition API, hỗ trợ TypeScript tốt. Dễ chia nhỏ thành nhiều store theo module.
+	Vai trò trong Project: 
+Sử dụng module @pinia/nuxt để tích hợp Pinia vào Nuxt.
+Nhờ Pinia, các trang khác nhau (Navigation, shop, chi tiết sản phẩm, admin) dùng chung một nguồn dữ liệu nhất quán.
+	2.1.4 Tailwind CSS và Plugin
+	Lý thuyết: 
+Tailwind CSS là CSS framework dạng utility-first, cung cấp các class nhỏ (margin, padding, màu sắc, font, flex, grid,…) để xây dựng giao diện nhanh mà không phải viết CSS thuần nhiều.
+@nuxtjs/tailwindcss – tích hợp Tailwind vào Nuxt. 
+@tailwindcss/typography – tối ưu hiển thị các đoạn văn bản dài (mô tả sản phẩm, blog,…). 
+tailwind-scrollbar – tùy biến thanh cuộn (scrollbar) cho UI đẹp hơn.
+	Vai trò trong project : 
+Dùng để xây dựng toàn bộ giao diện trang shop, card sản phẩm, modal giỏ hàng, form checkout, trang admin,… với class Tailwind. 
+Đảm bảo giao diện responsive trên mobile, tablet, desktop mà không cần nhiều file CSS thủ công.
+Giúp UI thống nhất, dễ chỉnh sửa (chỉ cần đổi class).
+2.2. TỔNG QUAN VỀ XÂY DỰNG CHỨC NĂNG
+2.2.1. Next.js 15 (App Router) – Nền tảng backend API
+	Lý thuyết: 
+Next.js là framework React full-stack, ngoài phần giao diện còn cho phép xây dựng API routes ngay trong project. Với App Router (app/api/...):
+Mỗi thư mục app/api/x/route.ts tương ứng với một endpoint REST (GET, POST, PUT, DELETE).
+Vai trò trong project
+Nhóm /api/products – CRUD sản phẩm, filter theo category, brand, từ khóa tìm kiếm, phân trang
+Nhóm /api/categories – trả danh sách category và cây 2 cấp (cha – con).
+Nhóm /api/brands – quản lý thương hiệu, slug, logo, mô tả, sản phẩm theo brand.
+Nhóm /api/cart, /api/orders – giỏ hàng và đặt hàng
+Nhóm /api/auth – login, logout, /me để lấy thông tin user
+Nhóm /api/admin/... – API riêng cho Admin quản lý sản phẩm, đơn hàng, khách hàng, thống kê.
+2.2.2 Prisma ORM
+	Lý thuyết:
+Định nghĩa cấu trúc CSDL trong prisma/schema.prisma
+Tự sinh ra Prisma Client type-safe để thao tác CSDL bằng code (không phải viết SQL tay cho các CRUD cơ bản).
+Hỗ trợ migration (prisma migrate), sync schema (prisma db push), seed dữ liệu.
+	Vai trò trong project:
+Mô hình hóa toàn bộ bảng trong MySQL: User, Category, Brand, Product, Image, Cart, CartItem, Order, OrderItem
+2.2.3. Cơ sở dữ liệu MySQL
+	Lý thuyết:
+MySQL là hệ quản trị CSDL quan hệ (RDBMS) sử dụng SQL
+Hỗ trợ bảng (table), khóa chính, khóa ngoại, unique, index
+Hỗ trợ Quan hệ 1-n, n-n giữa các bảng
+	Vai trò trong project:
+Lưu toàn bộ dữ liệu động của hệ thống TMFashion: Danh mục (cấp 1/cấp 2), thương hiệu, sản phẩm, ảnh. Người dùng (email, mật khẩu đã hash, vai trò). Giỏ hàng, đơn hàng, chi tiết đơn hàng, trạng thái đơn.
+Kết nối MySQL thông qua Prisma, cấu hình trong .env bằng DATABASE_URL
+MySQL Workbench được dùng để quan sát bảng, xem dữ liệu thật trong quá trình phát triển và kiểm thử
+2.2.4. Xác thực & phân quyền: bcryptjs + JSON Web Token (JWT)
+	Lý thuyết
+bcryptjs: thư viện để hash mật khẩu (một chiều). Khi đăng nhập, mật khẩu người dùng được hash lại và so sánh với hash lưu trong DB
+JWT (jsonwebtoken): Là chuỗi token mã hóa thông tin (payload) như userId, role. Backend ký token bằng JWT_SECRET. Mỗi request gửi token qua header Authorization: Bearer <token>, backend verify để xác định user.
+	Vai trò trong project:
+Bảng User lưu passwordHash, không lưu plain password
+API /api/auth/login: Nhận email và password. Tìm user, dùng bcryptjs.compare để kiểm tra mật khẩu. Nếu đúng, tạo JWT chứa id, role (ADMIN hoặc CUSTOMER), trả về cho frontend.
+2.2.5. Kiến trúc REST API & lớp tiện ích (CORS, mapDecimal,…)
+	Lý thuyết
+REST API: mỗi tài nguyên (resource) có endpoint rõ ràng: /products, /products/[id], /categories, /orders,
+Dữ liệu từ DB (đặc biệt kiểu Decimal, Date) cần được map lại trước khi trả JSON
+	Vai trò trong project:
+Các route được chia nhỏ theo resource trong app/api/..., dễ đọc và dễ bảo trì.
+File _utils/mapDecimal.ts: Chuyển các trường kiểu Decimal của Prisma sang number để frontend sử dụng thuận tiện (price, compareAtPrice, rating,…).
+File _utils/cors.ts: Thiết lập CORS để cho phép frontend Nuxt (port 3100/4000) gọi sang backend Next.js (port 3000) an toàn.
+

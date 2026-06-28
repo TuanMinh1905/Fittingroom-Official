@@ -1,11 +1,13 @@
-Thân hình mid 
+Thân hình mid  =>  170 cm 65kg
 
-Áo min 
-Áo mid 
-Áo max 
+Áo min (S) => Ok  
+Áo mid (L) => Ok có độ rũ và rộng
+Áo max (XL) =>  Ok có độ rũ và rộng
 
-Quần min 
-Quần mid 
+
+
+Quần min (S)
+Quần mid (M)
 Quần max 
 
 Áo min quần min => Lỗi đè mesh 
