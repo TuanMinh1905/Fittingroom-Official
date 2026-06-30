@@ -155,13 +155,11 @@ export default function FittingRoomPage() {
   };
 
   /**
-   * NGƯỠNG 1 — BLOCK (score <= -1.75): cơ thể vượt xa kích thước tối đa của quần áo
-   * đến mức TailorNet không thể deform mesh, gây ra hiện tượng body mesh xuyên qua cloth mesh.
-   * → Chặn hoàn toàn, mở chatbox AI cảnh báo.
+   * NGƯỠNG BLOCK (score <= -2.5): Chỉ block khi người THỰC SỰ RẤT TO mặc áo RẤT NHỎ
+   * ví dụ: 1m9/120kg mặc size S → mesh clipping nghiêm trọng.
    *
-   * NGƯỠNG 2 — WARN (score <= -1.2): áo chật nhưng vẫn mặc được.
-   * TailorNet vẫn render được (áo bó sát người), chỉ hiện toast nhẹ để người dùng biết.
-   * → Vẫn gọi TailorNet bình thường.
+   * Các trường hợp thông thường (kể cả hơi chật / hơi rộng) → render bình thường.
+   * TailorNet thể hiện đúng thực tế: áo chật ôm sát, áo rộng rủ xuống.
    */
   const checkFitBeforeTryOn = () => {
     const bodyForFit: BodyMeasurements = {
@@ -175,9 +173,9 @@ export default function FittingRoomPage() {
       weight,
     };
 
-    // Các item vượt ngưỡng BLOCK (gây mesh clipping)
+    // Chỉ block khi vượt ngưỡng CỰC ĐOAN (người rất to mặc áo rất nhỏ)
     const meshClipping: string[] = [];
-    // Các item chỉ bị chật bình thường (vẫn render, chỉ warn nhẹ)
+    // Không cần tightButOk nữa — cứ render, TailorNet tự thể hiện
     const tightButOk: string[] = [];
 
     const check = (itemId: string, isTop: boolean) => {
@@ -187,12 +185,10 @@ export default function FittingRoomPage() {
       const item = items.find(i => i._id === itemId);
       const label = item?.name ? `"${item.name}"` : (isTop ? `áo` : `quần`);
 
-      if (analysis.overallScore <= -1.75) {
-        // Vượt ngưỡng mesh clipping — BLOCK
+      // Chỉ BLOCK khi cực đoan: score <= -2.5
+      // (ví dụ người 1m9/120kg mặc áo S — mesh sẽ xuyên qua body)
+      if (analysis.overallScore <= -2.5) {
         meshClipping.push(`${label} size ${opt.size} → gợi ý: **${analysis.recommendedSize}**`);
-      } else if (analysis.overallScore <= -1.2) {
-        // Chật nhưng TailorNet vẫn render được — chỉ WARN
-        tightButOk.push(`${label} size ${opt.size} (${analysis.overallLabel})`);
       }
     };
 
@@ -351,7 +347,29 @@ export default function FittingRoomPage() {
       // Tự động mở chatbox nếu người dùng đã từng mở trước đó
       // (không tự mở lần đầu để tránh làm phiền)
     } catch (e: any) {
-      setError(e.message || "Có lỗi xảy ra khi kết nối TailorNet.");
+      const errMsg: string = e.message || "";
+      // Lỗi kỹ thuật nội bộ TailorNet (row index, matrix) → hiển thị qua AI chatbox
+      // thay vì error screen để UX mượt hơn
+      const isTailorNetInternalError =
+        errMsg.includes("row index") ||
+        errMsg.includes("matrix") ||
+        errMsg.includes("index") ||
+        errMsg.includes("out of") ||
+        errMsg.includes("bounds");
+
+      if (isTailorNetInternalError) {
+        const warnMsg = [
+          `⚠️ **Không thể mô phỏng chính xác tổ hợp này**\n`,
+          `Sự kết hợp giữa số đo cơ thể và kích cỡ trang phục vượt ngoài dữ liệu huấn luyện của AI.`,
+          `\n💡 **Gợi ý:** Hãy thử chọn size gần hơn với số đo thực tế của bạn để có kết quả tốt nhất.`,
+        ].join("\n");
+        setTooBigWarning(warnMsg);
+        setHasTryOnResult(true);
+        setPendingAnalysis(false);
+        setIsChatOpen(true);
+      } else {
+        setError(errMsg || "Có lỗi xảy ra khi kết nối TailorNet.");
+      }
     } finally {
       setIsLoading(false);
     }

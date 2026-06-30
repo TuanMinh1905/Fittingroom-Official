@@ -55,51 +55,16 @@ pnpm dev
 ## 3. Khởi chạy Backend SMPL (Python)
 Thư mục: `backend-smpl`
 
-**Cách 1: Chạy tự động bằng file Start.bat (Dành cho Windows)**
 Dự án đã có sẵn file script khởi chạy cho Windows, tự động kích hoạt môi trường ảo và chạy server:
 ```cmd
 cd backend-smpl
 .\start.bat
 ```
 
-**Cách 2: Chạy thủ công (Nếu bạn chưa thiết lập môi trường ảo)**
-Trong trường hợp chạy lần đầu hoặc script trên không hoạt động:
-
-1. Di chuyển vào thư mục:
-```bash
-cd backend-smpl
-```
-
-2. Tạo môi trường ảo (nếu chưa có thư mục `venv`):
-```bash
-python -m venv venv
-```
-
-3. Kích hoạt môi trường ảo:
-```bash
-# Trên Windows:
-.\venv\Scripts\activate
-# Trên macOS/Linux:
-source venv/bin/activate
-```
-
-4. Cài đặt các thư viện cần thiết:
-```bash
-pip install -r requirements.txt
-```
-
-5. Khởi chạy server FastAPI:
-```bash
-uvicorn main:app --reload --port 8001
-```
-*(FastAPI server sẽ chạy tại `http://localhost:8001`)*
-
----
-
 ## 4. Khởi chạy TailorNet (Docker)
 Thư mục: `TailorNet/TailorNet-master`
 
-Vì đây là model AI phức tạp, dự án đã đóng gói sẵn trong Docker để dễ dàng khởi chạy. Đảm bảo bạn đã cài đặt **Docker Desktop** và nó đang mở.
+Vì đây là model AI phức tạp, dự án đã đóng gói sẵn trong Docker để dễ dàng khởi chạy. Đảm bảo đã cài đặt **Docker Desktop** và nó đang mở.
 
 **Bước 1:** Di chuyển vào thư mục TailorNet:
 ```bash
@@ -110,10 +75,5 @@ cd TailorNet/TailorNet-master
 ```bash
 docker-compose up --build
 ```
-*(Nếu bạn dùng phiên bản Docker mới, lệnh có thể là `docker compose up --build`. Container sẽ chạy ở cổng `http://localhost:8000`)*
 
----
-**💡 Tips & Lưu ý:**
-- Đảm bảo bạn đã cài đặt sẵn **Node.js**, **Python** và **pnpm** trên máy tính.
-- Nếu bạn chưa có `pnpm`, có thể cài đặt bằng lệnh: `npm install -g pnpm`.
-- Hãy kiểm tra các file `.env` nếu có, để đảm bảo các thành phần được cấu hình đúng URL kết nối với nhau....
+
