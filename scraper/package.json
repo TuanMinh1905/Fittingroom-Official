@@ -1,0 +1,23 @@
+{
+  "name": "yody-scraper",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Scraper để cào dữ liệu sản phẩm từ YODY.vn và format cho database TMF",
+  "scripts": {
+    "scrape": "tsx src/scrape-yody.ts",
+    "format": "tsx src/format-for-db.ts",
+    "seed": "tsx src/seed-from-scraped.ts",
+    "all": "tsx src/scrape-yody.ts && tsx src/format-for-db.ts && tsx src/seed-from-scraped.ts"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "dotenv": "^17.3.1",
+    "mongoose": "^9.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "tsx": "^4.7.1",
+    "typescript": "^5.8.3"
+  }
+}

@@ -56,14 +56,14 @@ function estimateBodyMeasurements(
 
   return {
     // Vòng đo: scale mạnh theo weight, nhẹ theo height
-    bust:     clamp(defaults.bust     * Math.pow(wFactor, 0.55) * Math.pow(hFactor, 0.10), "bust"),
-    waist:    clamp(defaults.waist    * Math.pow(wFactor, 0.65) * Math.pow(hFactor, 0.05), "waist"),
-    hip:      clamp(defaults.hip      * Math.pow(wFactor, 0.50) * Math.pow(hFactor, 0.10), "hip"),
+    bust: clamp(defaults.bust * Math.pow(wFactor, 0.55) * Math.pow(hFactor, 0.10), "bust"),
+    waist: clamp(defaults.waist * Math.pow(wFactor, 0.65) * Math.pow(hFactor, 0.05), "waist"),
+    hip: clamp(defaults.hip * Math.pow(wFactor, 0.50) * Math.pow(hFactor, 0.10), "hip"),
     // Vai: pha trộn cả hai
     shoulder: clamp(defaults.shoulder * Math.pow(hFactor, 0.45) * Math.pow(wFactor, 0.20), "shoulder"),
     // Chiều dài: scale chủ yếu theo height
-    arm:      clamp(defaults.arm      * Math.pow(hFactor, 0.70) * Math.pow(wFactor, 0.05), "arm"),
-    leg:      clamp(defaults.leg      * Math.pow(hFactor, 0.70) * Math.pow(wFactor, 0.05), "leg"),
+    arm: clamp(defaults.arm * Math.pow(hFactor, 0.70) * Math.pow(wFactor, 0.05), "arm"),
+    leg: clamp(defaults.leg * Math.pow(hFactor, 0.70) * Math.pow(wFactor, 0.05), "leg"),
   };
 }
 
@@ -401,7 +401,7 @@ export default function FittingRoomPage() {
       >
         <div className="absolute top-3 left-3 z-10">
           <input type="radio" name={isTop ? "topSelect" : "bottomSelect"} checked={isSelected}
-            onChange={() => {}}
+            onChange={() => { }}
             onClick={e => { e.stopPropagation(); handleToggleSelect(); }}
             className="w-4 h-4 accent-[var(--primary)] cursor-pointer"
           />
@@ -527,10 +527,10 @@ export default function FittingRoomPage() {
                 className="relative w-full max-w-md group flex items-center justify-center transition-transform hover:scale-[1.02] custom-pulse-opacity"
               >
                 {/* Lớp viền sáng (glow) phía sau */}
-                <div 
-                  className="absolute -inset-1.5 rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 blur-md" 
+                <div
+                  className="absolute -inset-1.5 rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 blur-md"
                 ></div>
-                
+
                 <div className="relative w-full flex items-center justify-center gap-2.5 px-5 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-bold text-white shadow-xl border border-white/20">
                   <span className="text-xl animate-bounce" style={{ animationDuration: '2s' }}>🤖</span>
                   <span className="text-[14px] uppercase tracking-wide">Xem ý kiến và trò chuyện với AI</span>
@@ -554,24 +554,24 @@ export default function FittingRoomPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Giới tính</label>
               <div className="grid grid-cols-2 gap-3">
-              {(["male", "female"] as const).map(g => (
-                <button key={g} onClick={() => handleGenderChange(g)}
-                  disabled={isGenderSwitching}
-                  className={`py-2.5 rounded-xl border-2 flex flex-col items-center justify-center gap-1 transition-all text-sm font-medium
+                {(["male", "female"] as const).map(g => (
+                  <button key={g} onClick={() => handleGenderChange(g)}
+                    disabled={isGenderSwitching}
+                    className={`py-2.5 rounded-xl border-2 flex flex-col items-center justify-center gap-1 transition-all text-sm font-medium
                     ${gender === g
-                      ? g === "male" ? "border-[var(--primary)] bg-[var(--primary)]/5 text-[var(--primary)]" : "border-pink-500 bg-pink-50 text-pink-600"
-                      : "border-gray-200 text-gray-500 hover:bg-gray-50"}
+                        ? g === "male" ? "border-[var(--primary)] bg-[var(--primary)]/5 text-[var(--primary)]" : "border-pink-500 bg-pink-50 text-pink-600"
+                        : "border-gray-200 text-gray-500 hover:bg-gray-50"}
                     ${isGenderSwitching ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}>
-                  {isGenderSwitching && gender === g ? (
-                    <span className="flex items-center gap-1">
-                      <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" />
-                      <span>{g === "male" ? "Nam" : "Nữ"}</span>
-                    </span>
-                  ) : (
-                    <>{g === "male" ? "♂" : "♀"} {g === "male" ? "Nam" : "Nữ"}</>
-                  )}
-                </button>
-              ))}
+                    {isGenderSwitching && gender === g ? (
+                      <span className="flex items-center gap-1">
+                        <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" />
+                        <span>{g === "male" ? "Nam" : "Nữ"}</span>
+                      </span>
+                    ) : (
+                      <>{g === "male" ? "♂" : "♀"} {g === "male" ? "Nam" : "Nữ"}</>
+                    )}
+                  </button>
+                ))}
               </div>
             </div>
 

@@ -1,0 +1,500 @@
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  1 
+ 
+ 
+Title of the Paper in English, Be Concise, Specific and Relevant, Bold, Times 
+New Roman, Size 13  
+Full name (in English Order: EO; for example: Van A Tran NOT Tran Van A) of first author1*, Full 
+name (in EO) of second author2, Full name (in EO) of third author1 
+1Affiliation for first author ( just write the name of the university and the country, for example: Ho Chi Minh City University 
+of Technology and Education, Vietnam ) 
+2 Affiliation for second author ( more detailed information such as department, faculty, or the university's address should not 
+be provided here, but in the authors’ biography section ) 
+*Corresponding author. Email:  abc@xyz.com  
+ARTICLE INFO  ABSTRACT  
+Received:   English version of the bellow Vietnamese abstract.  
+Revised:   
+Accepted:   
+Published:   
+KEYWORDS  
+Keyword 1;  
+Keyword 2;  
+Keyword 3;  
+Keyword 4;  
+Keyword 5.  
+Tên bài báo  bằng tiếng Việt: Ngắn gọn, chính xác và rõ ràng,  dùng font T imes 
+New Roman cỡ 13, in đậm 
+Tên tác giả (theo thứ tự tiếng việt và có dấu, ví dụ: Trần Văn A) thứ nhất1* , Tên tác giả thứ hai2, Tên 
+tác giả thứ ba1 
+1Đơn vị công tác của tác giả 1 ( chỉ cần ghi tên trường và quốc gia, ví  dụ: Đại học Sư phạm Kỹ thuật Thành phố Hồ Chí 
+Minh, Việt Nam )  
+2Đơn vị công tác của tác giả 2 ( những thông tin chi tiết hơn như bộ môn, khoa hay địa chỉ trường không ghi ở đây mà ghi ở 
+phần tiểu sử tác giả ) 
+(Dấu * để đánh dấu tác giả liên hệ, ban biên tập  sẽ chỉ liên hệ với một người;  nếu tất cả tác giả cùng 1 đơn vị thì không cần 
+đánh số thứ tự ; trong nhóm nhiều tác giá, các tác giả cùng đơn vị chung 1 số thứ tự)  
+*Tác giả liên hệ.  Email: abc@xyz.com  
+THÔNG TIN BÀI BÁO   TÓM TẮT  
+Ngày nhận bài:   Phần tóm tắt trình bày thành một đoạn văn, có độ dài 150 -250 từ, KHÔNG 
+chứa công thức toán học , mô tả ngắn gọn các kết quả nổi bật nhất của bài 
+báo, tránh dùng các từ viết tắt, hạn chế đưa ra các ý kiến bình luận về các 
+tài liệu  tham khảo. Cấu trúc phần tóm tắt có thể bao gồm bốn ý sau: 1) Câu 
+hỏi và mục đích của nghiên cứu. 2) Phương pháp nghiên cứu: mô tả cách 
+thức giải quyết vấn đề (phát triển lý thuyết, phương pháp thu thập, xử lý dữ 
+liệu,…). 3) Kết quả: tóm tắt những khám ph á mới có tính cốt lõi của bài 
+báo, bao gồm cả những dữ liệu chính yếu chứng minh các khám phá đó. 
+Các kết quả nghiên cứu phải trả lời được các câu hỏi mà nghiên cứu đặt ra 
+từ đầu bài báo ở ý 1). 4) Kết luận: một hoặc hai câu, nêu kết quả nghiên 
+cứu và tiềm  năng ứng dụng. Tóm lại, phần tóm tắt chỉ mô tả ngắn gọn dữ 
+liệu để chứng minh điểm mới, không phân tích dài dòng mà đi thẳng vào 
+điểm mới được khám phá trong bài báo. Ngay sau phần tóm tắt là 
+Keywords (mẫu bên cạnh). Keywords: phải cung cấp tối thiểu 5 từ  khóa, 
+tránh sử dụng các thuật ngữ tổng quát chung chung, thuật ngữ số nhiều, các Ngày hoàn thiện:   
+Ngày chấp nhận đăng:   
+Ngày đăng:   
+TỪ KHÓA  
+Từ khóa 1; 
+Từ khóa 2; 
+Từ khóa 3; 
+Từ khóa 4; 
+Từ khóa 5. 
+
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  2 
+ 
+ 
+ 
+ khái niệm ghép (chứa ‘and’, ‘of’), hạn chế viết tắt (chỉ viết tắt các từ khóa 
+cơ bản và phổ biến trong lĩnh vực nghiên cứu). Các từ khóa được sử dụng 
+cho mục đích lập chỉ mục  phục vụ tìm kiếm, được ngăn cách bằng dấu 
+chấm phẩy, từ khóa cuối kết thúc bằng dấu chấm.  
+Doi: https://doi.org/10.54644/jte.2026.xxxx  
+Copyright © JTE. This is an open access article distributed under the terms and conditions of the Creative Commons Attribution -NonCommercial 4.0 
+International License  which permits unrestricted use, distribution, and reproduction in any medium for non -commercial purpose, provided the original work is 
+properly cited.  
+1. Gi ới thiệu 
+Bài báo mẫu này giúp tác giả định dạng bản thảo để đăng trên  trên Tạp chí Khoa học Giáo dục Kỹ 
+thuật – Trường Đại học Sư phạm Kỹ thuật Tp. Hồ Chí Minh.  Tác giả hãy dựa vào bản mẫu này để bố 
+trí các thành phần của bài báo như tiêu đề, danh sách tác giả, cơ quan công tác, t óm tắt, từ khóa đúng 
+với cấu trúc bài báo. Tác giả cần lưu ý rằng bản thảo một bài báo khoa học phải chứa các thành phần 
+thiết yếu  để truyền đạt nội dung bài viết, bao gồm Tóm tắt, Từ khóa, Giới thiệu, Vật liệu và Phương 
+pháp, Kết quả và Thảo luận, Kết luậ n và Tài liệu tham khảo.  Các yêu cầu cụ thể về định dạng, cấu trúc 
+bài báo sẽ được liệt kê dưới đây  (Hình 1 , 2):  
+ 
+Hình 1. Hướng dẫn căn chỉnh các thông số của Page setup, của font và của đoạn văn.  
+Bài báo phải được trình bày trên khổ A4 theo chiều dọc, với các thông số PageSetup cụ thể như sau: 
+Top: 3 ,0 cm, Bottom: 2 ,5 cm, Left: 3,0 cm, Right: 2 cm, Header: 1cm, Footer: 1,2 cm. Nội dung bài báo 
+gõ bằng font chữ Times New Roman, cỡ 11, không dãn hay co cỡ chữ; chế độ dãn dòng: Single, khoảng 
+trống dòng: b efore: 0, after: 3pt; căn lề justified. Khoảng thụt đầu dòng của đoạn văn là 0,5 cm. Tiêu đề 
+các phần không thụt đầu dòng. Khoảng trống dòng của tiêu đề: before 6, after 6. Hình 2 mô tả thông số 
+định dạng dãn dòng cho văn bản nội dung bài báo và thông số c ho các tiêu đề.  
+ 
+
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  3 
+ 
+ 
+   
+(a) (b) 
+Hình 2. Thông số định dạng cho (a): văn bản nội dung; (b): tiêu đề các phần  
+Độ dài  bài báo không quá mười  (10) trang  (không tính tài liệu tham khảo và tiểu sử các tác giả) .  
+Viết tiêu đề của bài báo:  Trong tiêu đề, tất cả các danh từ, đại từ, tính từ, động từ, trạng từ và liên từ 
+phụ thuộc (If, Because, That, Which) đều phải viết hoa. Viết hoa các chữ viết tắt thường dùng chữ 
+thường (ví dụ: dùng DC, không dùng dc hoặc Dc), ngoại trừ các chữ viết tắt c ủa đơn vị đo lường và 
+các từ viết tắt. Các mạo từ ( a, an, the ), liên từ kết hợp ( and, but, for, or, nor ) và hầu hết các giới từ 
+ngắn thì viết thường, trừ khi chúng là từ đầu tiên hoặc từ cuối cùng của tiêu đề. Các giới từ dài hơn ba 
+chữ cái ( Before, From, Through, With, Versus, Among, Under, Between, Without ) thì viết hoa.  
+Ví dụ:  
+ Nonlinear Gain Coefficients in Semiconductor Lasers: Effects of Carrier Heating  
+(Các hệ số khuếch đại phi tuyến trong laser bán dẫn: Ảnh hưởng của sự nung nóng hạt tải)  
+ Self-Pulsation in an InGaN Laser —Part I: Theory and Experiment  
+(Tự dao động trong laser InGaN — Phần I: Lý thuyết và thực nghiệm)  
+Bài báo cần được viết theo cấu trúc IMRAD (Introduction – Methods/Materials – Results – And 
+Discussion. Cấu trúc IMRAD là một cấu trúc tiêu chuẩn đặc thù trong cộng đồng khoa học quốc tế. Tiêu 
+đề các phần chính của bài báo (Tiêu đề cấp 1) dùng chữ in đậm, cùng cỡ chữ (11 pt) với cỡ chữ của nội 
+dung bài báo. Tiêu đề cấp 2 dùng chữ in đậm, nghiêng. Tiêu đề cấp 3 dùng chữ in nghiêng  (xem Hình 
+3). Ví dụ định dạng tiêu đề các cấp như sau:  
+1. Tiêu đề cấp 1  
+1.1. Tiêu đề cấp 2  
+1.1.1. Tiêu đề cấp 3  
+1.1.2. Tiêu đề cấp 3  
+1.2. Tiêu đề cấp 2  
+... 
+2. Tiêu đề cấp 1  
+Lưu ý:  Không sử dụng chức năng  đánh số tự động  của các phần mềm soạn thảo: MS Word,... . Không 
+dùng tiêu đề quá cấp 3.  
+Nội dung phần Giới thiệu  cần cung cấp những thông tin sau: vấn đề nghiên cứu đặt ra là gì, đã có 
+những công trình nghiên cứu nào thực hiện để giải quyết vấn đề, và khoảng trống của tri  thức cần được 
+
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  4 
+ 
+ 
+bổ sung là gì, từ đó chỉ ra mục đích nghiên cứu. Do độ dài  bài báo không quá 8 trang, nên không bố trí 
+phần “tổng quan tài liệu” riêng.  
+Nên cấu trúc phần Giới thiệu  như sau:  
+Trước tiên, cung cấp thông tin ngắn gọn về hoàn cảnh đặt ra vấn đề cần nghiên cứu. Nếu cần, sử 
+dụng 1 -2 câu văn tóm tắt kiến thức cơ bản có liên quan trực tiếp đến vấn đề nghiên cứu. Phát biểu vấn 
+đề nghiên cứu một cách cụ thể, súc tích. Thứ hai , bằng  việc tóm tắt các kết quả nghiên cứu liên quan 
+mới được xuất bản , chỉ ra các thiếu sót cần bổ sung  để hoàn thiện lời giải cho vấn đề nghiên cứu. Khi 
+muốn đưa vào các nghiên cứu liên quan đã được công bố, bắt buộc phải trích dẫn chúng dưới dạng 
+tài liệu tham khảo . Số lượng trích dẫn không được quá ít, tối thiểu là 5  (đa số các nhà khoa học đề nghị 
+là bằng với số trang của bài báo) . Nếu quá ít trích dẫn, độc giả sẽ cho rằng  vấn đề mà bài báo giải quyết 
+không quan trọng nên ít người quan tâm, hoặc là tác giả không chịu tìm hiểu kỹ vấn đề  để xác định rõ 
+các khiếm khuyết cần  bổ sung để giải quyết vấn đề . Các trích dẫn nên là các bài báo đăng trên các tạp 
+chí uy tín  trong danh mục WoS, Scopus, ACI ; hạn chế các trích dẫn từ sách giáo khoa , giáo trình (các 
+kiến thức nền tảng mà ai cũng biết) , các trích dẫn chưa được kiểm chứng t rên mạng, và các trích dẫn từ 
+các nguồn kém tin cậy khác . Phải đảm bảo rằng tất cả các tài liệu tham khảo được trích dẫn trong bài 
+báo phải được liệt kê theo đúng thứ tự đã được đề cập trong phần tài liệu tham khảo ở cuối bài báo . Các 
+kết quả chưa được côn g bố mặc dù có thể được đề cập trong bài báo nhưng không nên đưa vào danh 
+sách tài liệu tham khảo. Danh sách tài liệu tham khảo phải được ghi theo tiêu chuẩn của tạp chí (như 
+mẫu ở cuối bài)   
+Thứ ba, mô tả ngắn gọn cách thức  thực hiện  và kết quả  cần đạt đư ợc cho  vấn đề đã nêu.  
+ 
+Hình 3. Hướng dẫn cách bố trí hình, bảng và các tiêu đề mục.  
+Thứ tư, theo tiêu chuẩn đạo đức A.2, các thông tin trong bài báo phải được trình bày ngắn gọn, súc 
+tích, rõ ràng, các hình trong bài báo không nên chứa những vùng không c ó thông tin hay thông tin không 
+cần thiết, các chữ (nếu có) trong hình phải có font size dễ đọc cân đối so với font size của bài viết (trừ 
+
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  5 
+ 
+ 
+khi tác giả muốn nhấn mạnh điểm đặc biệt nào đó), các hình ghép (nhằm mục đích so sánh) nên có 
+khung đối chiếu nhất q uán. Các ví dụ bên dưới chỉ ra các hình đạt và không đạt theo tiêu chí này.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+(a) Font size chưa cân đối . 
+ 
+(b)  Font size hợp lý . 
+
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  6 
+ 
+ 
+ 
+(c) Dãy giá trị trục y không khớp . 
+ 
+(d) Dãy giá trị trục y khớp với nhau sẽ giúp độc giả dễ so sánh đối chiếu . 
+ 
+(e) Khung quá to so với phần nội dung . 
+
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  7 
+ 
+ 
+ 
+(f) Hình không được cắt sát phần chỉ chứa nội dung, gây khó khăn cho việc biên tập vì không gian trống dư thừa 
+quá lớn (ở bên trên Figure 1) . 
+ 
+(g) Các giá trị trục y lớn mà không được biểu diễn dưới dạng khoa học nên dài.  
+ 
+(h) Các giá trị trục x và y được biểu diễn hợp lý.  
+Hình 4. Các hình minh họa dựa theo tiêu chí đạo đức A.2  
+(a), (c), (e), (f), và (g) : hình không đạt chất lượng  
+(b), (d), và (h) : hình đạt chất lượng . 
+
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  8 
+ 
+ 
+2. Phương pháp nghiên c ứu 
+Phần này mô tả chi tiết cách tiếp cận để tìm lời giải cho vấn đề nghiên cứu. Cách tiếp cận có thể là 
+phát triển lý thuyết, nghiên cứu thực nghiệm, điều tra khảo sát v.v... Nên giải thích ưu việt của việc áp 
+dụng cách tiếp cận được sử dụng. Nếu có thể, nên đánh giá so sánh với các nghiên cứu trước (nếu có).  
+Nếu nghiên cứu phát triển lý thuyết, cần trình bày cơ sở lý luận để tìm lời giải cho vấn đề nghiên 
+cứu. 
+Nếu nghiên cứu sử dụng phương  pháp thực nghiệm hay mô phỏng, cần mô tả chi tiết thiết bị/ công 
+cụ (nếu có), kế hoạch triển khai, cách thức thu thập và phân tích số liệu. Phần mô tả cần chi tiết và đầy 
+đủ thông tin sao cho một nhà nghiên cứu khác có thể tiến hành lại được thí nghiệm đã  trình bày.  
+3. Kết quả và bàn lu ận 
+Phần này trình bày các kết quả thu được từ nghiên cứu. Có thể sử dụng hình ảnh, bảng biểu minh 
+họa kết quả, hỗ trợ cho phần bàn luận. Nhấn mạnh các đóng góp mới của nghiên cứu so với các nghiên 
+cứu tương tự đã công bố.  
+Nếu cần thiết, có thể chia nội dung một phần của bài báo thành nhiều phần nhỏ. Khi này, có thể cung 
+thông tin giới thiệu nội dung các phần nhỏ giữa tiêu đề của phần chính với tiêu đề của phần nhỏ đầu 
+tiên.  
+Tiêu đề các phần nhỏ (Tiêu đề cấp 2) thống nhất dùn g chữ in nghiêng đậm, cỡ 11 như dưới đây.  
+3.1.Ch ữ viết tắt 
+Những thuật ngữ dài, được sử dụng nhiều lần có thể sử dụng chữ viết tắt. Thuật ngữ này cần được 
+hiển thị đầy đủ ở lần đầu tiên xuất hiện trong bài viết, kèm theo ký hiệu viết tắt đặt trong ngoặc đơ n. Ví 
+dụ: "Các định hướng phát triển khoa học công nghệ (KHCN) đã đóng vai trò...".  
+3.2. Các lưu ý đ ịnh dạng và trình bày  
+3.2.1. Đơn vị đo và số liệu  
+Thống nhất dùng đơn vị đo theo hệ SI cho các số liệu trong bài báo. Định dạng in nghiêng cho ký 
+hiệu các đ ại lượng tính toán. Số thập phân trình bày trong bài báo tiếng Việt để dấu ","; trong bài báo 
+tiếng Anh để dấu "."  
+3.2.2. Công thức toán  
+Các công thức tính toán được đánh số thứ tự, đặt trong ngoặc đơn phía lề phải như minh họa bằng 
+các công thức (1) và (2 ) dưới đây. Lưu ý là các ký hiệu hàm, biến được in nghiêng; ký hiệu ma trận, véc 
+tơ được in đậm. Công thức phải được tạo bằng các công cụ hỗ trợ như Microsoft Equation Editor hoặc 
+MathType . 
+(𝑥+𝑎)𝑛=∑𝑛
+𝑘=0(𝑛
+𝑘)𝑥𝑘𝑎𝑛−𝑘 (1) 
+3.2.3. Hình ảnh, bảng biểu  
+Các hình ảnh (đồ thị, sơ đồ, ảnh chụp...), bảng biểu nhất thiết phải có số hiệu và tiêu đề. Số hiệu đánh 
+theo thứ tự tăng dần của bài báo, ví dụ Hình 1, Hình 2; Bảng 1, Bảng 2... Số hiệu hình , bảng phải được 
+tham chiếu (đề cập) đến trong bài báo . Khi biên tập, để phù hợp với format của trang báo, vị trí của bảng 
+biểu, hình vẽ có thể được di chuyển lên đầu trang hoặc xuống cuối trang . Do đó, tác giả KHÔNG  sử 
+dụng cách tham chiếu đến hình, bảng bằng các từ  chỉ vị trí tương đối : ”được minh họa trong hình dưới 
+đây/sau đây/ở trên/bên cạnh ", "số liệu thống kê như trong bảng sau /bên dưới/bên trên ". Tác giả phải 
+tham chiếu đến hình, bảng bằng số hiệu của chúng, như sau:  "được minh họa trong Hình 1", " số liệu 
+thống kê như trong Bảng 2".  
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  9 
+ 
+ 
+Số hiệu hình và bảng phải in đậm, tiêu đề thì in nghiêng, tất cả phải dùng font size 10 Times New 
+Roman, Layout có Before = 6pt, After = 6 pt, Line spacing: single. Tiêu đề bảng đặt bên trên bảng, canh 
+phải. Tiêu đề hình đặt ngay dưới hình, canh giữa.  (Xem hình 3)   
+Số liệu trong bảng phải chính xác, hình ảnh rõ nét. Độ rộng của bảng và hình vẽ bằng độ rộng của 
+cột, hoặc của trang giấy theo khổ dọc. Nếu bảng và hình vẽ quá lớn có  thể trình bày theo trang ngang . 
+Sắp xếp hình ảnh, bảng biểu ở vị trí gần với nội dung văn bản có tham chiếu đến hình ảnh, bảng biểu.  
+Nếu một hình bao gồm nhiều hình nhỏ, ký hiệu các hình nhỏ bằng các chữ cái a), b), v.v... và giải 
+thích nội dung các phần nhỏ ngay trong tiêu đề của hình.  
+  
+(a) (b) 
+Hình 5. Bộ nhận dạng tạp chi JTE: (a) Ảnh bìa tạp chí JTE; (b)  logo tạp chí JTE  
+Số hiệu và tiêu đề của hình để bên dưới hình. Số hiệu và tiêu đề của bảng nằm bên trên bảng. Cỡ chữ 
+10, in đậm số hiệu, in nghiêng nội dung tiêu đề. Định dạng khoảng trống dòng của tiêu đề: before 6, 
+after 6 để ngăn cách với các phần văn  bản phía trước và sau mỗi hình. Hình 2 minh họa mẫu định dạng 
+tiêu đề của một hình được chèn trong bài báo. Định dạng các thành phần của bảng biểu được minh họa 
+như trong Bảng 1.  
+Bảng 1. Mười quốc gia có mật độ dân số cao nhất năm 2021  (với dân số trên 5 triệu người)  
+Thứ hạng  Quốc gia  Dân s ố  
+(ngư ời) Diện tích  
+(km2) Mật độ  
+(người/km2) 
+1 Singapore  5.704.000  710 8.033  
+2 Bangladesh  171.730.000  143.998  1.193  
+3 Lebanon  6.856.000  10.452  656 
+4 Đài Loan  23.604.000  36.193  652 
+5 Hàn Quốc  51.781.000  99.538  520 
+Lưu ý: Bảng biểu phải ở dạng văn bản chỉnh sửa được, không phải ảnh chụp màn hình.  Table Properties 
+có Table tab với Preferred Width = 16 cm, Table options có Top = 0 Bottom = 0 Left = 0,05 Right = 
+0,05 cm, Row tab chọn  Not check Specify height. Font size  của text bên trong bảng  = 10, Layout của 
+Table có Spacing Before = 3pt After = 3pt, Line Spacing: Single ., không border cho mép trái và phải 
+của bảng, dòng đầu tiên của bảng (là tittle của mỗi cột ) không được bỏ trống hoặc thiếu thông tin        
+4. Kết luận 
+Phần này tóm tắt những kết luận quan trọng rút ra được từ phần Kết quả và Bàn luận. Lưu ý tránh 
+trùng lặp nội dung với phần Tóm tắt. Có thể trình bày các định hướng nghiên cứu, phát triển, ứng dụng 
+kết quả nghiên cứu.  
+Lời cám ơn  
+
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  10 
+ 
+ 
+Gửi lời cám ơn các cá nhân, tổ chức đã đóng góp, tài trợ cho nghiên cứu. Ví dụ, tác giả có thể ghi: 
+“Công trình này thuộc đề án năm 2022 được tài trợ kinh phí bởi Trường Đại học Sư phạm Kỹ thuật 
+Thành Phố Hồ Chí Minh”  
+Xung đột lợi ích  
+Các tác giả phải khẳn g định không có xung đột lợi ích, tác giả phải ghi: “Các tác giả tuyên bố không 
+có xung đột lợi ích trong bài báo này.”  
+Tuyên bố dữ liệu sẵn có  
+Nếu bài báo vượt quá 10 trang, phần vượt quá đó nên làm thành một file khác chứa các thông tin bổ 
+trợ. Tác giả c ó thể đặt file này ở website cơ quan hay trang cá nhân riêng của  tác giả . Tác giả mô tả cho 
+độc giả biết cách để lấy các thông tin bổ trợ và các thông tin thiết yếu khác ở đây. Tác giả có thể ghi:  
+“Dữ liệu hỗ trợ cho các khám phá của nghiên cứu này khi độc  giả yêu cầu một cách hợp lý sẽ được tác 
+giả liên hệ cung cấp ”. 
+TÀI LIỆU THAM KHẢO  
+Danh mục tài liệu tham khảo chỉ liệt kê những tài liệu được trích dẫn trong bài báo. Ngược lại, tài 
+liệu nào được tham chiếu trong bài cũng phải liệt lê trong danh sách tài liệu tham khảo. Yêu cầu thực 
+hiện trích dẫn theo định dạng IEEE. Tác giả nên sử dụn g các phần mềm quản lý tài liệu tham khảo 
+chuyên dụng (như Endnote; Zotero; Biblioscape;...), hoặc sử dụng chức năng Insert Citation trong 
+Microsoft Word  để tự động hóa việc trích dẫn và định dạng danh mục tài liệu tham khảo một cách tự 
+động, chính xác the o đúng chuẩn quốc tế. Tham khảo các quy định về trích dẫn theo chuẩn IEEE tại link 
+https://ieeeauthorcenter.ieee.org/wp -content/uploads/IEEE -Reference -Guide.pd f.  
+Một số lưu ý quan trọng như sau:  
+Trong bài báo, tham chiếu đến tài liệu trích dẫn bằng cách sử dụng dấu []. Dấu này cần được đặt 
+trước dấu ngắt câu . Ví dụ: [1], [1 –3] hoặc [1, 3]. Khi cần tham chiếu đến số trang của tài liệu, sử dụng 
+ký hiệu p. hoặc pp. , theo sau là số trang; ví dụ [5] (p. 10). or [6] (pp. 101 –105).  
+Danh mục tài liệu tham khảo để cuối bài viết, khuyến khích sử dụng tiếng Anh cho danh mục tài liệu 
+tham khảo. Lưu ý là các tạp chí trong nước xuất bản bằng tiếng Việt đa số có tên bài báo và  tóm tắt bằng 
+tiếng Anh, tác giả cần sử dụng những thông tin nguyên gốc này để đảm bảo người đọc có thể truy tìm 
+tài liệu tham khảo khi cần. Những tài liệu không có thông tin bằng tiếng Anh có thể dịch sang tiếng Anh 
+và ghi chú rõ (Ví dụ: In Vietnamese). L ưu ý là nhiều tạp chí trong nước cùng có tên “Tạp chí Khoa học 
+và Công nghệ”, do vậy trùng tên tiếng Anh (Journal of Science and Technology) khi trích dẫn bài viết 
+từ các tạp chí này, cần ghi rõ tên đơn vị chủ quản để có thể định danh chính xác tạp chí. Ví  dụ: Journal 
+of Science and Technology – ABC university. Với một số tạp chí đã có tên tiếng Anh riêng thì cần ghi 
+đúng tên tiếng Anh của các tạp chí này.  
+Tài liệu tham khảo phải được đánh số thứ tự bằng tay theo đúng thứ tự xuất hiện trong bài báo, không 
+dùng chức năng đánh số thứ tự tự động ( numbered list ) của phần mềm MS Word , có Paragraph properties 
+với giá trị  Indentation Left = 0, Special = Hangling By = 0,75 cm, có Font size 8, Justify Alignment, 
+Layout Spacing Before and After = 0 , Line Spacing: Sing le.     
+Some common examples of references in IEEE format are demonstrated as below: [1] for article 
+without DOI ([2] is equivalent example), [3] for article with DOI (([4] is equivalent example)),  [5] for 
+article with ID ([6] is equivalent example), [7] for article in other Language ([8] is equivalent example), 
+[9] for article with url (for example), [10] for unpublished paper (for example), [11] for article in 
+conference proceedings without DOI ([12] is equivalent example), [13] for article in conference  
+proceedings with DOI ([14] is equivalent example), [15] for paper presented at a Conference ([16] is 
+equivalent example), [17] for book, [18] for book with chapter title ([19] is equivalent example), [20 for 
+patent], [21] for dissertations (for example), [22] for standards (for example)  
+Dưới đây là một số ví dụ thường gặp về cách ghi tài liệu tham khảo theo định dạng IEEE: [1] cho 
+bài báo không có DOI ([2] là ví dụ tương đương), [3] cho bài báo có DOI ([4] là ví dụ tương đương), 
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  11 
+ 
+ 
+[5] cho bài báo có ID ([6] là ví dụ tương đương), [7] cho bài báo bằng ngôn ngữ khác ([8] là ví dụ tương 
+đương), [9] cho bài báo có URL (ví dụ), [10] cho bài báo chưa công bố (ví dụ), [11] cho bài báo trong 
+các tuyển tập hội nghị không có DOI ([12] là ví dụ tương đương), [13] cho bà i báo trong các tuyển tập 
+hội nghị có DOI ([14] là ví dụ tương đương), [15] cho báo cáo trình bày tại Hội nghị ([16] là ví dụ tương 
+đương), [17] cho sách, [18] cho sách với tiêu đề chương ([19] là ví dụ tương đương), [20] cho bằng sáng 
+chế, [21] cho luận á n (ví dụ), [22] cho tiêu chuẩn (ví dụ).  
+     
+[1] J. K. Author, “Name of paper,” Abbrev. Title of Periodical , vol. x, no. x, pp. xxx -xxx, Abbrev. Month, year.  
+[2] T. T. C. Duong, C. C. Nguyen, and T. D. Tran, "Synchronization Sliding Mode Control of Closed -Kinematic Chain Robot Manipulators 
+with Time -Delay Estimation," Appl. Sci. , vol. 12, no. 11, p. 5527, 2022.  
+[3] J. K. Author “Name of paper,” Abbrev. Title of Periodical, vol. x, no. x, pp. xxx -xxx, Abbrev. Month, year, doi: xxx  
+[4] G. R. Sheu et al., “Dis tribution of atmospheric mercury in northern Southeast Asia and South China Sea during Dongsha Experiment,” 
+Atmos. Environ. , vol. 78, pp. 174 –183, Oct. 2013, doi: 10.1016/J.ATMOSENV.2012.07.002.  
+[5] J. K. Author, “Name of paper,” Abbrev. Title of Periodica l, vol. x, no. x, Abbrev. month, year, Art. no. xxx.  
+[6] J. Zhang and N. Tansu, “Optical gain and laser characteristics of InGaN quantum wells on ternary InGaN substrates,” IEEE Photon. J. , 
+vol. 5, no. 2, Apr. 2013, Art no. 2600111.  
+[7] J. K. Author, “Name  of paper,” (in Language), Abbrev. Title of Periodical , vol. x, no. x, Abbrev. month, year, Art. no. xxx   
+[8] E. P. Wigner, “On a modification of the Rayleigh –Schrodinger perturbation theory,” (in German), Math. Naturwiss. Anz. Ungar. Akad. 
+Wiss. , vol. 53,  p. 475, 1935.  
+[9] J. K. Author, “Name of paper,” Abbrev. Title of Periodical , vol. x, no. x, pp. xxx –xxx, Abbrev. Month, year. Accessed: Month, Day, 
+Year, doi: 10.1109.XXX.123456. [Online]. Available: site/path/file  
+ (for example: [9] W. P. Risk, G. S. Kino, and H. J. Shaw, “Fiber -optic frequency shifter using a surface acoustic wave incident at an 
+oblique angle,” Opt. Lett. , vol. 11, no. 2, pp. 115 –117, Feb. 1986. [Online]. Available: https://opg.optica.org/ol/abstract.cfm?uri=ol -11-
+2-115 
+[10]  J. K. Author, “Title of paper,” unpublished.  
+ (for example: [10] B. Smith, “An approach to graphs of linear forms,” unpublished.)  
+[11] J. K. Author, “Title of paper,” in Abbreviated Name of Conf. , (location of conference is optional), (Month and day(s) if provided) year, 
+pp. xxx -xxx. 
+[12] T. V. Do, T. L. P. Nguyen, T. T. T. Nguyen, L. T. H. Lam, P. S. Thanh, and T. D. Nguyen, “Ankle joint rehabilitation system -the 
+prelimin ary results,” in Proceedings of the Sixth International Conference on Research in Intelligent and Computing , 2021, pp. 33 –37. 
+[13] J. K. Author, “Title of paper,” in Abbreviated Name of Conf. , (location of conference is optional), year, pp. xxx –xxx, doi: x xx. 
+[14] G. Veruggio, “The EURON roboethics roadmap,” in Proc. Humanoids ’06: 6th IEEE -RAS Int. Conf. Humanoid Robots , 2006, pp. 612 –
+617, doi: 10.1109/ICHR.2006.321337.  
+[15] J. K. Author, “Title of paper,” presented at the Abbreviated Name of Conf., City o f Conf., Abbrev. State, Country, Month and day(s), 
+year, Paper number.  
+[16] K. C. Dinh, N. S. Dao, H. D. Le, H. L. Le, T. D. T. Cam, and D. T. Tran, "Kinematics and Dynamics for a 4 -DOF Parallel Robot," 
+presented at the  2021 International Conference on System Science and Engineering (ICSSE), 2021.  
+[17] B. Klaus and P. Horn, Robot Vision . Cambridge, MA, USA: MIT Press, 1986.  
+[18] J. K. Author, “Title of chapter in the book,” in Title of Published Book , X. Editor, Ed., Cit y of Publisher, State (only U.S.), Country: 
+Abbrev. of Publisher, year, ch. x, sec. x, pp. xxx –xxx 
+[19] T. Ogura, “Electronic government and surveillance -oriented society,” in Theorizing Surveillance: The Panopticon and Beyond ., 
+Cullompton, U.K.: Willan, 2 006, ch. 13, pp. 270 –295. 
+[20] J. K. Author, “Title of patent,” Country Patent xxx, Abbrev. Month, day, year.  
+[21] J. K. Author, “Title of dissertation,” Ph.D. dissertation, Abbrev. Dept., Abbrev. Univ., City of Univ., Abbrev. State, year.  
+ (for example: [ 21] J. O. Williams, “Narrow -band analyzer”, Ph.D. dissertation, Dept. Elect. Eng., Harvard Univ., Cambridge, MA, USA, 
+1993. ) 
+[22] Title of Standard , Standard number, date.  
+ (for example: [22] IEEE Criteria for Class IE Electric Systems , IEEE Standard 308,  1969.)  
+[23] A. Harrison, private  communication, May 1995.  
+ 
+TÓM TẮT TIỂU SỬ CỦA CÁC TÁC GIẢ BẰNG TIẾNG ANH.  
+Tất cả tác giả bài báo phải tóm tắt tiểu sử bằng tiếng Anh . Hướng dẫn nội dung và cách trình bày tóm tắt tiểu sử như mẫu sau đây.  
+ 
+Họ tên tác gi ả 1 (thứ tự họ tên ghi theo ph ần bên dư ới tiêu đ ề, có th ể thêm chú thích family name ). Đoạn thứ nhất có thể liệt kê quá trình 
+học tập và kiến thức nền tảng của tác giả . Liệt kê bằng cấp các loại, chuyên ngành, tên trường viện ở đất nước, thành phố nào cấp bằng, năm 
+cấp bằng.  
+Đoạn thứ hai liệt kê kinh nghiệm làm báo hay học thuật (bao gồm việc được nhận thưởng bằng khen, huân huy chương về các bài b áo), các 
+công việc trước đây và hiện tại ở đâu, vào khoảng thời gian nào (cụ thể ở Lab, Department, Faculty, Un iversity, Country nào, năm nào)  
+Đoạn thứ ba liệt kê tất cả các lĩnh vực nghiên cứu đang làm càng chi tiết càng tốt (dưới dạng các từ khóa)  
+Đoạn cuối là thông tin liên hệ của tác giả, tối thiểu phải cung cấp địa chỉ email của tất cả các tác giả:  tg1@hcmute.edu.vn . ORCID:   
+https://orcid.org/0000 -000X -XXXX -XXXX . SĐT (c ủa tác gi ả liên h ệ): 090XXXXXXX  
+ 
+Tác gi ả 2: Tiểu sử các tác gi ả được đặt trong m ột table có 1 c ột như template này. The Table Properties with Preferred Width = 16 cm, Table 
+Option Top = 0, Bottom = 0, Left = 0,05 cm Right = 0,05 cm, No border. T ất cả các tác gi ả phải xác th ực làm tác gi ả bài báo b ằng số ORCID, 
+nên ph ải cung c ấp số ORCID c ủa tác gi ả tại đây. Email:  tg2@hcmute.edu.vn . ORCID:   https://orcid.org/0000 -000X -XXXX -XXXX  
+ 
+
+ 
+ISSN: 1859 -1272 TẠP CHÍ KHOA HỌC GIÁO DỤC KỸ THUẬT  
+Trường Đại học Công nghệ  Kỹ thuật Thành phố Hồ Chí Minh  
+Website: https://jte.edu.vn  
+Email: jte@hcmute.edu.vn  
+ 
+ 
+JTE,  Volume xx, Issue xx, mm/20xx  12 
+ 
+ 
+Lưu ý: để dễ dàng tra cứu danh tí nh khoa học, tác giả khi submit bài nên điền số ORCID vào trong 
+phần user details. Chi tiết v ề số ORCID tác giả hãy tham khảo tại: https://info.orcid.org/what -is-orcid/ . 
+Nếu chưa có, tác giả hãy đăng ký tại: https://orcid.org/register . Trong bản thảo,  hãy sửa lại link ORCID 
+của icon ngay sau tác giả liên hệ trong template ( author1*) thành link ORCID của  chính tác giả  và hãy 
+điền số ORCID vào ngay sau email trong phần tiểu sử.  
+ 
+ 
+ 
+ 
+ 
+  
