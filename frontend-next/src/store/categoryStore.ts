@@ -6,6 +6,7 @@ export type Category = {
   slug: string;
   sortOder: number;
   imageCategory?: string;
+  parentSlug?: string | null;
 };
 
 type CategoryState = {

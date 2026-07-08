@@ -37,7 +37,7 @@ async function seed() {
   const brands = await Brand.insertMany(brandsData)
   console.log(`Seeded ${brands.length} brands`)
 
-  // 3. Seed Categories
+  // 3. Seed Categories (parent categories)
   const categoriesData = [
     { name: 'Áo', slug: 'ao', sortOder: 1, imageCategory: '/category_shirt.png' },
     { name: 'Quần', slug: 'quan', sortOder: 2, imageCategory: '/category_short.png' },
@@ -47,7 +47,20 @@ async function seed() {
     { name: 'Phụ kiện', slug: 'phu-kien', sortOder: 6, imageCategory: '/category_acessory.png' }
   ]
   const categories = await Category.insertMany(categoriesData)
-  console.log(`Seeded ${categories.length} categories`)
+  console.log(`Seeded ${categories.length} parent categories`)
+
+  // 3b. Seed Subcategories (danh mục con)
+  const subcategoriesData = [
+    // Subcategories cho Áo
+    { name: 'Áo thun', slug: 'ao-thun', sortOder: 1, parentSlug: 'ao', imageCategory: '/category_shirt.png' },
+    { name: 'Áo tay dài', slug: 'ao-tay-dai', sortOder: 2, parentSlug: 'ao', imageCategory: '/category_shirt.png' },
+    { name: 'Áo sơ mi', slug: 'ao-so-mi', sortOder: 3, parentSlug: 'ao', imageCategory: '/category_shirt.png' },
+    // Subcategories cho Quần
+    { name: 'Quần dài', slug: 'quan-dai', sortOder: 1, parentSlug: 'quan', imageCategory: '/category_short.png' },
+    { name: 'Quần short', slug: 'quan-short', sortOder: 2, parentSlug: 'quan', imageCategory: '/category_short.png' },
+  ]
+  const subcategories = await Category.insertMany(subcategoriesData)
+  console.log(`Seeded ${subcategories.length} subcategories`)
 
   const productImages: Record<string, string[]> = {
     'ao': [

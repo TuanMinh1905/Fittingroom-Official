@@ -51,6 +51,25 @@ products.get('/slug/:slug', async (c) => {
     return c.json(product)
 })
 
+// API lấy sản phẩm theo category cha (bao gồm tất cả subcategories)
+// Ví dụ: /category-group/ao → trả tất cả sản phẩm có categorySlug là ao, ao-thun, ao-so-mi, ao-tay-dai
+products.get('/category-group/:parentSlug', async (c) => {
+    const parentSlug = c.req.param('parentSlug')
+    try {
+        // Tìm tất cả subcategory slugs từ Category collection
+        const { Category } = await import('../models/category.js')
+        const subcategories = await Category.find({ parentSlug })
+        const subSlugs = subcategories.map(sub => sub.slug)
+
+        // Tìm sản phẩm thuộc parent hoặc bất kỳ subcategory nào
+        const allSlugs = [parentSlug, ...subSlugs]
+        const groupProducts = await Product.find({ categorySlug: { $in: allSlugs } })
+        return c.json(groupProducts)
+    } catch (error) {
+        return c.json({ error: 'Failed to fetch products for category group' }, 500)
+    }
+})
+
 // API lấy sản phẩm theo categorySlug
 products.get('/category/:categorySlug', async (c) => {
     const categorySlug = c.req.param('categorySlug')

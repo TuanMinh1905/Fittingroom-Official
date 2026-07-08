@@ -6,6 +6,9 @@ export interface Category extends Document {
     slug: string;
     sortOder: number; // Để hiển thị thứ tự của Category
     imageCategory: string;
+    // Nếu có parentSlug → đây là subcategory (ví dụ: ao-thun có parentSlug: "ao")
+    // Nếu không có → đây là category cha (ví dụ: Áo, Quần, Giày...)
+    parentSlug?: string;
 }
 
 const CategorySchema = new Schema<Category>(
@@ -14,6 +17,7 @@ const CategorySchema = new Schema<Category>(
         slug: { type: String, required: true },
         sortOder: { type: Number, required: true },
         imageCategory: { type: String, required: false },
+        parentSlug: { type: String, required: false, default: null },
     }
 )
 

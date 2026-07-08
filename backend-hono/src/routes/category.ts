@@ -14,6 +14,18 @@ category.get('/', async (c) => {
 // GET category theo ID
 category.get('/:id', async (c) => {
     const { id } = c.req.param()
+    // Nếu id không phải ObjectId hợp lệ, thử tìm theo slug (dùng cho subcategory lookup)
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+        // Tìm subcategories theo parentSlug
+        const subcategories = await Category.find({ parentSlug: id }).sort({ sortOder: 1 })
+        if (subcategories.length > 0) {
+            return c.json(subcategories)
+        }
+        // Tìm category theo slug
+        const catBySlug = await Category.findOne({ slug: id })
+        if (catBySlug) return c.json(catBySlug)
+        return c.json({ error: 'Category not found' }, 404)
+    }
     try {
         const cat = await Category.findById(id)
         if (!cat) {

@@ -50,6 +50,24 @@ const ProductSchema = new mongoose.Schema({
 
 const Product = mongoose.model('Product', ProductSchema)
 
+// ── Category Schema (để seed subcategories) ─────────────────────────────────
+const CategorySchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    slug: { type: String, required: true },
+    sortOder: { type: Number, required: true },
+    imageCategory: { type: String, required: false },
+    parentSlug: { type: String, required: false, default: null },
+})
+const CategoryModel = mongoose.model('Category', CategorySchema)
+
+const SUBCATEGORIES = [
+    { name: 'Áo thun', slug: 'ao-thun', sortOder: 1, parentSlug: 'ao', imageCategory: '/category_shirt.png' },
+    { name: 'Áo tay dài', slug: 'ao-tay-dai', sortOder: 2, parentSlug: 'ao', imageCategory: '/category_shirt.png' },
+    { name: 'Áo sơ mi', slug: 'ao-so-mi', sortOder: 3, parentSlug: 'ao', imageCategory: '/category_shirt.png' },
+    { name: 'Quần dài', slug: 'quan-dai', sortOder: 1, parentSlug: 'quan', imageCategory: '/category_short.png' },
+    { name: 'Quần short', slug: 'quan-short', sortOder: 2, parentSlug: 'quan', imageCategory: '/category_short.png' },
+]
+
 // ── Main ────────────────────────────────────────────────────────────────────
 async function main() {
     console.log('🚀 Bắt đầu import dữ liệu sản phẩm YODY vào database...\n')
@@ -87,6 +105,11 @@ async function main() {
         // Xoá products cũ
         const deleteResult = await Product.deleteMany({})
         console.log(`🗑️  Đã xoá ${deleteResult.deletedCount} sản phẩm cũ`)
+
+        // Seed subcategories (xoá cũ rồi thêm mới)
+        await CategoryModel.deleteMany({ parentSlug: { $ne: null } })
+        const insertedSubs = await CategoryModel.insertMany(SUBCATEGORIES)
+        console.log(`📂 Đã seed ${insertedSubs.length} subcategories`)
 
         // Insert batch (chia thành chunks nhỏ để tránh timeout)
         const BATCH_SIZE = 20

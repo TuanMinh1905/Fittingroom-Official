@@ -43,6 +43,7 @@ type ProductState = {
   error: string | null;
   fetchProducts: () => Promise<void>;
   fetchProductsByCategory: (categorySlug: string) => Promise<void>;
+  fetchProductsByCategoryGroup: (parentSlug: string) => Promise<void>;
   fetchProductsByBrand: (brandSlug: string) => Promise<void>;
 };
 
@@ -84,6 +85,23 @@ export const useProductStore = create<ProductState>((set) => ({
       set({ categoryProducts: Array.isArray(data) ? data : [], loading: false });
     } catch {
       set({ loading: false, error: `Khong lay duoc du lieu tu danh muc ${categorySlug}` });
+    }
+  },
+
+  // Lấy tất cả sản phẩm thuộc 1 category cha (bao gồm subcategories)
+  fetchProductsByCategoryGroup: async (parentSlug: string) => {
+    set({ loading: true, error: null, categoryProducts: [] });
+    try {
+      const response = await fetch(`${PRODUCTS_API}/category-group/${parentSlug}`);
+      if (!response.ok) {
+        set({ loading: false, error: `Khong lay duoc du lieu tu nhom danh muc ${parentSlug}` });
+        return;
+      }
+
+      const data = (await response.json()) as Product[];
+      set({ categoryProducts: Array.isArray(data) ? data : [], loading: false });
+    } catch {
+      set({ loading: false, error: `Khong lay duoc du lieu tu nhom danh muc ${parentSlug}` });
     }
   },
 

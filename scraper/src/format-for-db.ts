@@ -100,6 +100,9 @@ const COLOR_PALETTES: Record<string, string[][]> = {
     ],
 }
 
+// ── Các brand hiện có trong DB ──────────────────────────────────────────────
+const BRANDS = ["Nike", "Adidas", "Zara", "H&M", "Gucci", "Chanel", "Louis Vuitton", "Dior", "Uniqlo", "Levi's"]
+
 // ── Tạo slug từ tên tiếng Việt ──────────────────────────────────────────────
 function createSlug(name: string): string {
     return name
@@ -140,18 +143,52 @@ function generateDescription(name: string, category: string): string {
     return categoryDescs[Math.floor(Math.random() * categoryDescs.length)]
 }
 
+// ── Xác định subcategory slug ───────────────────────────────────────────────
+function detectSubcategory(name: string, yodyCategory: string, tmfCategorySlug: string): string {
+    const nameLower = name.toLowerCase()
+    const yodyCatLower = yodyCategory.toLowerCase()
+
+    if (tmfCategorySlug === 'ao') {
+        // Áo sơ mi
+        if (yodyCatLower.includes('so-mi') || nameLower.includes('sơ mi') || nameLower.includes('sơ-mi')) {
+            return 'ao-so-mi'
+        }
+        // Áo tay dài (hoodie, nỉ, áo khoác)
+        if (yodyCatLower.includes('hoodie') || yodyCatLower.includes('ni-nam') ||
+            nameLower.includes('hoodie') || nameLower.includes('nỉ') ||
+            nameLower.includes('dài tay') || nameLower.includes('len') || nameLower.includes('khoác')) {
+            return 'ao-tay-dai'
+        }
+        // Default: Áo thun (polo, thun, phông...)
+        return 'ao-thun'
+    }
+
+    if (tmfCategorySlug === 'quan') {
+        // Quần short
+        if (yodyCatLower.includes('short') || nameLower.includes('short') ||
+            nameLower.includes('đùi') || nameLower.includes('ngắn')) {
+            return 'quan-short'
+        }
+        // Default: Quần dài (jeans, âu, kaki)
+        return 'quan-dai'
+    }
+
+    // Các category khác giữ nguyên (giay, tat, phu-kien)
+    return tmfCategorySlug
+}
+
 // ── Xác định garment_type cho TailorNet ─────────────────────────────────────
 function detectGarmentType(name: string, category: string): string | undefined {
     const nameLower = name.toLowerCase()
     
-    if (category === 'ao') {
+    if (category === 'ao' || category === 'ao-thun' || category === 'ao-so-mi' || category === 'ao-tay-dai') {
         if (nameLower.includes('sơ mi') || nameLower.includes('sơ-mi') || nameLower.includes('so mi')) return 'shirt'
         if (nameLower.includes('thun') || nameLower.includes('polo') || nameLower.includes('phông')) return 't-shirt'
         if (nameLower.includes('hoodie') || nameLower.includes('nỉ') || nameLower.includes('len')) return 't-shirt'
         return 't-shirt' // default cho áo
     }
     
-    if (category === 'quan') {
+    if (category === 'quan' || category === 'quan-dai' || category === 'quan-short') {
         if (nameLower.includes('short') || nameLower.includes('đùi') || nameLower.includes('ngắn')) return 'short-pant'
         return 'pant' // default cho quần dài
     }
@@ -211,8 +248,11 @@ function main() {
         if (raw.tmfCategorySlug === 'ao') sizeChart = SIZE_CHART_AO
         if (raw.tmfCategorySlug === 'quan') sizeChart = SIZE_CHART_QUAN
 
+        // Detect subcategory
+        const subcategorySlug = detectSubcategory(raw.name, raw.yodyCategory, raw.tmfCategorySlug)
+
         // Garment type
-        const garment_type = detectGarmentType(raw.name, raw.tmfCategorySlug)
+        const garment_type = detectGarmentType(raw.name, subcategorySlug)
 
         const product: TMFProduct = {
             name: raw.name,
@@ -221,10 +261,10 @@ function main() {
             discountPrice,
             description: generateDescription(raw.name, raw.tmfCategorySlug),
             imageUrl: raw.imageUrl || `https://picsum.photos/seed/${uniqueSlug}/400/400`,
-            categorySlug: raw.tmfCategorySlug,
+            categorySlug: subcategorySlug,
             rating: Number((Math.random() * 1.5 + 3.5).toFixed(1)),
             soldCount: Math.floor(Math.random() * 800) + 50,
-            brand: 'YODY',
+            brand: BRANDS[Math.floor(Math.random() * BRANDS.length)],
             expiryDate: '>1 năm',
             stock: Math.floor(Math.random() * 150) + 10,
             shippingInfo: 'Miễn phí vận chuyển',

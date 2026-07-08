@@ -42,9 +42,10 @@ const CATEGORY_STYLES: Record<string, { tag: string; subtitle: string; badgeBg: 
 
 export default function CategoriesPage() {
   const { categories, fetchCategories, loading: categoryLoading, error: categoryError } = useCategoryStore();
-  const { categoryProducts, fetchProductsByCategory, loading: productLoading, error: productError } = useProductStore();
+  const { categoryProducts, fetchProductsByCategory, fetchProductsByCategoryGroup, loading: productLoading, error: productError } = useProductStore();
 
   const [selectedSlug, setSelectedSlug] = useState<string>("");
+  const [selectedSubSlug, setSelectedSubSlug] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("default");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [priceRange, setPriceRange] = useState<string>("all");
@@ -56,12 +57,23 @@ export default function CategoriesPage() {
     void fetchCategories();
   }, [fetchCategories]);
 
+  // Lọc ra chỉ parent categories (không có parentSlug) để hiển thị hàng icon chính
+  const parentCategories = useMemo(() => {
+    return categories.filter((cat) => !cat.parentSlug);
+  }, [categories]);
+
+  // Lấy subcategories của category đang chọn
+  const subcategories = useMemo(() => {
+    if (!selectedSlug) return [];
+    return categories.filter((cat) => cat.parentSlug === selectedSlug).sort((a, b) => a.sortOder - b.sortOder);
+  }, [categories, selectedSlug]);
+
   // Set default category slug when categories are loaded
   useEffect(() => {
-    if (categories.length > 0 && !selectedSlug) {
-      setSelectedSlug(categories[0].slug);
+    if (parentCategories.length > 0 && !selectedSlug) {
+      setSelectedSlug(parentCategories[0].slug);
     }
-  }, [categories, selectedSlug]);
+  }, [parentCategories, selectedSlug]);
 
   // Reset filters when switching category
   const handleResetFilters = () => {
@@ -72,13 +84,26 @@ export default function CategoriesPage() {
     setSortBy("default");
   };
 
-  // Fetch products when selected category changes
+  // Fetch products when selected category or subcategory changes
   useEffect(() => {
     if (selectedSlug) {
-      void fetchProductsByCategory(selectedSlug);
+      if (selectedSubSlug === "all") {
+        // Lấy tất cả sản phẩm của parent category (bao gồm subcategories)
+        void fetchProductsByCategoryGroup(selectedSlug);
+      } else {
+        // Lấy sản phẩm của subcategory cụ thể
+        void fetchProductsByCategory(selectedSubSlug);
+      }
       handleResetFilters();
     }
-  }, [selectedSlug, fetchProductsByCategory]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSlug, selectedSubSlug, fetchProductsByCategoryGroup, fetchProductsByCategory]);
+
+  // Reset subcategory khi chuyển parent category
+  const handleSelectParent = (slug: string) => {
+    setSelectedSlug(slug);
+    setSelectedSubSlug("all");
+  };
 
   const currentCategory = categories.find((cat) => cat.slug === selectedSlug);
   const categoryName = currentCategory ? currentCategory.name : "";
@@ -357,42 +382,74 @@ export default function CategoriesPage() {
           </div>
         )}
 
-        {!categoryLoading && !categoryError && categories.length > 0 && (
-          <div className="flex items-center space-x-6 md:space-x-8 overflow-x-auto py-6 mb-10 justify-start md:justify-center scrollbar-none border-b border-slate-100 pb-8">
-            {categories.map((cat) => {
-              const isSelected = selectedSlug === cat.slug;
-              return (
+        {!categoryLoading && !categoryError && parentCategories.length > 0 && (
+          <>
+            {/* Parent Category Row */}
+            <div className="flex items-center space-x-6 md:space-x-8 overflow-x-auto py-6 justify-start md:justify-center scrollbar-none border-b border-slate-100 pb-8">
+              {parentCategories.map((cat) => {
+                const isSelected = selectedSlug === cat.slug;
+                return (
+                  <button
+                    key={cat._id}
+                    onClick={() => handleSelectParent(cat.slug)}
+                    className="flex flex-col items-center gap-2 cursor-pointer group focus:outline-none shrink-0"
+                  >
+                    <div className={`relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 transition-all duration-300 p-[2px] bg-white ${
+                      isSelected 
+                        ? "border-[var(--primary)] ring-2 ring-[var(--primary)]/20 ring-offset-2 scale-105 shadow-md" 
+                        : "border-slate-200 group-hover:border-slate-400 group-hover:scale-105"
+                    }`}>
+                      <img
+                        src={cat.imageCategory || "/placeholder.png"}
+                        alt={cat.name}
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                      <div className="absolute inset-0 bg-slate-950/5 opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-full"></div>
+                    </div>
+                    <span className={`text-xs md:text-sm tracking-wide transition-colors duration-200 ${
+                      isSelected 
+                        ? "text-[var(--primary)] font-bold" 
+                        : "text-slate-600 group-hover:text-slate-900 font-semibold"
+                    }`}>
+                      {cat.name}
+                    </span>
+                    {isSelected && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)] -mt-1 animate-pulse"></span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Subcategory Tabs (chỉ hiện khi parent có subcategories) */}
+            {subcategories.length > 0 && (
+              <div className="flex items-center gap-2 overflow-x-auto py-4 mb-6 justify-start md:justify-center scrollbar-none">
                 <button
-                  key={cat._id}
-                  onClick={() => setSelectedSlug(cat.slug)}
-                  className="flex flex-col items-center gap-2 cursor-pointer group focus:outline-none shrink-0"
+                  onClick={() => setSelectedSubSlug("all")}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap border ${
+                    selectedSubSlug === "all"
+                      ? "bg-[var(--primary)] text-white border-[var(--primary)] shadow-md shadow-blue-100"
+                      : "bg-white text-slate-600 border-slate-200 hover:border-slate-400 hover:text-slate-900"
+                  }`}
                 >
-                  <div className={`relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 transition-all duration-300 p-[2px] bg-white ${
-                    isSelected 
-                      ? "border-[var(--primary)] ring-2 ring-[var(--primary)]/20 ring-offset-2 scale-105 shadow-md" 
-                      : "border-slate-200 group-hover:border-slate-400 group-hover:scale-105"
-                  }`}>
-                    <img
-                      src={cat.imageCategory || "/placeholder.png"}
-                      alt={cat.name}
-                      className="w-full h-full object-cover rounded-full"
-                    />
-                    <div className="absolute inset-0 bg-slate-950/5 opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-full"></div>
-                  </div>
-                  <span className={`text-xs md:text-sm tracking-wide transition-colors duration-200 ${
-                    isSelected 
-                      ? "text-[var(--primary)] font-bold" 
-                      : "text-slate-600 group-hover:text-slate-900 font-semibold"
-                  }`}>
-                    {cat.name}
-                  </span>
-                  {isSelected && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)] -mt-1 animate-pulse"></span>
-                  )}
+                  Tất cả {categoryName}
                 </button>
-              );
-            })}
-          </div>
+                {subcategories.map((sub) => (
+                  <button
+                    key={sub._id}
+                    onClick={() => setSelectedSubSlug(sub.slug)}
+                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap border ${
+                      selectedSubSlug === sub.slug
+                        ? "bg-[var(--primary)] text-white border-[var(--primary)] shadow-md shadow-blue-100"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-slate-400 hover:text-slate-900"
+                    }`}
+                  >
+                    {sub.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
         )}
 
         {/* Selected Category Listing Section */}
