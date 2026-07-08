@@ -586,14 +586,14 @@ export default function FittingRoomPage() {
             <div>
               <label className="block text-sm font-bold text-gray-800 mb-1">CHIỀU CAO</label>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs text-gray-400 w-6 shrink-0">140</span>
-                <input type="range" min={140} max={220} step={1} value={height}
+                <span className="text-xs text-gray-400 w-6 shrink-0">150</span>
+                <input type="range" min={150} max={199} step={1} value={height}
                   onChange={e => setHeight(Number(e.target.value))}
                   className="flex-1 min-w-[50px] h-1.5 cursor-pointer appearance-none rounded-full bg-gray-200 accent-[var(--primary)]" />
-                <span className="text-xs text-gray-400 w-6 shrink-0 text-right">220</span>
+                <span className="text-xs text-gray-400 w-6 shrink-0 text-right">199</span>
                 <div className="flex items-center border border-gray-300 rounded-lg bg-white overflow-hidden shrink-0">
-                  <input type="number" value={height} min={140} max={220}
-                    onChange={e => setHeight(Number(e.target.value) || 140)}
+                  <input type="number" value={height} min={150} max={199}
+                    onChange={e => setHeight(Math.min(199, Math.max(150, Number(e.target.value) || 150)))}
                     className="w-10 text-center text-sm font-semibold text-gray-900 outline-none py-1.5 bg-transparent" />
                   <span className="text-xs text-gray-500 pr-1.5">cm</span>
                 </div>
@@ -604,14 +604,14 @@ export default function FittingRoomPage() {
             <div>
               <label className="block text-sm font-bold text-gray-800 mb-1">CÂN NẶNG</label>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs text-gray-400 w-6 shrink-0">30</span>
-                <input type="range" min={30} max={150} step={1} value={weight}
+                <span className="text-xs text-gray-400 w-6 shrink-0">40</span>
+                <input type="range" min={40} max={110} step={1} value={weight}
                   onChange={e => setWeight(Number(e.target.value))}
                   className="flex-1 min-w-[50px] h-1.5 cursor-pointer appearance-none rounded-full bg-gray-200 accent-[var(--primary)]" />
-                <span className="text-xs text-gray-400 w-6 shrink-0 text-right">150</span>
+                <span className="text-xs text-gray-400 w-6 shrink-0 text-right">110</span>
                 <div className="flex items-center border border-gray-300 rounded-lg bg-white overflow-hidden shrink-0">
-                  <input type="number" value={weight} min={30} max={150}
-                    onChange={e => setWeight(Number(e.target.value) || 30)}
+                  <input type="number" value={weight} min={40} max={110}
+                    onChange={e => setWeight(Math.min(110, Math.max(40, Number(e.target.value) || 40)))}
                     className="w-10 text-center text-sm font-semibold text-gray-900 outline-none py-1.5 bg-transparent" />
                   <span className="text-xs text-gray-500 pr-1.5">kg</span>
                 </div>
