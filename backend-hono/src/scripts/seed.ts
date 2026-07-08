@@ -137,15 +137,75 @@ async function seed() {
     ]
   }
 
+  // ── Size charts chuẩn (cm) ────────────────────────────────────────────────
+  const SIZE_CHART_AO = [
+    { size: 'S',  length_cm: 64, chest_half_cm: 44, shoulder_cm: 40 },
+    { size: 'M',  length_cm: 67, chest_half_cm: 47, shoulder_cm: 43 },
+    { size: 'L',  length_cm: 70, chest_half_cm: 50, shoulder_cm: 46 },
+    { size: 'XL', length_cm: 73, chest_half_cm: 53, shoulder_cm: 49 },
+  ]
+  const SIZE_CHART_QUAN = [
+    { size: 'S',  length_cm: 98,  waist_cm: 72, hip_cm: 90 },
+    { size: 'M',  length_cm: 100, waist_cm: 78, hip_cm: 96 },
+    { size: 'L',  length_cm: 102, waist_cm: 84, hip_cm: 102 },
+    { size: 'XL', length_cm: 104, waist_cm: 90, hip_cm: 108 },
+  ]
+  const SIZE_CHART_QUAN_SHORT = [
+    { size: 'S',  length_cm: 44, waist_cm: 72, hip_cm: 90 },
+    { size: 'M',  length_cm: 46, waist_cm: 78, hip_cm: 96 },
+    { size: 'L',  length_cm: 48, waist_cm: 84, hip_cm: 102 },
+    { size: 'XL', length_cm: 50, waist_cm: 90, hip_cm: 108 },
+  ]
+
   // 4. Seed Products
+  // Phân loại garment_type:
+  //   t-shirt    : áo tay ngắn (thun, polo, gile, vest)
+  //   shirt      : áo tay dài  (sơ mi, khoác, hoodie, len, cardigan, dài tay)
+  //   pant       : quần dài    (jean, kaki, âu, jogger, baggy, yếm, thô, xếp ly)
+  //   short-pant : quần ngắn   (đùi, lót)
   const mockData = {
-    'ao': { names: ['Áo thun Pima', 'Áo sơ mi Oxford', 'Áo khoác Denim', 'Áo hoodie nỉ', 'Áo len Cardigan', 'Áo polo cộc tay', 'Áo khoác gió', 'Áo thun dài tay', 'Áo gile len', 'Áo vest công sở'], priceMin: 150000, priceMax: 800000 },
-    'quan': { names: ['Quần jean dáng suông', 'Quần kaki ống rộng', 'Quần âu nam/nữ', 'Quần đùi dạo phố', 'Quần jogger thể thao', 'Quần baggy năng động', 'Quần lót lụa', 'Quần yếm bò', 'Quần thô túi hộp', 'Quần xếp ly'], priceMin: 200000, priceMax: 900000 },
-    'giay': { names: ['Giày thể thao Runner', 'Giày Oxford da thật', 'Giày Sneaker cổ cao', 'Giày lười Loafer', 'Giày bốt Chelsea', 'Giày đi bộ mềm mại', 'Dép sandal da', 'Dép quai hậu', 'Giày gót nhọn', 'Boot da lộn'], priceMin: 300000, priceMax: 2500000 },
-    'mu': { names: ['Mũ lưỡi trai chóp', 'Mũ bucket vải thô', 'Mũ len Beanie', 'Mũ cói đi biển', 'Mũ Beret cổ điển', 'Mũ nồi họa tiết', 'Mũ snapback', 'Mũ vành rộng', 'Nón rơm phong cách', 'Mũ phớt họa sĩ'], priceMin: 80000, priceMax: 300000 },
-    'tat': { names: ['Tất gân cổ cao', 'Tất thuyền thể thao', 'Tất len dày dặn', 'Tất lười chống trượt', 'Tất họa tiết quả trám', 'Tất lưới mỏng', 'Tất đi ngủ lông cừu', 'Tất vớ hoạt hình', 'Tất cổ trung 5 màu', 'Tất nén chuyên dụng'], priceMin: 20000, priceMax: 100000 },
-    'phu-kien': { names: ['Thắt lưng da bò', 'Kính râm chống nắng', 'Vòng cổ kim loại', 'Đồng hồ thanh lịch', 'Túi chéo canvas', 'Ví da nam/nữ', 'Khuyên tai nữ', 'Nhẫn bạc 925', 'Khăn quàng cổ lụa', 'Găng tay len mịn'], priceMin: 50000, priceMax: 1500000 }
+    'ao': {
+      products: [
+        // ─── t-shirt (áo tay ngắn) ──────────────────────────
+        { name: 'Áo thun Pima',        garment_type: 't-shirt' as const },
+        { name: 'Áo polo cộc tay',     garment_type: 't-shirt' as const },
+        { name: 'Áo gile len',         garment_type: 't-shirt' as const },
+        { name: 'Áo vest công sở',     garment_type: 't-shirt' as const },
+        // ─── shirt (áo tay dài) ─────────────────────────────
+        { name: 'Áo sơ mi Oxford',     garment_type: 'shirt' as const },
+        { name: 'Áo khoác Denim',      garment_type: 'shirt' as const },
+        { name: 'Áo hoodie nỉ',        garment_type: 'shirt' as const },
+        { name: 'Áo len Cardigan',     garment_type: 'shirt' as const },
+        { name: 'Áo khoác gió',        garment_type: 'shirt' as const },
+        { name: 'Áo thun dài tay',     garment_type: 'shirt' as const },
+      ],
+      priceMin: 150000, priceMax: 800000
+    },
+    'quan': {
+      products: [
+        // ─── pant (quần dài) ────────────────────────────────
+        { name: 'Quần jean dáng suông',  garment_type: 'pant' as const },
+        { name: 'Quần kaki ống rộng',    garment_type: 'pant' as const },
+        { name: 'Quần âu nam/nữ',        garment_type: 'pant' as const },
+        { name: 'Quần jogger thể thao',  garment_type: 'pant' as const },
+        { name: 'Quần baggy năng động',  garment_type: 'pant' as const },
+        { name: 'Quần yếm bò',          garment_type: 'pant' as const },
+        { name: 'Quần thô túi hộp',     garment_type: 'pant' as const },
+        { name: 'Quần xếp ly',          garment_type: 'pant' as const },
+        // ─── short-pant (quần ngắn) ─────────────────────────
+        { name: 'Quần đùi dạo phố',     garment_type: 'short-pant' as const },
+        { name: 'Quần lót lụa',          garment_type: 'short-pant' as const },
+      ],
+      priceMin: 200000, priceMax: 900000
+    },
+    'giay': { products: ['Giày thể thao Runner', 'Giày Oxford da thật', 'Giày Sneaker cổ cao', 'Giày lười Loafer', 'Giày bốt Chelsea', 'Giày đi bộ mềm mại', 'Dép sandal da', 'Dép quai hậu', 'Giày gót nhọn', 'Boot da lộn'].map(n => ({ name: n })), priceMin: 300000, priceMax: 2500000 },
+    'mu': { products: ['Mũ lưỡi trai chóp', 'Mũ bucket vải thô', 'Mũ len Beanie', 'Mũ cói đi biển', 'Mũ Beret cổ điển', 'Mũ nồi họa tiết', 'Mũ snapback', 'Mũ vành rộng', 'Nón rơm phong cách', 'Mũ phớt họa sĩ'].map(n => ({ name: n })), priceMin: 80000, priceMax: 300000 },
+    'tat': { products: ['Tất gân cổ cao', 'Tất thuyền thể thao', 'Tất len dày dặn', 'Tất lười chống trượt', 'Tất họa tiết quả trám', 'Tất lưới mỏng', 'Tất đi ngủ lông cừu', 'Tất vớ hoạt hình', 'Tất cổ trung 5 màu', 'Tất nén chuyên dụng'].map(n => ({ name: n })), priceMin: 20000, priceMax: 100000 },
+    'phu-kien': { products: ['Thắt lưng da bò', 'Kính râm chống nắng', 'Vòng cổ kim loại', 'Đồng hồ thanh lịch', 'Túi chéo canvas', 'Ví da nam/nữ', 'Khuyên tai nữ', 'Nhẫn bạc 925', 'Khăn quàng cổ lụa', 'Găng tay len mịn'].map(n => ({ name: n })), priceMin: 50000, priceMax: 1500000 }
   }
+
+  const standardSizes = ['S', 'M', 'L', 'XL']
+  const standardColors = ['#000000', '#FFFFFF', '#0000FF', '#FF0000']
 
   const productsToInsert = []
   for (const cat of categories) {
@@ -153,12 +213,15 @@ async function seed() {
     const catSettings = mockData[slug];
     if (!catSettings) continue;
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < catSettings.products.length; i++) {
+      const productInfo = catSettings.products[i]
+      const garmentType = 'garment_type' in productInfo ? (productInfo as any).garment_type : undefined
+
       const randomPrice = Math.floor(Math.random() * (catSettings.priceMax - catSettings.priceMin) + catSettings.priceMin);
       const roundedPrice = Math.floor(randomPrice / 1000) * 1000;
       const hasDiscount = Math.random() > 0.5;
       const discountPrice = hasDiscount ? roundedPrice - Math.floor((roundedPrice * (Math.random() * 0.15 + 0.05)) / 1000) * 1000 : undefined;
-      const productName = `${catSettings.names[i]} - Mẫu ${i + 1}`;
+      const productName = `${productInfo.name} - Mẫu ${i + 1}`;
 
       const createSlug = (str: string) => {
         return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").replace(/([^0-9a-z-\s])/g, "").replace(/(\s+)/g, "-").replace(/-+/g, "-").replace(/^-+|-+$/g, "");
@@ -168,12 +231,18 @@ async function seed() {
       const categoryImages = productImages[cat.slug];
       const imageUrl = categoryImages && categoryImages[i] ? categoryImages[i] : `https://picsum.photos/seed/${cat.slug}${i}/400/400`;
 
+      // Chọn sizeChart phù hợp theo garment_type
+      let sizeChart = undefined
+      if (garmentType === 't-shirt' || garmentType === 'shirt') sizeChart = SIZE_CHART_AO
+      if (garmentType === 'pant') sizeChart = SIZE_CHART_QUAN
+      if (garmentType === 'short-pant') sizeChart = SIZE_CHART_QUAN_SHORT
+
       productsToInsert.push({
         name: productName,
         slug: productSlug,
         price: roundedPrice,
         discountPrice: discountPrice,
-        description: `Sản phẩm ${catSettings.names[i].toLowerCase()} thiết kế tinh tế, đem lại sự thoải mái khi sử dụng. 100% chính hãng tại TMF.`,
+        description: `Sản phẩm ${productInfo.name.toLowerCase()} thiết kế tinh tế, đem lại sự thoải mái khi sử dụng. 100% chính hãng tại TMF.`,
         imageUrl: imageUrl,
         categorySlug: cat.slug,
         rating: Number((Math.random() * 1.5 + 3.5).toFixed(1)),
@@ -181,7 +250,11 @@ async function seed() {
         brand: brandsData[Math.floor(Math.random() * brandsData.length)].name,
         expiryDate: '>1 năm',
         stock: Math.floor(Math.random() * 100) + 5,
-        shippingInfo: 'Miễn phí vận chuyển'
+        shippingInfo: 'Miễn phí vận chuyển',
+        sizes: standardSizes,
+        colorCodes: standardColors,
+        ...(sizeChart ? { sizeChart } : {}),
+        ...(garmentType ? { garment_type: garmentType } : {}),
       });
     }
   }

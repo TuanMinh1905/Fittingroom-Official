@@ -178,19 +178,39 @@ function detectSubcategory(name: string, yodyCategory: string, tmfCategorySlug: 
 }
 
 // ── Xác định garment_type cho TailorNet ─────────────────────────────────────
+// Quy tắc phân loại:
+//   - t-shirt  : áo tay ngắn (thun, polo, phông, gile, vest)
+//   - shirt    : áo tay dài  (sơ mi, hoodie, nỉ, len, khoác, dài tay, flannel, cardigan)
+//   - pant     : quần dài    (jean, kaki, âu, jogger, baggy, yếm, thô, xếp ly)
+//   - short-pant: quần ngắn  (short, đùi, ngắn, lót)
 function detectGarmentType(name: string, category: string): string | undefined {
     const nameLower = name.toLowerCase()
     
     if (category === 'ao' || category === 'ao-thun' || category === 'ao-so-mi' || category === 'ao-tay-dai') {
-        if (nameLower.includes('sơ mi') || nameLower.includes('sơ-mi') || nameLower.includes('so mi')) return 'shirt'
-        if (nameLower.includes('thun') || nameLower.includes('polo') || nameLower.includes('phông')) return 't-shirt'
-        if (nameLower.includes('hoodie') || nameLower.includes('nỉ') || nameLower.includes('len')) return 't-shirt'
-        return 't-shirt' // default cho áo
+        // Áo tay dài → shirt
+        if (
+            nameLower.includes('sơ mi') || nameLower.includes('sơ-mi') || nameLower.includes('so mi') ||
+            nameLower.includes('hoodie') || nameLower.includes('nỉ') ||
+            nameLower.includes('len') || nameLower.includes('cardigan') ||
+            nameLower.includes('khoác') || nameLower.includes('dài tay') ||
+            nameLower.includes('flannel') || nameLower.includes('tay dài')
+        ) {
+            return 'shirt'
+        }
+        // Áo tay ngắn → t-shirt (thun, polo, phông, gile, vest, cộc tay...)
+        return 't-shirt'
     }
     
     if (category === 'quan' || category === 'quan-dai' || category === 'quan-short') {
-        if (nameLower.includes('short') || nameLower.includes('đùi') || nameLower.includes('ngắn')) return 'short-pant'
-        return 'pant' // default cho quần dài
+        // Quần ngắn → short-pant
+        if (
+            nameLower.includes('short') || nameLower.includes('đùi') ||
+            nameLower.includes('ngắn') || nameLower.includes('lót')
+        ) {
+            return 'short-pant'
+        }
+        // Quần dài → pant
+        return 'pant'
     }
 
     return undefined // không map được cho giày/tất/phụ kiện

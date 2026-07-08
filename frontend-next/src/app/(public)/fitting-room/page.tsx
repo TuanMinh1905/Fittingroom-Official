@@ -126,8 +126,14 @@ export default function FittingRoomPage() {
   const [hasTryOnResult, setHasTryOnResult] = useState(false);
   const [tooBigWarning, setTooBigWarning] = useState<string | null>(null);
 
-  const topItems = items.filter(i => i.categorySlug === "ao").slice(0, 3);
-  const bottomItems = items.filter(i => i.categorySlug === "quan").slice(0, 3);
+  const topItems = items.filter(i =>
+    i.categorySlug === "ao" ||
+    i.categorySlug?.startsWith("ao-")
+  ).slice(0, 3);
+  const bottomItems = items.filter(i =>
+    i.categorySlug === "quan" ||
+    i.categorySlug?.startsWith("quan-")
+  ).slice(0, 3);
 
   useEffect(() => {
     const init: Record<string, { size: string; color: string; garmentType: string }> = {};
@@ -135,9 +141,10 @@ export default function FittingRoomPage() {
       if (!selectedOptions[item._id]) {
         // Ư u tiên đọc garment_type từ DB sản phẩm.
         // Fallback: 't-shirt' cho áo, 'pant' cho quần (sản phẩm cũ chưa có garment_type).
+        const isTop = item.categorySlug === "ao" || item.categorySlug?.startsWith("ao-");
         const defaultGarmentType = item.garment_type
           ? item.garment_type
-          : item.categorySlug === "ao" ? "t-shirt" : "pant";
+          : isTop ? "t-shirt" : "pant";
         init[item._id] = {
           size: item.sizes?.[0] || "M",
           color: item.colorCodes?.[0] || "#0000FF",
