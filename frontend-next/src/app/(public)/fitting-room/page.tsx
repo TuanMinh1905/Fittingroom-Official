@@ -114,8 +114,8 @@ export default function FittingRoomPage() {
     setBodyMeasures(prev => ({ ...prev, [key]: value }));
   };
   const [selectedOptions, setSelectedOptions] = useState<Record<string, { size: string; color: string; garmentType: string }>>({});
-  const [selectedTopId, setSelectedTopId] = useState<string | null>(null);
-  const [selectedBottomId, setSelectedBottomId] = useState<string | null>(null);
+  const [selectedTopId, setSelectedTopId] = useState<string | null>(null); // _id của sản phẩm áo mà người dùng đang tick chọn
+  const [selectedBottomId, setSelectedBottomId] = useState<string | null>(null); // _id của sản phẩm quần mà người dùng đang tick chọn
   const [isLoading, setIsLoading] = useState(false);
   const [isGenderSwitching, setIsGenderSwitching] = useState(false);
   const [resultImg, setResultImg] = useState<string | null>(null);
@@ -152,6 +152,9 @@ export default function FittingRoomPage() {
         };
       }
     });
+
+    // Tóm lại là lặp qua item ( item là const { items, removeFromCart } = useCartStore();[cite: 1] )
+    // Và sau đó gán vào selectedOptions bằng lệnh set bên dưới
     if (Object.keys(init).length > 0) setSelectedOptions(prev => ({ ...prev, ...init }));
   }, [items]);
 
@@ -186,7 +189,7 @@ export default function FittingRoomPage() {
     const tightButOk: string[] = [];
 
     const check = (itemId: string, isTop: boolean) => {
-      const opt = selectedOptions[itemId];
+      const opt = selectedOptions[itemId]; // Được lấy từ useEffect nhé
       if (!opt) return;
       const analysis = analyzeFit(bodyForFit, opt.size, opt.garmentType, gender);
       const item = items.find(i => i._id === itemId);
@@ -227,12 +230,13 @@ export default function FittingRoomPage() {
       return; // ← Chặn hoàn toàn, không gọi TailorNet
     }
 
-    setIsLoading(true);
-    setError(null);
-    setResultImg(null);
-    setMeshData(null);
+    // Dọn dẹp UI + bật trạng thái loading — chuẩn bị giao diện trước khi gọi TailorNet. Gọi là "reset UI
+    setIsLoading(true); // Hiển thị vòng xoay "Đang xử lý..." trên nút, khóa nút bấm để tránh double-click
+    setError(null); // Nếu lần thử đồ trước bị lỗi, xóa thông báo lỗi đó đi
+    setResultImg(null); // Xóa kết quả ảnh từ lần try-on trước để khung hiển thị trống
+    setMeshData(null); // Xóa model 3D từ lần try-on trước
 
-    // Số đo cơ thể bổ sung gửi kèm
+    // Lấy các số đo mà người dùng đang nhập vào trong giao diện
     const bodyExtra = {
       shoulder_cm: bodyMeasures.shoulder,
       arm_length_cm: bodyMeasures.arm,
@@ -243,10 +247,23 @@ export default function FittingRoomPage() {
     };
 
     try {
-      const topOpt = selectedTopId ? selectedOptions[selectedTopId] : null;
+
+      // let topOpt;
+
+      // if (selectedTopId) {
+      //   // Nếu có ID của áo đang được chọn, lấy ra size/màu của áo đó
+      //   topOpt = selectedOptions[selectedTopId];
+      // } else {
+      //   // Nếu người dùng không chọn áo nào (chỉ chọn thử quần), thì để trống
+      //   topOpt = null;
+      // }
+
+      // const topOpt = selectedOptions["id12345"]
+      // topOpt = { size: "M", color: "#FF0000", garmentType: "t-shirt" }
+      const topOpt = selectedTopId ? selectedOptions[selectedTopId] : null; // Code này là viết tắt của cái đám ở trên
       const botOpt = selectedBottomId ? selectedOptions[selectedBottomId] : null;
 
-      // Helper: tra sizeChart của product → lấy số đo cho size đã chọn
+      // Từ size mà user chọn. Lấy ra các số đo tương ứng trong DB
       const getGarmentMeasurements = (itemId: string, size: string) => {
         const item = items.find(i => i._id === itemId);
         const entry = item?.sizeChart?.find((sc: any) => sc.size === size);
@@ -278,10 +295,19 @@ export default function FittingRoomPage() {
             { garment_type: botOpt.garmentType, size_small: botOpt.size, size_large: SIZE_NEXT[botOpt.size] || "XL", color_hex: botOpt.color, ...botMeasures },
           ],
         };
+
+        // gọi API POST phía dưới gửi kèm theo cái payload chúng ta vừa đóng gói. 
+        // API đó là API trung gian để giao tiếp giữa frontend và backend python tailornet
+        // File này là api/tryon/route.ts ở frontend-next luôn
+        // file đó nhận được yêu cầu từ khi ta gọi API thì mới gọi xuống Model TailorNet 
+        // đang chạy ở port 8000 xử lí Logic
+        // Sau đó TailorNet nhả lại mesh-data
         const res = await fetch(`${TRYON_PROXY}?endpoint=try-on-outfit`, {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
+
+
         if (!res.ok) {
           const e = await res.json();
           if (res.status === 422) {
