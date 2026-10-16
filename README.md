@@ -1,12 +1,10 @@
-# Hướng dẫn chạy dự án TMF Fitting Room 3D
+# Run project TMF Fitting Room 3D
 
-Dự án này bao gồm 4 thành phần chính cần được khởi chạy đồng thời để hệ thống hoạt động đầy đủ:
+Bao gồm 4 thành phần chính cần được khởi chạy đồng thời để hệ thống hoạt động đầy đủ:
 1. **Frontend (Next.js)**: Giao diện người dùng.
 2. **Backend (Hono/Node.js)**: API server chính xử lý dữ liệu (Sử dụng cổng mặc định của Hono).
 3. **Backend SMPL (Python/FastAPI)**: Server xử lý tính toán mô hình 3D (Sử dụng cổng 8001).
 4. **TailorNet (Docker)**: API xử lý hình ảnh thực tế (Sử dụng cổng 8000).
-
-Dưới đây là các bước để cài đặt và khởi chạy từng thành phần. Bạn cần mở 4 cửa sổ Terminal khác nhau để chạy song song 4 thành phần này.
 
 ---
 
